@@ -135,7 +135,7 @@ const ChatBot = ({
             , newMessages.length - 1);
         return newMessages;
       });
-    } catch (error) {
+    } catch (error:any) {
       const errorMessage =
       error.response?.data?.message ||
         error.message ||
@@ -186,7 +186,7 @@ const ChatBot = ({
     //     localStorage.setItem(finalMessgKey, result);
 
     //   }
-    } catch (error) {
+    } catch (error:any) {
       const errorMessage =
       error.response?.data?.message ||
         error.message ||
@@ -196,18 +196,18 @@ const ChatBot = ({
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e:any) => {
     setInputValue(e.target.value);
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e:any) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleSend();
     }
   };
 
-  const typewriterEffect = (text, index) => {
+  const typewriterEffect = (text:string, index:number) => {
     console.log("text", text, index);
     let charIndex = -1;
     const interval = setInterval(() => {

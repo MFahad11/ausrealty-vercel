@@ -1,21 +1,537 @@
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@font-face {
+  font-family: "ABC Corporate Extra Light";
+  src: url("../pages/fonts/abc-corporate-extra-light.ttf") format("truetype");
+  font-style: normal;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family: "Lato",
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+/* Custom styles for date cells */
+.react-datepicker__day--selected,
+.react-datepicker__day--in-range {
+  background-color: black !important; /* Black background for selected date */
+  color: white !important; /* White text color */
+  border-radius: 9999px; /* Rounded full */
+}
+
+.react-datepicker__day:hover {
+  background-color: black; /* Black background on hover */
+  color: white; /* White text color */
+  border-radius: 9999px; /* Rounded full */
+}
+
+/* Optional: Ensure the calendar has a grey background initially */
+.react-datepicker__header {
+  background-color: grey;
+  color: white;
+}
+
+
+@layer base {
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-size: initial;
+    font-weight: initial;
+    line-height: initial;
+    letter-spacing: initial;
+    color: initial;
+    margin: initial;
+    padding: initial;
+  }
+
+  .container {
+    max-width: 1280px !important;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem;
+    background-color: white;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  h4 {
+    font-size: 16px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+
+  h5 {
+    font-size: 13px;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  h6 {
+    font-size: 12px;
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  ul {
+    list-style-type: disc;
+    margin-left: 2rem;
+    /* margin-bottom: 1rem; */
+  }
+
+  ol {
+    list-style-type: decimal;
+    margin-left: 1rem;
+    /* margin-bottom: 1rem; */
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin: 0;
+  }
+
+}
+
+
+html,
+body {
+  height: 100%;
+  background-color: #ffffff !important; /* or your desired background color */
+  margin: 0;
+  padding: 0;
+  /* line-height: 1.25rem !important; */
+  color: #212529;
+}
+
+
+
+
+.start-campaign-input,
+.search-input {
+  font-family: "ABChanel Corpo Extra Light", sans-serif;
+  font-size: 12px !important;
+}
+
+pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+.black-button {
+  border-radius: 4px;
+  background-color: black !important;
+  color: white;
+  font-size: 14px;
+  padding: 8px 16px;
+  transition: opacity 0.2s;
+}
+
+.black-button:hover {
+  opacity: 0.8;
+}
+
+.gray-button {
+  border-radius: 4px;
+  background-color: #efeff0;
+  color: #62646a;
+  font-size: 14px;
+  padding: 8px 16px;
+  transition: opacity 0.2s;
+}
+
+.gray-button:hover {
+  background-color: #e5e5e5;
+}
+
+input {
+  outline: none;
+}
+input:focus {
+  outline: none;
+}
+
+.shortcut-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.shortcut-dropdown-item {
+  display: block;
+  width: 100%;
+  min-width: 200px;
+  padding: 0.5rem;
+  text-align: center;
+  white-space: nowrap;
+  border-bottom: 1px solid #e5e5e5;
+  color: #62646a;
+  font-size: 14px;
+}
+
+.shortcut-dropdown-item:last-child {
+  border: none;
+}
+
+.shortcut-dropdown-item:hover {
+  background-color: #efeff0;
+}
+
+.profile-dropdown-menu {
+  position: absolute;
+  top: 44px;
+  right: 5%;
+  background-color: #fff;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1050;
+  width: 250px;
+  padding-top: 1rem;
+  padding-bottom: 0.3rem;
+  border: 1px solid #e5e5e5;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.profile-dropdown-item {
+  display: flex;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  color: #62646a;
+  font-size: 14px;
+  align-items: center;
+}
+
+.profile-dropdown-item:last-child {
+  border: none;
+}
+
+.profile-dropdown-item:hover {
+  background-color: #efeff0;
+}
+
+/* For slider */
+.slick-prev {
+  left: 10px !important; /* Adjust to position the arrow */
+}
+
+.slick-next {
+  right: 2px !important; /* Adjust to position the arrow */
+}
+
+.slick-prev,
+.slick-next {
+  display: flex !important;
+  padding: 1rem !important;
+  border: 1px solid #62646a !important;
+  border-radius: 50% !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: white !important;
+  z-index: 999 !important;
+}
+
+.slick-prev:before {
+  content: "\f104" !important; /* FontAwesome right arrow */
+}
+
+.slick-next:before {
+  content: "\f105" !important; /* FontAwesome right arrow */
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-family: "FontAwesome" !important;
+  font-size: 24px;
+  color: #000 !important; /* Change the color */
+}
+
+.slick-slide {
+  padding: 0 8px !important; /* Adjust the value as needed */
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+.enhanced-textarea::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 0%;
+}
+
+.enhanced-textarea::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 8px;
+  border-radius: 0%;
+}
+
+.enhanced-textarea::-webkit-scrollbar-thumb:hover {
+  background: #ccc;
+}
+
+.box-scrollbar {
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+  .box-scrollbar::-webkit-scrollbar {
+    width: 0px !important;
+    border-radius: 0% !important;
+  }
+
+  .box-scrollbar::-webkit-scrollbar-thumb {
+    background: #ffffff !important;
+    border-radius: 0px !important;
+    border-radius: 0% !important;
+  }
+
+  .box-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #ffffff !important;
+  }
+
+  .box-scrollbar::-webkit-scrollbar {
+    display: none !important; /* Hide scrollbar in WebKit browsers */
+  }
+}
+
+input,
+textarea,
+select {
+  font-size: 14px !important;
+}
+
+/* specifically for start campaign page only */
+.pac-container.pac-logo {
+  position: absolute !important;
+  bottom: 180px !important;
+  top: auto !important;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  padding: 10px 12px;
+  min-height: 38px;
+  width: 100%;
+  border-radius: 4px;
+  font-size: 14px !important;
+  outline: none;
+  resize: none;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+}
+
+.form-input:disabled {
+  border: none;
+  background: #f5f5f5;
+}
+
+.form-error-message {
+  color: #ef4444;
+  font-size: 12px;
+}
+
+select {
+  cursor: pointer;
+  /* Remove default arrow in some browsers */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  background-color: white;
+
+  /* Add the custom arrow */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23000000' viewBox='0 0 24 24' height='1em' width='1em' aria-hidden='true'%3e%3cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z' clip-rule='evenodd'%3e%3c/path%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 9.2px center;
+  background-size: 12px;
+}
+
+/* Hide arrow in IE10 and IE11 */
+select::-ms-expand {
+  display: none;
+}
+
+input[type="checkbox"] {
+  accent-color: black;
+}
+
+input[type="radio"] {
+  accent-color: black;
+}
+
+.custom-legend {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.3rem;
+  text-align: left;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.chain {
+  width: 6rem;
+  height: 3rem;
+  border-radius: 20px;
+}
+.chain-stick {
+  width: 4rem;
+  height: 0.8rem;
+  margin: 0px -6px;
+  border: 2px solid white;
+  border-radius: 32px;
+  position: relative;
+  top: -20px;
+}
+
+/* video post list start */
+
+.video-container {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.background-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+}
+
+/* Reduce video height on mobile and tablet screens */
+@media (max-width: 768px) {
+  .video-container {
+    height: 85vh; /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .video-container {
+    height: 75vh; /* Further adjust height for smaller screens */
+  }
+}
+
+/* video post list end */
+
+@media only screen and (max-width: 768px) {
+  table td,
+  table th {
+    font-size: 9px;
+  }
+}
+
+.custom-modal {
+  margin: 0 !important;
+}
+
+.my-scroll-container::-webkit-scrollbar {
+  height: 8px; /* Adjust the height for horizontal scrollbar */
+}
+
+.my-scroll-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  height: 8px; /* Ensure track height matches scrollbar height */
+}
+
+.my-scroll-container::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 0px;
+  height: 8px; /* Ensure thumb height matches scrollbar height */
+}
+
+.my-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@import url('https://db.onlinewebfonts.com/c/03c62e0b065e5635dac558cfe4731817?family=ABChanel+Corpo+Extra+Light');

@@ -30,18 +30,22 @@ const NavBar: React.FC<NavBarProps> = ({
           href={backButtonLink} 
           className="absolute left-4 md:left-48 top-1/2 -translate-y-1/2"
         >
-          <BiChevronLeft className="h-6 w-6" />
+          <BiChevronLeft className={`h-6 w-6
+            ${backgroundColor === 'white' ? 'text-black' : 'text-white'}
+            `}/>
         </Link>
       )}
       
       {/* Centered Logo */}
       <Link href={'/'} className="flex items-center justify-center">
         <Image 
-          src={logoSrc} 
+          src={
+            backgroundColor === 'white' ? '/logo.png' : '/logo-white.png'
+          } 
           alt={logoAlt} 
           className=" object-contain"
-            width={197}
-            height={18}
+            width={199}
+            height={36}
         />
 
       </Link>

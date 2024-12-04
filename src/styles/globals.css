@@ -9,7 +9,11 @@
   src: url("../pages/fonts/abc-corporate-extra-light.ttf") format("truetype");
   font-style: normal;
 }
-
+@font-face {
+  font-family: "AB Chanel";
+  src: url("../pages/fonts/abchanel.ttf") format("truetype");
+  font-style: normal;
+}
 body {
   margin: 0;
   font-family: "Lato",
@@ -75,6 +79,7 @@ code {
     margin-top: 1rem;
     margin-bottom: 1rem;
     line-height: 1.2;
+    font-family:"AB Chanel";
   }
 
   h2 {
@@ -83,6 +88,7 @@ code {
     margin-top: 1rem;
     margin-bottom: 1rem;
     line-height: 1.3;
+    font-family:"AB Chanel";
   }
 
   h3 {
@@ -91,25 +97,31 @@ code {
     margin-top: 1rem;
     margin-bottom: 1rem;
     line-height: 1.4;
+    font-family:"AB Chanel";
   }
 
   h4 {
-    font-size: 16px;
+    font-size: 14px;
     margin-top: 0.5rem;
+    font-weight: 550;
     margin-bottom: 0.5rem;
     line-height: 1.4;
+    font-family:"AB Chanel";
   }
 
   h5 {
     font-size: 13px;
     margin: 0;
     line-height: 1.4;
+    font-family:"AB Chanel";
   }
+  
 
   h6 {
     font-size: 12px;
     margin: 0;
     line-height: 1.7;
+    font-family:"AB Chanel";
   }
 
   ul {
@@ -130,6 +142,7 @@ code {
 
   p {
     margin: 0;
+    
   }
 
 }

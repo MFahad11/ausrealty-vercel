@@ -28,7 +28,7 @@ const NavBar: React.FC<NavBarProps> = ({
       {showBackButton && (
         <Link 
           href={backButtonLink} 
-          className="absolute left-4 top-1/2 -translate-y-1/2"
+          className="absolute left-4 md:left-48 top-1/2 -translate-y-1/2"
         >
           <BiChevronLeft className="h-6 w-6" />
         </Link>

@@ -1,5 +1,7 @@
 import Image from 'next/image'
+import { useState } from 'react'
 import { LuCopy, LuVideo } from 'react-icons/lu'
+import { MediaViewer } from './MediaViewer'
 
 type MediaItem = {
   type: 'image' | 'video' | 'multiple'
@@ -49,12 +51,14 @@ export default function ImageGrid() {
       'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg'
     ]},
   ]
-
+  const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null)
   return (
-    <div className="max-w-4xl lg:h-[555px] h-[444px]  mx-auto px-4 py-8 enhanced-textarea overflow-y-auto">
+    <><div className="max-w-4xl lg:h-[555px] h-[444px]  mx-auto px-4 py-8 enhanced-textarea overflow-y-auto">
       <div className="grid grid-cols-3 gap-1">
         {mediaItems.map((item, index) => (
-          <div key={index} className="relative aspect-square overflow-hidden">
+          <div key={index} className="relative aspect-square overflow-hidden"
+          onClick={() => setSelectedMedia(item)}
+          >
             {item.type === 'multiple' ? (
               <div className="grid grid-cols-2 gap-1 h-full w-full">
                 {(item.src as string[]).slice(0, 4).map((src, i) => (
@@ -105,6 +109,11 @@ export default function ImageGrid() {
           </div>
         ))}
       </div>
-    </div>
+    </div><MediaViewer
+        isOpen={!!selectedMedia}
+        onClose={() => setSelectedMedia(null)}
+        media={selectedMedia || { type: 'image', src: '' }}
+      /></>
+    
   )
 }

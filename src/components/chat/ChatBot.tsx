@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { IoSend } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ImageGrid from "./ImageGrid";
 const ChatBot = ({
     title,
     firstMessage,
@@ -264,7 +265,10 @@ const ChatBot = ({
       <ToastContainer />
       <div className="max-w-4xl mx-auto flex flex-col flex-grow mb-2">
         <div className="p-2 m-0 w-full rounded-lg mt-4">
-          <div
+        {
+          title === "MOMENTS FROM HOME" ? (
+            <ImageGrid />
+          ):( <div
             id="msg"
             ref={messagesContainerRef}
             className="enhanced-textarea overflow-y-auto p-3 pl-0 pb-32"
@@ -295,7 +299,9 @@ const ChatBot = ({
                 </span>
               </div>
             )}
-          </div>
+          </div>)
+        }
+         
         </div>
       </div>
             

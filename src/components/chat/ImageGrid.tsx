@@ -32,10 +32,26 @@ export default function ImageGrid() {
       'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg'
     ]},
     { type: 'image', src: 'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380673/topdown_drone_smtk4z.jpg' },
+    { type: 'image', src: 'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733331535/DJI_20240913174112_0573_D-Edit_tidt8y.jpg' },
+    { type: 'video', src: 'https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/STARTS+WITH+BELIEF+(5).mp4' },
+    { type: 'multiple', src: [
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733331535/Drone_-_front_facade_-_print_1_leserc.jpg',
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380673/topdown_drone_smtk4z.jpg',
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg',
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380670/Still_8_v9k9fp.jpg'
+    ]},
+    { type: 'image', src: 'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg' },
+    { type: 'video', src: 'https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/STARTS+WITH+BELIEF+(5).mp4' },
+    { type: 'image', src: 'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733331537/Still_16_dqnyod.jpg' },
+    { type: 'multiple', src: [
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733331535/DJI_20240913174112_0573_D-Edit_tidt8y.jpg',
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg',
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg'
+    ]},
   ]
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-4xl lg:h-[555px] h-[444px]  mx-auto px-4 py-8 enhanced-textarea overflow-y-auto">
       <div className="grid grid-cols-3 gap-1">
         {mediaItems.map((item, index) => (
           <div key={index} className="relative aspect-square overflow-hidden">
@@ -92,4 +108,3 @@ export default function ImageGrid() {
     </div>
   )
 }
-

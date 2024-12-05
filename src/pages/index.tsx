@@ -7,7 +7,7 @@ export default function PhotoLayout() {
     <>
   <div className="max-w-md mx-auto px-4 flex flex-col space-y-2 items-center">
     {/* Video Container */}
-    <div className="relative w-full max-w-[417px] h-[676px]">
+    <div className="relative w-full max-w-[417px] h-[656px]">
       <video 
         autoPlay 
         loop 

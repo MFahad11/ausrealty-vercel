@@ -12,26 +12,26 @@ export default function ImageGrid() {
     { type: 'video', src: 'https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/STARTS+WITH+BELIEF+(5).mp4' },
     { type: 'multiple', src: [
       'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733331535/Drone_-_front_facade_-_print_1_leserc.jpg',
-      '/placeholder.svg?height=600&width=600',
-      '/placeholder.svg?height=600&width=600',
-      '/placeholder.svg?height=600&width=600'
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380673/topdown_drone_smtk4z.jpg',
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg',
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380670/Still_8_v9k9fp.jpg'
     ]},
-    { type: 'image', src: '/placeholder.svg?height=600&width=600' },
+    { type: 'image', src: 'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__7950_y8mukl.jpg' },
     { type: 'video', src: 'https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/STARTS+WITH+BELIEF+(5).mp4' },
     { type: 'image', src: 'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733331535/DJI_20240913174112_0573_D-Edit_tidt8y.jpg' },
     { type: 'multiple', src: [
-      '/placeholder.svg?height=600&width=600',
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380670/Still_8_v9k9fp.jpg',
       'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733331535/Drone_-_front_facade_-_print_1_leserc.jpg'
     ]},
-    { type: 'image', src: '/placeholder.svg?height=600&width=600' },
+    { type: 'image', src: 'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg' },
     { type: 'video', src: 'https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/STARTS+WITH+BELIEF+(5).mp4' },
-    { type: 'image', src: '/placeholder.svg?height=600&width=600' },
+    { type: 'image', src: 'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733331537/Still_16_dqnyod.jpg' },
     { type: 'multiple', src: [
       'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733331535/DJI_20240913174112_0573_D-Edit_tidt8y.jpg',
-      '/placeholder.svg?height=600&width=600',
-      '/placeholder.svg?height=600&width=600'
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg',
+      'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380671/AM__8022_gtmjjx.jpg'
     ]},
-    { type: 'image', src: '/placeholder.svg?height=600&width=600' },
+    { type: 'image', src: 'https://res.cloudinary.com/dthqgnlbt/image/upload/v1733380673/topdown_drone_smtk4z.jpg' },
   ]
 
   return (
@@ -56,13 +56,24 @@ export default function ImageGrid() {
                 ))}
               </div>
             ) : (
-              <Image
-                src={item.src as string}
-                alt={`Grid item ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
-              />
+              item.type === 'video' ? (
+                <video
+                  src={item.src as string}
+                  className="object-cover w-full h-full"
+                  loop
+                  muted
+                  playsInline
+                  autoPlay
+                />
+              ) : (
+                <Image
+                  src={item.src as string}
+                  alt={`Grid item ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
+                />
+              )
             )}
             
             {item.type === 'video' && (

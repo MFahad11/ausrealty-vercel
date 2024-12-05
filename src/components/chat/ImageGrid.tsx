@@ -53,7 +53,7 @@ export default function ImageGrid() {
   ]
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null)
   return (
-    <><div className="max-w-4xl lg:h-[555px] h-[444px]  mx-auto px-4 py-8 enhanced-textarea overflow-y-auto">
+    <><div className="max-w-4xl lg:h-[555px] h-[474px]  mx-auto px-4 py-8 enhanced-textarea overflow-y-auto">
       <div className="grid grid-cols-3 gap-1">
         {mediaItems.map((item, index) => (
           <div key={index} className="relative aspect-square overflow-hidden"

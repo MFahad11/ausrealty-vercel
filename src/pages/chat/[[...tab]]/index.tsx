@@ -148,17 +148,13 @@ const ChatbotPage = () => {
         
       </div>
       <div className="flex flex-col items-center">
-        {
-          selectedBox === "MOMENT FROM HOME" ? (
-            <ImageGrid />
-          ):(<ChatBot
+        <ChatBot
             title={selectedBox}
             firstMessage={boxes.find((box) => {
             
                 return box.title === selectedBox})?.firstMessage || ""}
             prompt={boxes.find((box) => box.title === selectedBox)?.prompt || ""}
-            />)
-        }
+            />
       
       </div>
 

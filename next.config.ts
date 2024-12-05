@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         // hostname: 'ausrealty-next.s3.ap-southeast-2.amazonaws.com',
-        hostname: 'res.cloudinary.com',
+        hostname: '*',
       },
     ],
   },

@@ -70,6 +70,10 @@ const ChatBot = ({
             {
                 role: "user",
                 content: firstMessage,
+            },
+            {
+              role: "system",
+              content: firstMessage?.includes('Sell')?`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`:`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best properties. Otherwise, message us over what you’re looking for and we’ll show you what we have to offer.`,
             }
           ]);
         //   typewriterEffect(

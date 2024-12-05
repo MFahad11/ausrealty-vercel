@@ -1,4 +1,5 @@
 import ChatBot from "@/components/chat/ChatBot";
+import ImageGrid from "@/components/chat/ImageGrid";
 import NavBar from "@/components/layout/Navba";
 import { useRouter } from "next/router";
 import React, { useState, useRef,  useEffect } from "react";
@@ -147,13 +148,18 @@ const ChatbotPage = () => {
         
       </div>
       <div className="flex flex-col items-center">
-      <ChatBot
+        {
+          selectedBox === "MOMENT FROM HOME" ? (
+            <ImageGrid />
+          ):(<ChatBot
             title={selectedBox}
             firstMessage={boxes.find((box) => {
             
                 return box.title === selectedBox})?.firstMessage || ""}
             prompt={boxes.find((box) => box.title === selectedBox)?.prompt || ""}
-            />
+            />)
+        }
+      
       </div>
 
           

@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 const ChatbotPage = () => {
   const [step, setStep] = useState(1);
   const [finalMessg, setFinalMessg] = useState("");
-  const [selectedBox, setSelectedBox] = useState("");
+  const [selectedBox, setSelectedBox] = useState("MOMENTS FROM HOME");
   const [isBoxLoading, setIsBoxLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const router=useRouter();
@@ -20,6 +20,8 @@ const ChatbotPage = () => {
     prompt: string;
     firstMessage?: string;
     placeholder?: string;
+    route?: string;
+    index?: number;
   }[]>([
     {
       title: "SELL OR LEASE MY PROPERTY",
@@ -27,32 +29,44 @@ const ChatbotPage = () => {
       prompt:"SELL_MY_PROPERTY_PROMPT",
       firstMessage: "Sell my property",
       placeholder: "type the address and if youre looking to sell or lease",
+      route: "sell-or-lease-my-property",
+      index: 0,
     },
+
     {
       title: "LOOKING TO BUY",
       description: "See what properties we have available",
       prompt:'LOOKING_TO_BUY_PROMPT',
         firstMessage: "Looking to buy",
         placeholder : "type the suburb or area & any property features you're looking for",
+        route: "looking-to-buy",
+        index: 1,
     },
     
     {
       title: "MOMENTS FROM HOME",
       description: "Images of your home",
-      prompt:'MOMENTS_FROM_HOME_PROMPT'
+      prompt:'MOMENTS_FROM_HOME_PROMPT',
+      route: "moments-from-home",
+      index: 2,
     },
     {
       title: "INSIDE AUSREALTY",
       description: "Learn more about us",
-      prompt:'INSIDE_AUSREALTY_PROMPT'
+      prompt:'INSIDE_AUSREALTY_PROMPT',
+      route: "inside-ausrealty",
+      index: 3,
     },
     {
       title: "OUR PEOPLE",
       description: "Meet our team",
-      prompt:'OUR_PEOPLE_PROMPT'
+      prompt:'OUR_PEOPLE_PROMPT',
+      route: "our-people",
+      index: 4,
     },
 
   ]); 
+
   useEffect(() => {
     if (tab) {
     const title=tab[0].replace(/-/g, " ").toUpperCase();
@@ -93,7 +107,9 @@ const ChatbotPage = () => {
     description: string;
     prompt: string;
   }, index:number) => {
+    console.log(box.title);
         const tabName = box.title.toLowerCase().replace(/\s+/g, "-");
+        console.log(tabName);
         router.push(`/chat/${tabName}`);
   };
 
@@ -104,7 +120,7 @@ const ChatbotPage = () => {
      
       
           <div
-        className={`w-full fixed left-0 right-0 bg-white px-6 flex items-center justify-center bottom-0 pb-2`}
+        className={`w-full fixed left-0 right-0 bg-white px-6 flex items-center justify-center bottom-0 pb-2 `}
         style={{ zIndex: 1001, overflow: "visible" }} // Ensure overflow is visible
       >
         <div
@@ -164,6 +180,11 @@ const ChatbotPage = () => {
                 return box.title === selectedBox})?.firstMessage || ""}
             prompt={boxes.find((box) => box.title === selectedBox)?.prompt || ""}
             placeholder={boxes.find((box) => box.title === selectedBox)?.placeholder || "Type here"}
+            route={boxes.find((box) => box.title === selectedBox)?.route || ""}
+            index={boxes.find((box) => box.title === selectedBox)?.index || 0}
+            // @ts-ignore
+            handleBoxClick={handleBoxClick}
+            boxes={boxes}
             />
       
       </div>

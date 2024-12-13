@@ -461,13 +461,13 @@ const ChatBot = ({
       </div>
             
       <div className="max-w-4xl mx-auto fixed bottom-[4.64rem] left-0 right-0 w-full bg-white py-2 px-6">
-      <div className="relative flex items-center justify-between border border-gray-600 rounded-full px-6 py-3 shadow-md">
+      <div className="relative flex items-center justify-between border border-gray-600 rounded-full px-4 py-3 shadow-md">
   <textarea
     ref={textareaRef}
     value={inputValue}
     onChange={handleInputChange}
     onKeyPress={handleKeyPress}
-    placeholder={placeholder}
+    placeholder={placeholder?.length>=35?placeholder?.slice(0,35):placeholder}
     className="flex-grow bg-transparent text-sm outline-none resize-none overflow-y-hidden"
     rows={1}
   />

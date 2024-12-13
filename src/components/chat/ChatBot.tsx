@@ -305,7 +305,7 @@ const ChatBot = ({
               </div>
             ))}
             <div
-                className={`mb-4 text-left`}
+                className={`mb-4 text-left ml-3`}
               >
                 <span
                   className={`inline-block pl-5 pr-8 py-6  max-w-[90%] bg-gray-200 rounded-md `}

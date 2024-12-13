@@ -308,7 +308,7 @@ const ChatBot = ({
                 className={`mb-4 text-left`}
               >
                 <span
-                  className={`inline-block pl-5 pr-8 py-6  max-w-[80%] bg-gray-200 rounded-md `}
+                  className={`inline-block pl-5 pr-8 py-6  max-w-[90%] bg-gray-200 rounded-md `}
                 >
                   <Form fields={[
                     {
@@ -342,7 +342,7 @@ const ChatBot = ({
                 className={`mb-4 text-left`}
               >
                 <span
-                  className={`inline-block pl-5 pr-8 py-6  max-w-[80%] bg-gray-200 rounded-md `}
+                  className={`inline-block pl-5 pr-8 py-6  max-w-[90%] bg-gray-200 rounded-md `}
                 >
                   <Form fields={[
                     {

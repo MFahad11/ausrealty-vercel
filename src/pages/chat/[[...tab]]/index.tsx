@@ -64,6 +64,11 @@ const ChatbotPage = () => {
       route: "our-people",
       index: 4,
     },
+    {
+      title: "OUR PEOPLE",
+      description: "Meet our team",
+      prompt:'OUR_PEOPLE_PROMPT'
+    },
 
   ]); 
 

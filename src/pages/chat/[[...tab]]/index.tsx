@@ -104,7 +104,7 @@ const ChatbotPage = () => {
      
       
           <div
-        className={`w-full fixed left-0 right-0 bg-white px-6 flex items-center justify-center bottom-8 `}
+        className={`w-full fixed left-0 right-0 bg-white px-6 flex items-center justify-center bottom-0 pb-2`}
         style={{ zIndex: 1001, overflow: "visible" }} // Ensure overflow is visible
       >
         <div

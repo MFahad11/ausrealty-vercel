@@ -89,7 +89,7 @@ const ChatBot = ({
         clearTimeout(debounceTimeout); // Clear the timeout on cleanup
       };
     }
-  }, [inputValue, route, router]);
+  }, [inputValue]);
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem(prompt, JSON.stringify(messages));

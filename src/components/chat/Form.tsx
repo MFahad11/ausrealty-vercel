@@ -21,7 +21,7 @@ const Form = ({ fields }: { fields: FieldConfig[] }) => {
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-2">
       {fields.map((field, index) => (
         <div key={index} className="space-y-1">
-          <label className="block text-sm whitespace-nowrap">{index+1}. {field.label}</label>
+          <label className="block text-sm leading-normal">{index+1}. {field.label}</label>
           <Controller
             name={field.name}
             control={control}

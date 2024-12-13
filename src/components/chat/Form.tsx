@@ -48,7 +48,7 @@ const Form = ({ fields }: { fields: FieldConfig[] }) => {
                   placeholder={field.placeholder}
                   value={value}
                   onChange={onChange}
-                  className="ml-3 w-full px-1 py-[0.15rem] rounded-sm"
+                  className="ml-3 w-full px-1 py-[0.15rem] rounded-sm text-[10px]"
                 />
               );
             }}

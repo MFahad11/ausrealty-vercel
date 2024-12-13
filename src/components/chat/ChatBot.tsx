@@ -467,7 +467,7 @@ const ChatBot = ({
     value={inputValue}
     onChange={handleInputChange}
     onKeyPress={handleKeyPress}
-    placeholder={placeholder?.length>=35?placeholder?.slice(0,35):placeholder}
+    placeholder={placeholder?.length>=40?placeholder?.slice(0,41):placeholder}
     className="flex-grow bg-transparent text-sm outline-none resize-none overflow-y-hidden"
     rows={1}
   />

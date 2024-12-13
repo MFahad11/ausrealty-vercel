@@ -4,20 +4,42 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ImageGrid from "./ImageGrid";
 import Form from "./Form";
+import { useRouter } from "next/router";
 const ChatBot = ({
     title,
     firstMessage,
     prompt,
-    placeholder
+    placeholder,
+    route,
+    index,
+    boxes,
+    handleBoxClick
 }:{
     title: string,
     firstMessage: string,
     prompt: string
     placeholder: string
+    route: string
+    index: number
+    boxes: Array<{
+      title: string;
+      description: string;
+      prompt: string;
+      firstMessage?: string;
+      placeholder?: string;
+      route?: string;
+      index?: number;
+    }>
+    handleBoxClick: (box:{
+      title: string;
+      description?: string;
+      prompt: string;
+    }, index:number) => void
 }) => {
   const [messages, setMessages] = useState<
     Array<{ role: string; content: string }>
   >([]);
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -27,7 +49,47 @@ const ChatBot = ({
   const textareaRef = useRef<
     HTMLTextAreaElement | null
   >(null);
-
+  const tabKeywords = {
+    "sell-or-lease-my-property": ["sell", "lease"],
+    "looking-to-buy": ["buy", "purchase"],
+    "moments-from-home": ["moments", "home"],
+    "inside-ausrealty": ["inside", "ausrealty"],
+    "our-people": ["people"],
+  }
+  useEffect(() => {
+    const checkTabMatch = () => {
+      console.log("Checking tab match");
+      const words = inputValue.trim().split(/\s+/); // Split input into words
+      const lastWord = words[words.length - 1].toLowerCase();
+  
+      for (const [tab, keywords] of Object.entries(tabKeywords)) {
+        if (keywords.some((keyword) => lastWord === keyword)) {
+          if (route !== tab) {
+            const index = boxes.findIndex((box) => box.route === tab);
+            handleBoxClick(
+              {
+                title: boxes[index].title,
+                description: boxes[index].description,
+                prompt: boxes[index].prompt,
+              },
+              index
+            );
+          }
+          break;
+        }
+      }
+    };
+  
+    if (inputValue.trim() || inputValue.trim().endsWith("?")|| inputValue.trim().endsWith(".") || inputValue.trim().endsWith("!")|| inputValue.trim().endsWith(",")) {
+      const debounceTimeout = setTimeout(() => {
+        checkTabMatch(); // Call the function here
+      }, 500); // Adjust debounce delay as needed
+  
+      return () => {
+        clearTimeout(debounceTimeout); // Clear the timeout on cleanup
+      };
+    }
+  }, [inputValue, route, router]);
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem(prompt, JSON.stringify(messages));
@@ -305,10 +367,10 @@ const ChatBot = ({
               </div>
             ))}
             <div
-                className={`mb-4 text-left ml-3`}
+                className={`mb-4 text-left`}
               >
                 <span
-                  className={`inline-block pl-5 pr-8 py-6  max-w-[90%] bg-gray-200 rounded-md `}
+                  className={`inline-block  pl-5 pr-8 py-6  max-w-[90%] bg-gray-200 rounded-md `}
                 >
                   <Form fields={[
                     {
@@ -342,7 +404,7 @@ const ChatBot = ({
                 className={`mb-4 text-left`}
               >
                 <span
-                  className={`inline-block pl-5 pr-8 py-6  max-w-[90%] bg-gray-200 rounded-md `}
+                  className={`inline-block pl-5 pr-8 py-6  max-w-[80%] bg-gray-200 rounded-md `}
                 >
                   <Form fields={[
                     {

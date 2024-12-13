@@ -19,19 +19,23 @@ const ChatbotPage = () => {
     description: string;
     prompt: string;
     firstMessage?: string;
+    placeholder?: string;
   }[]>([
     {
-      title: "SELL MY PROPERTY",
+      title: "SELL OR LEASE MY PROPERTY",
       description: "See what your home is worth",
       prompt:"SELL_MY_PROPERTY_PROMPT",
       firstMessage: "Sell my property",
+      placeholder: "type the address and if youre looking to sell or lease",
     },
     {
       title: "LOOKING TO BUY",
       description: "See what properties we have available",
       prompt:'LOOKING_TO_BUY_PROMPT',
         firstMessage: "Looking to buy",
+        placeholder : "type the suburb or area & any property features you're looking for",
     },
+    
     {
       title: "MOMENTS FROM HOME",
       description: "Images of your home",
@@ -41,6 +45,11 @@ const ChatbotPage = () => {
       title: "INSIDE AUSREALTY",
       description: "Learn more about us",
       prompt:'INSIDE_AUSREALTY_PROMPT'
+    },
+    {
+      title: "OUR PEOPLE",
+      description: "Meet our team",
+      prompt:'OUR_PEOPLE_PROMPT'
     },
 
   ]); 
@@ -154,6 +163,7 @@ const ChatbotPage = () => {
             
                 return box.title === selectedBox})?.firstMessage || ""}
             prompt={boxes.find((box) => box.title === selectedBox)?.prompt || ""}
+            placeholder={boxes.find((box) => box.title === selectedBox)?.placeholder || "Type here"}
             />
       
       </div>

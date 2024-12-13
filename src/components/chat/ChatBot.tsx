@@ -398,7 +398,7 @@ const ChatBot = ({
         </div>
       </div>
             
-      <div className="max-w-4xl mx-auto fixed bottom-24 left-0 right-0 w-full bg-white py-4 px-6">
+      <div className="max-w-4xl mx-auto fixed bottom-24 left-0 right-0 w-full bg-white py-0 px-6">
       <div className="relative flex items-center justify-between border border-gray-600 rounded-full px-6 py-3 shadow-md">
   <textarea
     ref={textareaRef}

@@ -1,11 +1,25 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { LuChevronLeft, LuChevronRight, LuX } from 'react-icons/lu'
-
+type MediaItem = {
+  caption: string
+  children: { 
+    data: {
+    id: string
+    media_url: string
+    media_type: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM"
+    }[] 
+}
+comments_count: number
+id: string
+like_count: number
+media_type:"CAROUSEL_ALBUM" | "IMAGE" | "VIDEO"
+media_url: string
+}
 type MediaViewerProps = {
   isOpen: boolean
   onClose: () => void
-  media: { type: 'image' | 'video' | 'multiple'; src: string | string[] }
+  media: MediaItem | null
 }
 
 export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
@@ -26,23 +40,26 @@ export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
   }
 
   const handleNext = () => {
+    console.log(media)
     setCurrentIndex((prev) => 
-      (media.type === 'multiple' && Array.isArray(media.src) && prev < media.src.length - 1) ? prev + 1 : prev
+      (media?.media_type === 'CAROUSEL_ALBUM' && Array.isArray(media?.children?.data) && prev < media?.children?.data?.length - 1) ? prev + 1 : prev
     )
   }
 
   if (!isOpen) return null
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-90 z-[10000] flex flex-col items-center justify-center">
       <div className="w-full max-w-screen-lg px-4 py-2 flex justify-between items-center">
         <div className="text-white text-sm">
-          {media.type === 'multiple' && Array.isArray(media.src) && 
-            `${currentIndex + 1} / ${media.src.length}`
+          {media?.media_type === 'CAROUSEL_ALBUM' && Array.isArray(media.children?.data) && 
+            `${currentIndex + 1} / ${media.children?.data.length}`
           }
         </div>
         <button
-          onClick={onClose}
+          onClick={()=>{
+            setCurrentIndex(0)
+            onClose()
+          }}
           className="text-white hover:text-gray-300"
           aria-label="Close"
         >
@@ -50,29 +67,31 @@ export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
         </button>
       </div>
       <div className="relative w-full h-[calc(100vh-4rem)] flex items-center justify-center">
-        {media.type === 'multiple' && Array.isArray(media.src) ? (
+        {media?.media_type === 'CAROUSEL_ALBUM' && Array.isArray(media.children?.data) ? (
           <Image
-            src={media.src[currentIndex]}
+            src={media.children?.data[currentIndex]?.media_url}
             alt={`Viewed image ${currentIndex + 1}`}
             layout="fill"
             objectFit="contain"
+            loading='eager'
           />
-        ) : media.type === 'video' ? (
+        ) : media?.media_type === 'VIDEO' ? (
           <video
-            src={media.src as string}
+            src={media.media_url as string}
             className="max-w-full max-h-full"
             controls
             autoPlay
           />
         ) : (
           <Image
-            src={media.src as string}
+            src={media?.media_url as string}
             alt="Viewed image"
             layout="fill"
             objectFit="contain"
+            loading='eager'
           />
         )}
-        {media.type === 'multiple' && Array.isArray(media.src) && (
+        {media?.media_type === 'CAROUSEL_ALBUM' && Array.isArray(media.children?.data) && (
           <>
             <button
               onClick={handlePrevious}
@@ -85,7 +104,7 @@ export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
             <button
               onClick={handleNext}
               className="absolute right-2 text-white hover:text-gray-300 disabled:opacity-50"
-              disabled={currentIndex === media.src.length - 1}
+              disabled={currentIndex === media.children?.data.length - 1}
               aria-label="Next image"
             >
               <LuChevronRight className="w-8 h-8" />

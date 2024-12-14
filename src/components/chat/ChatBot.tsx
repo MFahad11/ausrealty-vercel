@@ -13,8 +13,10 @@ const ChatBot = ({
     route,
     index,
     boxes,
+    instaData,
     handleBoxClick
 }:{
+    instaData: any
     title: string,
     firstMessage: string,
     prompt: string
@@ -342,7 +344,7 @@ const ChatBot = ({
         <div className="p-2 m-0 w-full rounded-lg mt-4">
         {
           title === "MOMENTS FROM HOME" ? (
-            <ImageGrid />
+            <ImageGrid data={instaData}/>
           ):( <div
             id="msg"
             ref={messagesContainerRef}

@@ -1,12 +1,15 @@
 import ChatBot from "@/components/chat/ChatBot";
 import ImageGrid from "@/components/chat/ImageGrid";
 import NavBar from "@/components/layout/Navba";
+import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useState, useRef,  useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ChatbotPage = () => {
+const ChatbotPage = (
+  {data}: {data: any}
+) => {
   const [step, setStep] = useState(1);
   const [finalMessg, setFinalMessg] = useState("");
   const [selectedBox, setSelectedBox] = useState("MOMENTS FROM HOME");
@@ -190,6 +193,7 @@ const ChatbotPage = () => {
             // @ts-ignore
             handleBoxClick={handleBoxClick}
             boxes={boxes}
+            instaData={data}
             />
       
       </div>
@@ -201,3 +205,20 @@ const ChatbotPage = () => {
 };
 
 export default ChatbotPage;
+export const getStaticProps = async () => {
+  const url = `https://graph.facebook.com/v21.0/17841401703973084?fields=media.limit(30){id,media_type,media_url,children{media_url,id}}&access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`
+  const response =await axios.get(url)
+  const data = response?.data
+  return {
+    props: {
+      data: data
+    }
+  }
+}
+
+export const getStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true
+  }
+}

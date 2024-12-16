@@ -66,6 +66,7 @@ const ChatbotPage = (
       prompt:'OUR_PEOPLE_PROMPT',
       route: "our-people",
       index: 4,
+      placeholder:"Search here by name, location or office"
     },
 
   ]); 

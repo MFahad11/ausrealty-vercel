@@ -5,6 +5,9 @@ import "react-toastify/dist/ReactToastify.css";
 import ImageGrid from "./ImageGrid";
 import Form from "./Form";
 import { useRouter } from "next/router";
+import InstaGrid from "./InstaGrid";
+import { OUR_TEAM_DATA } from "@/constants/our-team";
+import { INSIDE_AUSREALTY } from "@/constants/inside-ausrealty";
 const ChatBot = ({
     title,
     firstMessage,
@@ -60,7 +63,6 @@ const ChatBot = ({
   }
   useEffect(() => {
     const checkTabMatch = () => {
-      console.log("Checking tab match");
       const words = inputValue.trim().split(/\s+/); // Split input into words
       const lastWord = words[words.length - 1].toLowerCase();
   
@@ -114,7 +116,6 @@ const ChatBot = ({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
   }
 //   const chatgptAPICall = async (message, previousMessages) => {
 //     try {
@@ -290,7 +291,7 @@ const ChatBot = ({
   };
 
   const typewriterEffect = (text:string, index:number) => {
-    console.log("text", text, index);
+
     let charIndex = -1;
     const interval = setInterval(() => {
       setMessages((prevMessages) => {
@@ -343,9 +344,12 @@ const ChatBot = ({
       <div className="max-w-4xl mx-auto flex flex-col flex-grow mb-2">
         <div className="p-2 m-0 w-full rounded-lg mt-4">
         {
-          title === "MOMENTS FROM HOME" ? (
-            <ImageGrid data={instaData}/>
-          ):( <div
+          title === "MOMENTS FROM HOME" && (
+            <InstaGrid data={instaData}/>
+          )
+        }
+        {
+          (title==='SELL OR LEASE MY PROPERTY' || title==='LOOKING TO BUY') && (<div
             id="msg"
             ref={messagesContainerRef}
             className="enhanced-textarea overflow-y-auto p-3 pl-0 pb-32"
@@ -458,6 +462,22 @@ const ChatBot = ({
             )}
           </div>)
         }
+        {
+          title === "INSIDE AUSREALTY" && (
+            <ImageGrid data={INSIDE_AUSREALTY}
+            isInsideAusrealty={true}
+            
+            />
+          )
+        }
+        {
+          title === "OUR PEOPLE" && (
+            <ImageGrid data={OUR_TEAM_DATA}
+            
+            />
+          )
+        }
+          
          
         </div>
       </div>

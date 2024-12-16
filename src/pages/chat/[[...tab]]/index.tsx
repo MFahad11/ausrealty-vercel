@@ -12,7 +12,7 @@ const ChatbotPage = (
 ) => {
   const [step, setStep] = useState(1);
   const [finalMessg, setFinalMessg] = useState("");
-  const [selectedBox, setSelectedBox] = useState("MOMENTS FROM HOME");
+  const [selectedBox, setSelectedBox] = useState("SELL OR LEASE MY PROPERTY");
   const [isBoxLoading, setIsBoxLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const router=useRouter();
@@ -67,11 +67,6 @@ const ChatbotPage = (
       route: "our-people",
       index: 4,
     },
-    {
-      title: "OUR PEOPLE",
-      description: "Meet our team",
-      prompt:'OUR_PEOPLE_PROMPT'
-    },
 
   ]); 
 
@@ -115,9 +110,9 @@ const ChatbotPage = (
     description: string;
     prompt: string;
   }, index:number) => {
-    console.log(box.title);
+    
         const tabName = box.title.toLowerCase().replace(/\s+/g, "-");
-        console.log(tabName);
+       
         router.push(`/chat/${tabName}`);
   };
 

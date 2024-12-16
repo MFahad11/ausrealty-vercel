@@ -14,7 +14,6 @@ const Form = ({ fields }: { fields: FieldConfig[] }) => {
   const { control, handleSubmit } = useForm();
 
   const onSubmit = (data: any) => {
-    console.log('Form Data:', data);
   };
 
   return (

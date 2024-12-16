@@ -40,7 +40,7 @@ export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
   }
 
   const handleNext = () => {
-    console.log(media)
+   
     setCurrentIndex((prev) => 
       (media?.media_type === 'CAROUSEL_ALBUM' && Array.isArray(media?.children?.data) && prev < media?.children?.data?.length - 1) ? prev + 1 : prev
     )

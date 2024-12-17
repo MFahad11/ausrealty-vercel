@@ -45,7 +45,16 @@ const ChatbotPage = (
         route: "looking-to-buy",
         index: 1,
     },
-    
+    {
+      title:"LOOKING TO RENT",
+      description: "See what properties we have available",
+      prompt:'LOOKING_TO_RENT_PROMPT',
+      firstMessage: "Looking to rent",
+      placeholder : "type the suburb or area & any property features you're looking for",
+      route: "looking-to-rent",
+      index: 2,
+      
+    },
     {
       title: "MOMENTS FROM HOME",
       description: "Images of your home",

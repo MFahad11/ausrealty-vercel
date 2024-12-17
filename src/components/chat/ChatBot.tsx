@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import InstaGrid from "./InstaGrid";
 import { OUR_TEAM_DATA } from "@/constants/our-team";
 import { INSIDE_AUSREALTY } from "@/constants/inside-ausrealty";
+import { LOOKING_TO_RENT } from "@/constants/looking-to-rent";
 const ChatBot = ({
     title,
     firstMessage,
@@ -477,7 +478,13 @@ const ChatBot = ({
             />
           )
         }
-          
+        {
+          title==="LOOKING TO RENT"&&(
+            <ImageGrid data={LOOKING_TO_RENT}
+            
+            />
+          )
+        }
          
         </div>
       </div>

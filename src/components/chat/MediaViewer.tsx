@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { LuChevronLeft, LuChevronRight, LuX } from 'react-icons/lu'
+import { LuChevronLeft, LuChevronRight, LuHeart, LuMessageCircle, LuX } from 'react-icons/lu'
 type MediaItem = {
   caption: string
   children: { 
@@ -24,7 +24,6 @@ type MediaViewerProps = {
 
 export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
-
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -66,7 +65,7 @@ export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
           <LuX className="w-6 h-6" />
         </button>
       </div>
-      <div className="relative w-full h-[calc(100vh-4rem)] flex items-center justify-center">
+      <div className="relative w-full h-[calc(100vh-15rem)] flex items-center justify-center">
         {media?.media_type === 'CAROUSEL_ALBUM' && Array.isArray(media.children?.data) ? (
           <Image
             src={media.children?.data[currentIndex]?.media_url}
@@ -110,6 +109,24 @@ export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
               <LuChevronRight className="w-8 h-8" />
             </button>
           </>
+        )}
+      </div>
+      <div className="w-full max-w-screen-lg px-4 py-4 text-white">
+        <div className="flex items-center space-x-4 mb-2">
+          <div className="flex items-center">
+            <LuHeart className="w-6 h-6 mr-1" />
+            <span>{media?.like_count || 0}</span>
+          </div>
+          <div className="flex items-center">
+            <LuMessageCircle className="w-6 h-6 mr-1" />
+            <span>{media?.comments_count || 0}</span>
+          </div>
+        </div>
+        {media?.caption && (
+          
+          <p className="text-sm">{
+            media?.caption
+          }</p>
         )}
       </div>
     </div>

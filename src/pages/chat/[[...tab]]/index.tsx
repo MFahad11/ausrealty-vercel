@@ -211,7 +211,7 @@ const ChatbotPage = (
 
 export default ChatbotPage;
 export const getStaticProps = async () => {
-  const url = `https://graph.facebook.com/v21.0/17841401703973084?fields=media.limit(30){id,media_type,media_url,children{media_url,id}}&access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`
+  const url = `https://graph.facebook.com/v21.0/17841401703973084?fields=media.limit(30){id,caption,like_count,comments_count,media_type,media_url,children{media_url,id}}&access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`
   const response =await axios.get(url)
   const data = response?.data
   return {

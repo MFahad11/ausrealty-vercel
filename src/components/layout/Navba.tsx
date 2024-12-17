@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link'
 import { BiChevronLeft } from 'react-icons/bi';
 import Image from 'next/image';
+import StickyContact from './StickyContact';
 
-// Define prop types for the navigation component
 interface NavBarProps {
   backgroundColor?: string;
   showBackButton?: boolean;
@@ -20,6 +20,7 @@ const NavBar: React.FC<NavBarProps> = ({
   logoAlt = 'Logo'
 }) => {
   return (
+    <>
     <nav 
       className={`flex items-center justify-center relative w-full p-4`} 
       style={{ backgroundColor }}
@@ -50,6 +51,8 @@ const NavBar: React.FC<NavBarProps> = ({
 
       </Link>
     </nav>
+    <StickyContact/>
+</>
   );
 };
 

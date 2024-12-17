@@ -57,10 +57,10 @@ const ChatbotPage = (
     },
     {
       title: "MOMENTS FROM HOME",
-      description: "Images of your home",
+      description: "Stories from people just like you",
       prompt:'MOMENTS_FROM_HOME_PROMPT',
       route: "moments-from-home",
-      index: 2,
+      index: 3,
     },
     {
       title: "INSIDE AUSREALTY",

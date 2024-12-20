@@ -349,7 +349,7 @@ const ChatBot = ({
           )
         }
         {
-          (title==='SELL OR LEASE MY PROPERTY' || title==='LOOKING TO BUY') && (<div
+          (title==='SELL OR LEASE MY PROPERTY' || title==='LOOKING TO BUY' || title==='LOOKING TO RENT') && (<div
             id="msg"
             ref={messagesContainerRef}
             className="enhanced-textarea overflow-y-auto p-3 pl-0 pb-32"
@@ -372,86 +372,7 @@ const ChatBot = ({
                 </span>
               </div>
             ))}
-            <div
-                className={`mb-4 text-left`}
-              >
-                <span
-                  className={`inline-block  pl-5 pr-8 py-6  max-w-[90%] bg-gray-200 rounded-md `}
-                >
-                  <Form fields={[
-                    {
-                      label: 'Preferred Suburb (s)',
-                      name: 'suburb',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Price Range (e.g., $1M - $1.5M)',
-                      name: 'priceRange',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Number of Bedrooms',
-                      name: 'bedrooms',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Must-Haves (e.g., pool, waterfront)',
-                      name: 'mustHaves',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    }
-                  ]} />
-                </span>
-              </div>
-              <div
-                className={`mb-4 text-left`}
-              >
-                <span
-                  className={`inline-block pl-5 pr-8 py-6  max-w-[80%] bg-gray-200 rounded-md `}
-                >
-                  <Form fields={[
-                    {
-                      label: 'Your Name',
-                      name: 'name',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Contact Number',
-                      name: 'contactNumber',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Email Address',
-                      name: 'email',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Property Address',
-                      name: 'propertyAddress',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Estimated Value or Recent Appraisal (if you have one)',
-                      name: 'estimatedValue',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },{
-                      label: 'Reason for Selling (e.g., downsizing, relocating, etc.)',
-                      name: 'reasonForSelling',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    }
-                  ]} />
-                </span>
-              </div>
-
+            
 
             {isTyping && (
               <div className="text-left mb-2">
@@ -478,7 +399,7 @@ const ChatBot = ({
           )
         }
         {
-          title==="LOOKING TO RENT"&&(
+          title==="LOCATION" && (
             <ImageGrid data={LOOKING_TO_RENT}
             
             />

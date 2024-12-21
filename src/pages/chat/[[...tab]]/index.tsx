@@ -49,32 +49,40 @@ const ChatbotPage = (
       title:"LOOKING TO RENT",
       description: "See what properties we have available",
       prompt:'LOOKING_TO_RENT_PROMPT',
-      firstMessage: "Looking to rent",
+      firstMessage: "Hi, let us know how we can help you. Any particular suburb or features you're looking for?",
       placeholder : "type the suburb or area & any property features you're looking for",
       route: "looking-to-rent",
       index: 2,
       
     },
     {
+      title:"LOCATION",
+      description: "Find a property in your desired location",
+      prompt:'LOCATION_PROMPT',
+      route: "location",
+      index:3,
+
+    },
+    {
       title: "MOMENTS FROM HOME",
       description: "Stories from people just like you",
       prompt:'MOMENTS_FROM_HOME_PROMPT',
       route: "moments-from-home",
-      index: 3,
+      index: 4,
     },
     {
       title: "INSIDE AUSREALTY",
       description: "Learn more about us",
       prompt:'INSIDE_AUSREALTY_PROMPT',
       route: "inside-ausrealty",
-      index: 3,
+      index: 5,
     },
     {
       title: "OUR PEOPLE",
       description: "Meet our team",
       prompt:'OUR_PEOPLE_PROMPT',
       route: "our-people",
-      index: 4,
+      index: 6,
       placeholder:"Search here by name, location or office"
     },
 

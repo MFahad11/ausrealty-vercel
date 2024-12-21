@@ -9,6 +9,8 @@ import InstaGrid from "./InstaGrid";
 import { OUR_TEAM_DATA } from "@/constants/our-team";
 import { INSIDE_AUSREALTY } from "@/constants/inside-ausrealty";
 import { LOOKING_TO_RENT } from "@/constants/looking-to-rent";
+import Link from "next/link";
+import axiosInstance from "@/utils/axios-instance";
 const ChatBot = ({
     title,
     firstMessage,
@@ -141,20 +143,21 @@ const ChatBot = ({
 //     }
 //   };
   const initializeChat = async () => {
-      if(firstMessage){
+    console.log('initializeChat',firstMessage)
+    if(title!=='SELL OR LEASE MY PROPERTY'){if(firstMessage){
         setMessages([
             {
               role: "system",
-              content: 'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.',
+              content:firstMessage,
             },
-            {
-                role: "user",
-                content: firstMessage,
-            },
-            {
-              role: "system",
-              content: firstMessage?.includes('Sell')?`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`:`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best properties. Otherwise, message us over what you’re looking for and we’ll show you what we have to offer.`,
-            }
+            // {
+            //     role: "user",
+            //     content: firstMessage,
+            // },
+            // {
+            //   role: "system",
+            //   content: firstMessage?.includes('Sell')?`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`:`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best properties. Otherwise, message us over what you’re looking for and we’ll show you what we have to offer.`,
+            // }
           ]);
         //   typewriterEffect(
         //     `Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`, 0
@@ -171,7 +174,8 @@ const ChatBot = ({
       }
       if(prompt){
         localStorage.setItem(prompt, JSON.stringify(messages));
-      }
+      }}
+      
       
   }
   useEffect(() => {
@@ -180,7 +184,10 @@ const ChatBot = ({
     if (savedMessages) {
       setMessages(JSON.parse(savedMessages));
     } else {
-      initializeChat();
+      if(title!=='SELL OR LEASE MY PROPERTY'){
+        initializeChat();
+      }
+      
     }
     
   }, [
@@ -202,7 +209,7 @@ const ChatBot = ({
     setIsTyping(true);
     const userMessage = { role: "user", content: inputValue };
     setMessages([...messages, userMessage]);
-    setInputValue("");
+    // setInputValue("");
 
     try {
     //   const botResponseText = await chatgptAPICall(inputValue, messages);
@@ -211,14 +218,17 @@ const ChatBot = ({
     //   }
 
       setIsTyping(false);
-      const botResponse = { role: "system", content: "" };
-      setMessages((prevMessages) => {
-        const newMessages = [...prevMessages, botResponse];
-        typewriterEffect(
-            'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.'
-            , newMessages.length - 1);
-        return newMessages;
-      });
+      // const botResponse = { role: "system", content: "" };
+      // setMessages((prevMessages) => {
+      //   const newMessages = [...prevMessages, botResponse];
+      //   typewriterEffect(
+      //       'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.'
+      //       , newMessages.length - 1);
+      //   return newMessages;
+      // });
+
+    // user input to api
+    searchData(userMessage?.content);
     } catch (error:any) {
       const errorMessage =
       error.response?.data?.message ||
@@ -228,7 +238,28 @@ const ChatBot = ({
       setIsTyping(false);
     }
   };
+  const searchData = async (userInput:string) => {
+    try {
+      const response = await axiosInstance.get('/api/domain/listings',{
+        params:{
+          searchTerm: userInput
+        }
+      });
+    
+    } catch (error:any) {
+      const errorMessage =
+      error.response?.data?.message ||
+        error.message ||
+        "An unexpected error occurred";
+      toast.error(errorMessage);
+    }
 
+  }
+  useEffect(() => {
+    if(title==='LOOKING TO BUY'){
+      searchData(inputValue);
+    }
+  }, [messages]);
   const generateStory = async () => {
     if (messages.length < 10) {
       toast.error(
@@ -349,7 +380,30 @@ const ChatBot = ({
           )
         }
         {
-          (title==='SELL OR LEASE MY PROPERTY' || title==='LOOKING TO BUY') && (<div
+          (title==='SELL OR LEASE MY PROPERTY' || title==='LOOKING TO BUY' || title==='LOOKING TO RENT') && (
+            (title==='SELL OR LEASE MY PROPERTY' && !localStorage.getItem(prompt)) ? (
+              <div
+              className={`mb-4 text-left`}
+            >
+              <span
+                className={`inline-block p-3 max-w-[80%] rounded-lg bg-white`}
+              >
+                <p>Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+  <Link href="/sell-or-lease-my-property font-lato" className="text-black underline">
+    Sell My Property
+  </Link>
+  <Link href="/sell-or-lease-my-property font-lato" className="text-black underline">
+    Lease My Property
+  </Link>
+</div>
+
+
+
+              </span>
+            </div>
+            
+            ) :(<div
             id="msg"
             ref={messagesContainerRef}
             className="enhanced-textarea overflow-y-auto p-3 pl-0 pb-32"
@@ -372,7 +426,7 @@ const ChatBot = ({
                 </span>
               </div>
             ))}
-            <div
+            {/* <div
                 className={`mb-4 text-left`}
               >
                 <span
@@ -450,7 +504,7 @@ const ChatBot = ({
                     }
                   ]} />
                 </span>
-              </div>
+              </div> */}
 
 
             {isTyping && (
@@ -461,6 +515,8 @@ const ChatBot = ({
               </div>
             )}
           </div>)
+          
+          )
         }
         {
           title === "INSIDE AUSREALTY" && (
@@ -478,24 +534,76 @@ const ChatBot = ({
           )
         }
         {
-          title==="LOOKING TO RENT"&&(
+          title==="LOCATION" && (
             <ImageGrid data={LOOKING_TO_RENT}
             
             />
           )
         }
-         
+         {/* {
+          !title && (
+            <div
+            // place in the center
+            className="flex flex-col items-center justify-center min-h-[75vh]"
+            >
+              
+              <p className="text-center">Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.</p>
+              <div className="flex flex-wrap justify-center mt-4">
+                {boxes?.slice(0,3).map((box, index) => (
+                  <div
+                    key={index}
+                    className="w-full md:w-1/2 lg:w-1/3 p-2"
+                  >
+                    <button
+                      onClick={() => handleBoxClick(box, index)}
+                      className="w-full p-4 bg-gray-200 rounded-lg shadow-md"
+                    >
+                      <h3 className=" mb-1">{box.title}</h3>
+                      <p
+                      className="mb-0"
+                      >{box.description}</p>
+                    </button>
+                  </div>
+                ))}
+  </div>
+
+
+
+
+            </div>
+          )
+         } */}
         </div>
       </div>
-            
-      <div className="max-w-4xl mx-auto fixed bottom-[4.64rem] left-0 right-0 w-full bg-white py-2 px-6">
+      {/* {
+          title &&     
+      <div className="max-w-4xl mx-auto fixed bottom-[4.64rem] left-0 right-0 w-full bg-white pt-2 pb-6 px-6">
       <div className="relative flex items-center justify-between border border-gray-600 rounded-full px-4 py-3 shadow-md">
   <textarea
     ref={textareaRef}
     value={inputValue}
     onChange={handleInputChange}
     onKeyPress={handleKeyPress}
-    placeholder={placeholder?.length>=40?placeholder?.slice(0,41):placeholder}
+    placeholder={placeholder}
+    className="flex-grow bg-transparent text-sm outline-none resize-none overflow-y-hidden"
+    rows={1}
+  />
+  <button
+    onClick={handleSend}
+    className=" text-black"
+  >
+    <IoSend />
+  </button>
+</div>
+      </div>} */}
+      <div className="max-w-4xl mx-auto fixed bottom-[4.64rem] left-0 right-0 w-full bg-white pt-2 pb-6 px-6">
+      <div className="relative flex items-center justify-between border border-gray-600 rounded-full px-4 py-3 shadow-md">
+  <textarea
+    ref={textareaRef}
+    value={inputValue}
+    onChange={handleInputChange}
+    onKeyPress={handleKeyPress}
+    placeholder={placeholder}
     className="flex-grow bg-transparent text-sm outline-none resize-none overflow-y-hidden"
     rows={1}
   />

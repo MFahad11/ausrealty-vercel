@@ -395,7 +395,7 @@ const ChatBot = ({
 
   const handleStartAgain = () => {
     setMessages([]);
-    // localStorage.removeItem(prompt);
+    localStorage.removeItem(prompt);
     initializeChat();
   };
   return (
@@ -674,6 +674,16 @@ const ChatBot = ({
     <IoSend />
   </button>
 </div>
+<div className="flex my-2 justify-center">
+          <button
+            onClick={handleStartAgain}
+            className="font-lato rounded-md transition-all bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
+            disabled={isTyping || loading}
+          >
+            Start again
+          </button>
+          
+        </div>
       </div>
     </div>
   );

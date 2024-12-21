@@ -1,155 +1,136 @@
-interface AddressParts {
-    suburb: string;
+type Property = {
+  objective: string;
+  propertyTypes: string[];
+  status: string;
+  saleMode: string;
+  channel: string;
+  addressParts: {
     stateAbbreviation: string;
-    postcode: string;
+    displayType: string;
     street: string;
+    suburb: string;
+    postcode: string;
     displayAddress: string;
-  }
-  
-  interface PropertyListing {
-    objective: string;
-    propertyTypes: string[];
-    status: string;
-    addressParts: AddressParts;
-    bathrooms: number;
-    bedrooms: number;
-    carspaces: number;
-    description: string;
-    headline: string;
-    [key: string]: any;
-  }
-  
-  // Common property type variations for flexible matching
-  const propertyTypeMap: Record<string, string[]> = {
-    'apartmentUnitFlat': ['apartment', 'unit', 'flat', 'apartmentunitflat'],
-    'house': ['house', 'home', 'residence'],
-    'townhouse': ['townhouse', 'town house', 'villa'],
-    'studio': ['studio', 'bachelor'],
-    'duplex': ['duplex', 'semi-detached'],
-    'penthouse': ['penthouse', 'luxury apartment'],
-    'terrace': ['terrace', 'terrace house'],
-    'villa': ['villa', 'villa unit'],
-    'acreage': ['acreage', 'land', 'rural'],
-    'blockOfUnits': ['block of units', 'apartment block', 'unit block']
   };
-  
-  /**
-   * Search through property listings based on user input
-   * @param listings Array of property listings
-   * @param searchTerm User input search term
-   * @returns Filtered array of property listings
-   */
-  const filterProperties = (
-    listings: PropertyListing[],
-    searchTerm: string
-  ): PropertyListing[] => {
-    // If no search term, return all listings
-    if (!searchTerm?.trim()) {
-      return listings;
+  bathrooms: number;
+  bedrooms: number;
+  carspaces: number;
+  priceDetails?: {
+    displayPrice: string;
+  };
+};
+
+type Filter = {
+  objective?: string;
+  saleMode?: string;
+  channel?: string;
+  suburb?: string;
+  features?: string[];
+  location?: string;
+  address?: string;
+  priceRange?: string; // "min-max" or "value"
+  propertyTypes?: string[];
+  bedrooms?: number;
+  bathrooms?: number;
+  carspaces?: number;
+};
+
+function filterProperties(properties: Property[], filter: Filter): Property[] {
+  // Helper function to check for range match
+  function matchesRange(value: number, range?: string): boolean {
+    if (!range) return true; // No range specified, always match
+
+    const [min, max] = range.split("-").map((v) => parseFloat(v));
+
+    if (!isNaN(min) && value < min) return false; // Below min
+    if (!isNaN(max) && value > max) return false; // Above max
+
+    return true; // Matches range
+  }
+
+  // Filter logic
+  return properties.filter((property) => {
+    // Location-related filtering
+    let matchesLocation = false;
+    let matchesAddress = false;
+    let matchesSuburb = false;
+    
+    if (filter.suburb || filter.address || filter.location) {
+      const matchesSuburb =
+        filter.suburb && (property.addressParts.suburb.toLowerCase().includes(filter.suburb.toLowerCase()) || property.addressParts.suburb.toLowerCase()===filter?.suburb?.toLowerCase())
+      const matchesAddress =
+        filter.address && (property.addressParts.street.toLowerCase().includes(filter.address.toLowerCase()) || property.addressParts.street.toLowerCase()===filter?.address?.toLowerCase())
+      const matchesLocation =
+        filter.location && (property.addressParts.displayAddress.toLowerCase().includes(filter.location.toLowerCase()) || property.addressParts.displayAddress.toLowerCase()===filter?.location?.toLowerCase())
+      
+      if (!matchesSuburb && !matchesAddress && !matchesLocation) {
+        console.log('matchesSuburb', matchesSuburb)
+        return false; // Reject if none of the location filters match
+      }else{
+        console.log('matchesSuburbTrue', matchesSuburb)
+      }
     }
-  
-    const normalizedSearch = searchTerm.toLowerCase().trim();
-    const searchTerms = normalizedSearch.split(/\s+/);
-  
-    return listings.filter(listing => {
-      // Normalize property types for searching
-      const propertyTypeVariations = listing.propertyTypes.flatMap(type => {
-        const variations = propertyTypeMap[type] || [type.toLowerCase()];
-        // Add the original type as well
-        return [...variations, type.toLowerCase()];
-      });
-  
-      // Convert relevant listing data to searchable string
-      const searchableContent = [
-        // Location-based search
-        listing.addressParts.suburb,
-        listing.addressParts.stateAbbreviation,
-        listing.addressParts.postcode,
-        listing.addressParts.street,
-        listing.addressParts.displayAddress,
-        
-        // Property types with variations
-        ...propertyTypeVariations,
-        
-        // Property features
-        listing.objective,
-        listing.status,
-        
-        // Additional features from description
-        listing.description,
-        listing.headline,
-        
-        // Number-based searches
-        `${listing.bedrooms} bed`,
-        `${listing.bedrooms} beds`,
-        `${listing.bedrooms} bedroom`,
-        `${listing.bedrooms} bedrooms`,
-        `${listing.bathrooms} bath`,
-        `${listing.bathrooms} baths`,
-        `${listing.bathrooms} bathroom`,
-        `${listing.bathrooms} bathrooms`,
-        `${listing.carspaces} car`,
-        `${listing.carspaces} cars`,
-        `${listing.carspaces} carspace`,
-        `${listing.carspaces} carspaces`,
-        `${listing.carspaces} parking`,
-        
-        // Common feature keywords from description
-        ...(listing.description.toLowerCase().match(/air.*conditioning|balcony|storage|modern|new|luxury|train|station|shops|school/g) || [])
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-  
-      // Check if ALL search terms match (AND operation)
-      return searchTerms.every(term => {
-        // Handle number ranges
-        if (term.includes('+') || term.includes('-')) {
-          const numMatch = term.match(/(\d+)([+-])(?:\d+)?/);
-          if (numMatch) {
-            const baseNum = parseInt(numMatch[1]);
-            const operator = numMatch[2];
-            
-            if (term.includes('bed')) {
-              return operator === '+' 
-                ? listing.bedrooms >= baseNum
-                : listing.bedrooms >= baseNum && listing.bedrooms <= parseInt(term.split('-')[1]);
-            }
-            if (term.includes('bath')) {
-              return operator === '+' 
-                ? listing.bathrooms >= baseNum
-                : listing.bathrooms >= baseNum && listing.bathrooms <= parseInt(term.split('-')[1]);
-            }
-            if (term.includes('car')) {
-              return operator === '+' 
-                ? listing.carspaces >= baseNum
-                : listing.carspaces >= baseNum && listing.carspaces <= parseInt(term.split('-')[1]);
-            }
-          }
-        }
-  
-        // Handle exact number matches
-        const numMatch = term.match(/^(\d+)(bed|bath|car)/);
-        if (numMatch) {
-          const num = parseInt(numMatch[1]);
-          const type = numMatch[2];
-          if (type === 'bed') return listing.bedrooms === num;
-          if (type === 'bath') return listing.bathrooms === num;
-          if (type === 'car') return listing.carspaces === num;
-        }
-  
-        // Special handling for property types
-        for (const [originalType, variations] of Object.entries(propertyTypeMap)) {
-          if (variations.includes(term)) {
-            return listing.propertyTypes.some(type => 
-              type.toLowerCase() === originalType.toLowerCase()
-            );
-          }
-        }
-  
-        // Regular text search
-        return searchableContent.includes(term);
-      });
-    });
-  };
-  export default filterProperties;
+
+    // Match objective
+    if (filter.objective && property.objective !== filter.objective) {
+      console.log('objective', matchesSuburb)
+      return false;
+    }
+
+    // Match saleMode
+    if (filter.saleMode && property.saleMode !== filter.saleMode) {
+      console.log('saleMode', matchesSuburb)
+      return false;
+    }
+
+    // Match channel
+    if (filter.channel && property.channel !== filter.channel) {
+      console.log('channel', matchesSuburb)
+      return false;
+    }
+
+    // Match propertyTypes
+    if (
+      filter.propertyTypes &&
+      filter.propertyTypes.length > 0 &&
+      !filter.propertyTypes.some((type) => property.propertyTypes.includes(type))
+    ) {
+      console.log('propertyTypes', matchesSuburb)
+      return false;
+    }
+
+    // Match bedrooms
+    if (filter.bedrooms && property.bedrooms !== filter.bedrooms) {
+      console.log('bedrooms', matchesSuburb)
+      return false;
+    }
+
+    // Match bathrooms
+    if (filter.bathrooms && property.bathrooms !== filter.bathrooms) {
+      console.log('bathrooms', matchesSuburb)
+      return false;
+    }
+
+    // Match carspaces
+    if (filter.carspaces && property.carspaces !== filter.carspaces) {
+      console.log('carspaces', matchesSuburb)
+      return false;
+    }
+
+    // Match price range
+    if (
+      filter.priceRange &&
+      property.priceDetails?.displayPrice &&
+      !matchesRange(parseFloat(property.priceDetails.displayPrice.replace(/[^0-9.]/g, "")), filter.priceRange)
+    ) {
+      console.log('priceRange', matchesSuburb)
+      return false;
+    }
+    
+    console.log('outside', matchesSuburb)
+
+    return true; // Property matches all filters
+  });
+}
+
+export default filterProperties;

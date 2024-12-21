@@ -11,6 +11,7 @@ import { INSIDE_AUSREALTY } from "@/constants/inside-ausrealty";
 import { LOOKING_TO_RENT } from "@/constants/looking-to-rent";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios-instance";
+import { handleBuyingChat } from "@/utils/openai";
 const ChatBot = ({
     title,
     firstMessage,
@@ -45,7 +46,10 @@ const ChatBot = ({
     }, index:number) => void
 }) => {
   const [messages, setMessages] = useState<
-    Array<{ role: string; content: string }>
+    Array<{ role: string; content: string
+      properties?: any[],
+      isLoading?: boolean
+    }>
   >([]);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -99,7 +103,7 @@ const ChatBot = ({
   }, [inputValue]);
   useEffect(() => {
     if (messages.length > 0) {
-      localStorage.setItem(prompt, JSON.stringify(messages));
+      localStorage.setItem(prompt, JSON.stringify(messages?.map(({ content, role }) => ({ content, role }))));
     }
   }, [messages]);
 
@@ -143,7 +147,6 @@ const ChatBot = ({
 //     }
 //   };
   const initializeChat = async () => {
-    console.log('initializeChat',firstMessage)
     if(title!=='SELL OR LEASE MY PROPERTY'){if(firstMessage){
         setMessages([
             {
@@ -209,7 +212,7 @@ const ChatBot = ({
     setIsTyping(true);
     const userMessage = { role: "user", content: inputValue };
     setMessages([...messages, userMessage]);
-    // setInputValue("");
+    setInputValue("");
 
     try {
     //   const botResponseText = await chatgptAPICall(inputValue, messages);
@@ -217,7 +220,7 @@ const ChatBot = ({
     //     throw new Error("Error in response");
     //   }
 
-      setIsTyping(false);
+      setIsTyping(true);
       // const botResponse = { role: "system", content: "" };
       // setMessages((prevMessages) => {
       //   const newMessages = [...prevMessages, botResponse];
@@ -239,27 +242,53 @@ const ChatBot = ({
     }
   };
   const searchData = async (userInput:string) => {
-    try {
-      const response = await axiosInstance.get('/api/domain/listings',{
-        params:{
-          searchTerm: userInput
-        }
-      });
-    
-    } catch (error:any) {
-      const errorMessage =
-      error.response?.data?.message ||
-        error.message ||
-        "An unexpected error occurred";
-      toast.error(errorMessage);
-    }
-
-  }
-  useEffect(() => {
     if(title==='LOOKING TO BUY'){
-      searchData(inputValue);
+      const data = await handleBuyingChat(userInput,messages.map(({ content, role }) => ({ content, role })));
+    
+      if(data?.extractedInfo){
+        setMessages((prevMessages) => {
+          const newMessage={ role: "system", content: data?.response,properties:[],isLoading:true }
+          const updatedMessages = [...prevMessages, newMessage];
+          return updatedMessages;
+        });
+        try {
+          const response = await axiosInstance.post('/api/domain/listings',{
+            extractedInfo: data?.extractedInfo
+          });
+          if(response.data.success){
+            const properties = response.data.data;
+            
+            setMessages((prevMessages) => {
+              const updatedMessages = [...prevMessages];
+              updatedMessages[prevMessages.length - 1].properties = properties;
+              updatedMessages[prevMessages.length - 1].isLoading = false;
+              return updatedMessages;
+            });
+    
+    
+          }
+        } catch (error:any) {
+          const errorMessage =
+          error.response?.data?.message ||
+            error.message ||
+            "An unexpected error occurred";
+          toast.error(errorMessage);
+        }
+    
+      }else{
+        setMessages(
+          (prevMessages) => {
+            const newMessage={ role: "system", content: data?.response }
+            const updatedMessages = [...prevMessages, newMessage];
+            return updatedMessages;
+          }
+        );
+      }
     }
-  }, [messages]);
+    
+    setIsTyping(false);
+    
+  }
   const generateStory = async () => {
     if (messages.length < 10) {
       toast.error(
@@ -379,9 +408,8 @@ const ChatBot = ({
             <InstaGrid data={instaData}/>
           )
         }
-        {
-          (title==='SELL OR LEASE MY PROPERTY' || title==='LOOKING TO BUY' || title==='LOOKING TO RENT') && (
-            (title==='SELL OR LEASE MY PROPERTY' && !localStorage.getItem(prompt)) ? (
+        {(title === 'SELL OR LEASE MY PROPERTY' || title === 'LOOKING TO BUY' || title === 'LOOKING TO RENT') && (
+  title === 'SELL OR LEASE MY PROPERTY' && messages?.length === 0 ? (
               <div
               className={`mb-4 text-left`}
             >
@@ -423,6 +451,38 @@ const ChatBot = ({
                   }`}
                 >
                   <p>{message.content}</p>
+                  {message.properties && message.properties.length > 0 && (
+                    <div className="mt-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                        {message.properties.map((property, index) => (
+                          <div
+                            key={index}
+                            className="bg-white rounded-md shadow-sm p-4 cursor-pointer border-lightgray border"
+                            onClick={() => {}}
+                          >
+                            <h5 className="font-semibold mb-1">
+                              {property.addressParts.displayAddress}
+                            </h5>
+                            <p className="mb-2">
+                              {property.headline}
+                            </p>
+                            <div className="flex justify-between">
+                              <span className="font-semibold">
+                                {property.priceDetails.displayPrice}
+                              </span>
+                              
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {message.isLoading && (
+                    <div className="text-center mt-4">
+                      <i className="fa-solid fa-spinner animate-spin"></i>
+                    </div>
+                  )}
                 </span>
               </div>
             ))}

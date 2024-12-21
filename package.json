@@ -30,7 +30,8 @@
     "react-toastify": "^10.0.6",
     "tailwind-merge": "^2.5.5",
     "uuid": "^11.0.3",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "openai": "^4.3.0"
   },
   "devDependencies": {
     "@types/formidable": "^3.4.5",

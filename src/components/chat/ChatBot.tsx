@@ -11,7 +11,7 @@ import { INSIDE_AUSREALTY } from "@/constants/inside-ausrealty";
 import { LOOKING_TO_RENT } from "@/constants/looking-to-rent";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios-instance";
-import { handleBuyingChat } from "@/utils/openai";
+import { handleBuyingChat, handleRenChat } from "@/utils/openai";
 const ChatBot = ({
     title,
     firstMessage,
@@ -103,7 +103,7 @@ const ChatBot = ({
   }, [inputValue]);
   useEffect(() => {
     if (messages.length > 0) {
-      localStorage.setItem(prompt, JSON.stringify(messages?.map(({ content, role }) => ({ content, role }))));
+      localStorage.setItem(prompt, JSON.stringify(messages));
     }
   }, [messages]);
 
@@ -242,10 +242,14 @@ const ChatBot = ({
     }
   };
   const searchData = async (userInput:string) => {
+    let data:any;
     if(title==='LOOKING TO BUY'){
-      const data = await handleBuyingChat(userInput,messages.map(({ content, role }) => ({ content, role })));
-    
-      if(data?.extractedInfo){
+      data = await handleBuyingChat(userInput,messages.map(({ content, role }) => ({ content, role })));
+    }
+    else if(title==='LOOKING TO RENT'){
+      data = await handleRenChat(userInput,messages.map(({ content, role }) => ({ content, role })))
+    }
+    if(data?.extractedInfo){
         setMessages((prevMessages) => {
           const newMessage={ role: "system", content: data?.response,properties:[],isLoading:true }
           const updatedMessages = [...prevMessages, newMessage];
@@ -284,8 +288,6 @@ const ChatBot = ({
           }
         );
       }
-    }
-    
     setIsTyping(false);
     
   }
@@ -401,7 +403,7 @@ const ChatBot = ({
   return (
     <div className="w-full h-full flex flex-col justify-between">
       <ToastContainer />
-      <div className="max-w-4xl mx-auto flex flex-col flex-grow mb-2">
+      <div className="max-w-4xl min-w-4xl mx-auto flex flex-col flex-grow pb-14 overflow-y-auto">
         <div className="p-2 m-0 w-full rounded-lg mt-4">
         {
           title === "MOMENTS FROM HOME" && (
@@ -656,7 +658,17 @@ const ChatBot = ({
   </button>
 </div>
       </div>} */}
-      <div className="max-w-4xl mx-auto fixed bottom-[4.64rem] left-0 right-0 w-full bg-white pt-2 pb-6 px-6">
+      <div className="max-w-4xl mx-auto fixed bottom-[5rem] pb-4 left-0 right-0 w-full bg-white px-2 sm:px-0">
+      <div className="flex my-2 justify-center">
+          <button
+            onClick={handleStartAgain}
+            className="font-lato rounded-md transition-all bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
+            disabled={isTyping || loading}
+          >
+            Start again
+          </button>
+          
+        </div>
       <div className="relative flex items-center justify-between border border-gray-600 rounded-full px-4 py-3 shadow-md">
   <textarea
     ref={textareaRef}
@@ -674,16 +686,7 @@ const ChatBot = ({
     <IoSend />
   </button>
 </div>
-<div className="flex my-2 justify-center">
-          <button
-            onClick={handleStartAgain}
-            className="font-lato rounded-md transition-all bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
-            disabled={isTyping || loading}
-          >
-            Start again
-          </button>
-          
-        </div>
+
       </div>
     </div>
   );

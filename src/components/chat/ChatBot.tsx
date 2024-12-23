@@ -67,6 +67,7 @@ const ChatBot = ({
 
   useEffect(() => {
     if (messages.length > 0) {
+      
       localStorage.setItem(prompt, JSON.stringify(messages));
     }
   }, [messages]);
@@ -227,10 +228,10 @@ const ChatBot = ({
       
     }else{
       if(title==='LOOKING TO BUY'){
-      data = await handleBuyingChat(userInput,messages.map(({ content, role }) => ({ content, role })));
+      data = await handleBuyingChat(userInput,messages.map(({ content, role,properties }) => ({ content, role,properties:properties || [] })));
     }
     else if(title==='LOOKING TO RENT'){
-      data = await handleRenChat(userInput,messages.map(({ content, role }) => ({ content, role })))
+      data = await handleRenChat(userInput,messages.map(({ content, role,properties }) => ({ content, role,properties:properties || []  })))
     }
     if(data?.extractedInfo){
         setMessages((prevMessages) => {
@@ -244,13 +245,41 @@ const ChatBot = ({
           });
           if(response.data.success){
             const properties = response.data.data;
-            
-            setMessages((prevMessages) => {
+            if(properties.length==0){
+              setMessages(
+                (prevMessages) => {
+                  const newMessage={ role: "system", content: 'Unable to find any properties that match your criteria. But you can always provide more information to help us find the right property for you.' }
+                  const updatedMessages = [...prevMessages, newMessage];
+                  return updatedMessages;
+                }
+              );
+            }else{
+              setMessages((prevMessages) => {
               const updatedMessages = [...prevMessages];
-              updatedMessages[prevMessages.length - 1].properties = properties;
+              updatedMessages[prevMessages.length - 1].properties = properties?.map((property:any) => ({
+                addressParts: property?.addressParts,
+                headline: property?.headline,
+                priceDetails: property?.priceDetails,
+                bedrooms: property?.bedrooms,
+                bathrooms: property?.bathrooms,
+                carspaces: property?.carspaces,
+                channel: property?.channel,
+                features: property?.features,
+                location: property?.location,
+                objective: property?.objective,
+                priceRange: property?.priceRange,
+                propertyTypes: property?.propertyTypes,
+                saleMode: property?.saleMode,
+                suburb: property?.sub,
+                media: property?.media?.length>=1?property?.media[0]:null
+
+              }));
+
               updatedMessages[prevMessages.length - 1].isLoading = false;
               return updatedMessages;
             });
+            }
+            
     
     
           }
@@ -442,20 +471,38 @@ const ChatBot = ({
                     <div className="mt-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                         {message.properties.map((property, index) => (
+                          console.log(property),
                           <div
                             key={index}
                             className="bg-white rounded-md shadow-sm p-4 cursor-pointer border-lightgray border"
                             onClick={() => {}}
                           >
+                            {property?.media && (
+  <div className="relative md:w-full md:h-64 aspect-16x9 overflow-hidden rounded-md mb-1">
+    {property?.media?.category === 'image' ? (
+      <img
+        src={property?.media?.url}
+        alt={property?.headline}
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <video
+        src={property?.media?.url}
+        className="w-full h-full object-cover"
+        controls
+      />
+    )}
+  </div>
+)}
                             <h5 className="font-semibold mb-1">
-                              {property.addressParts.displayAddress}
+                              {property?.addressParts.displayAddress}
                             </h5>
                             <p className="mb-2">
-                              {property.headline}
+                              {property?.headline}
                             </p>
                             <div className="flex justify-between">
                               <span className="font-semibold">
-                                {property.priceDetails.displayPrice}
+                                {property?.priceDetails.displayPrice}
                               </span>
                               
                             </div>

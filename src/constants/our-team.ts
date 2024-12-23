@@ -59,7 +59,7 @@ export const OUR_TEAM_DATA = [
     email: "chris.harding@ausrealty.com.au",
     specialisedServiceAreas: ["Penshurst, NSW 2222"],
     image:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/747a128d-df4f-4e2f-899f-f0198b667c59-Hani%20-%20web cropped.jpg",
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/747a128d-df4f-4e2f-899f-f0198b667c59-Hani%20-%20web%20cropped.jpg",
   },
   {
     name: "CHRIS HARDING",

@@ -1,7 +1,7 @@
 import Button from "@/components/ui/Button";
 import { useRouter } from "next/router";
-import ChatbotPage from "./chat/[tab]";
 import axios from "axios";
+import ChatBotHandler from "@/components/chat/ChatBotHandler";
 
 export default function Index({data}: {data: any}) {
   const navigate=useRouter();
@@ -24,14 +24,8 @@ export default function Index({data}: {data: any}) {
       </video>
     </div>
     
-    {/* Button */}
-    {/* <button
-      onClick={() => navigate.push('/chat')}
-      className="w-full max-w-[417px] py-4 bg-black text-white font-abchanel text-center"
-    >
-      Find what you need
-    </button> */}
-    <div><ChatbotPage 
+    
+    <div><ChatBotHandler
       data={data}
     /></div>
     

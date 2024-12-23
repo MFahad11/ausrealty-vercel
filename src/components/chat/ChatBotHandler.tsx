@@ -8,7 +8,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ChatBotHandler = (
-  {data}: {data: any}
+  {data,indexPage=false
+  }: {data: any, indexPage?: boolean}
 ) => {
   const [step, setStep] = useState(1);
   const [finalMessg, setFinalMessg] = useState("");
@@ -216,6 +217,7 @@ const ChatBotHandler = (
             handleBoxClick={handleBoxClick}
             boxes={boxes}
             instaData={data}
+            indexPage={indexPage}
             />
       
       </div>

@@ -11,7 +11,7 @@ import { INSIDE_AUSREALTY } from "@/constants/inside-ausrealty";
 import { LOOKING_TO_RENT } from "@/constants/looking-to-rent";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios-instance";
-import { handleBuyingChat, handleRenChat } from "@/utils/openai";
+import { handleBuyingChat, handleIdentifyIntent, handleRenChat } from "@/utils/openai";
 const ChatBot = ({
     title,
     firstMessage,
@@ -21,7 +21,8 @@ const ChatBot = ({
     index,
     boxes,
     instaData,
-    handleBoxClick
+    handleBoxClick,
+    indexPage
 }:{
     instaData: any
     title: string,
@@ -39,6 +40,7 @@ const ChatBot = ({
       route?: string;
       index?: number;
     }>
+    indexPage?: boolean
     handleBoxClick: (box:{
       title: string;
       description?: string;
@@ -51,6 +53,7 @@ const ChatBot = ({
       isLoading?: boolean
     }>
   >([]);
+  const [intentExtracting, setIntentExtracting] = useState(false);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -61,46 +64,7 @@ const ChatBot = ({
   const textareaRef = useRef<
     HTMLTextAreaElement | null
   >(null);
-  const tabKeywords = {
-    "sell-or-lease-my-property": ["sell", "lease"],
-    "looking-to-buy": ["buy", "purchase"],
-    "moments-from-home": ["moments", "home"],
-    "inside-ausrealty": ["inside", "ausrealty"],
-    "our-people": ["people"],
-  }
-  useEffect(() => {
-    const checkTabMatch = () => {
-      const words = inputValue.trim().split(/\s+/); // Split input into words
-      const lastWord = words[words.length - 1].toLowerCase();
-  
-      for (const [tab, keywords] of Object.entries(tabKeywords)) {
-        if (keywords.some((keyword) => lastWord === keyword)) {
-          if (route !== tab) {
-            const index = boxes.findIndex((box) => box.route === tab);
-            handleBoxClick(
-              {
-                title: boxes[index].title,
-                description: boxes[index].description,
-                prompt: boxes[index].prompt,
-              },
-              index
-            );
-          }
-          break;
-        }
-      }
-    };
-  
-    if (inputValue.trim() || inputValue.trim().endsWith("?")|| inputValue.trim().endsWith(".") || inputValue.trim().endsWith("!")|| inputValue.trim().endsWith(",")) {
-      const debounceTimeout = setTimeout(() => {
-        checkTabMatch(); // Call the function here
-      }, 500); // Adjust debounce delay as needed
-  
-      return () => {
-        clearTimeout(debounceTimeout); // Clear the timeout on cleanup
-      };
-    }
-  }, [inputValue]);
+
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem(prompt, JSON.stringify(messages));
@@ -212,7 +176,12 @@ const ChatBot = ({
 
     setIsTyping(true);
     const userMessage = { role: "user", content: inputValue };
-    setMessages([...messages, userMessage]);
+    if(!indexPage){
+      
+      setMessages([...messages, userMessage]);
+    }else{
+      setIntentExtracting(true)
+    }
     setInputValue("");
 
     try {
@@ -221,7 +190,7 @@ const ChatBot = ({
     //     throw new Error("Error in response");
     //   }
 
-      setIsTyping(true);
+      // setIsTyping(true);
       // const botResponse = { role: "system", content: "" };
       // setMessages((prevMessages) => {
       //   const newMessages = [...prevMessages, botResponse];
@@ -240,11 +209,24 @@ const ChatBot = ({
         "An unexpected error occurred";
       toast.error(errorMessage);
       setIsTyping(false);
+      setIntentExtracting(false);
     }
   };
   const searchData = async (userInput:string) => {
     let data:any;
-    if(title==='LOOKING TO BUY'){
+    if(indexPage){
+      const data= await handleIdentifyIntent(userInput)
+      if(data?.response){
+        const {
+          redirect='/'
+        } = JSON.parse(data?.response)
+        setIntentExtracting(false)
+        router.push(`/chat/${redirect}`)
+        // router.push(`/${data?.response?.redirect}`)
+      }
+      
+    }else{
+      if(title==='LOOKING TO BUY'){
       data = await handleBuyingChat(userInput,messages.map(({ content, role }) => ({ content, role })));
     }
     else if(title==='LOOKING TO RENT'){
@@ -289,6 +271,8 @@ const ChatBot = ({
           }
         );
       }
+    }
+    
     setIsTyping(false);
     
   }
@@ -659,7 +643,46 @@ const ChatBot = ({
   </button>
 </div>
       </div>} */}
-      <div className="md:max-w-3xl  max-w-md  px-4 shadow-lg mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
+      {
+        indexPage?(<div className="md:max-w-3xl  max-w-md px-4 md:px-0 shadow-lg mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
+          {/* <div className="flex my-2 justify-center">
+              <button
+                onClick={handleStartAgain}
+                className="font-lato rounded-md transition-all bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
+                disabled={isTyping || loading}
+              >
+                Start again
+              </button>
+              
+            </div> */}
+          <div className="relative flex items-center justify-between border border-gray-600 rounded-sm px-4 py-3 shadow-md">
+      <textarea
+        ref={textareaRef}
+        value={inputValue}
+        onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
+        placeholder="Send your query, and we'll take you to the right tab."
+        className="flex-grow bg-transparent text-sm outline-none resize-none overflow-y-hidden"
+        disabled={intentExtracting}
+        rows={1}
+      />
+      {
+        intentExtracting ?(
+          
+            <i className="fa-solid fa-spinner animate-spin"></i>
+          
+
+        ):(<button
+        onClick={handleSend}
+        className=" text-black"
+      >
+        <IoSend />
+      </button>)
+      }
+      
+    </div>
+    
+          </div>):(<div className="md:max-w-4xl  max-w-md px-4 md:px-0 shadow-lg mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
       {/* <div className="flex my-2 justify-center">
           <button
             onClick={handleStartAgain}
@@ -688,7 +711,9 @@ const ChatBot = ({
   </button>
 </div>
 
-      </div>
+      </div>)
+      }
+      
     </div>
   );
 };

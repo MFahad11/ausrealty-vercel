@@ -622,40 +622,11 @@ const ChatBot = ({
          } */}
         </div>
       </div>
-      {/* {
-          title &&     
-      <div className="max-w-4xl mx-auto fixed bottom-[4.64rem] left-0 right-0 w-full bg-white pt-2 pb-6 px-6">
-      <div className="relative flex items-center justify-between border border-gray-600 rounded-full px-4 py-3 shadow-md">
-  <textarea
-    ref={textareaRef}
-    value={inputValue}
-    onChange={handleInputChange}
-    onKeyPress={handleKeyPress}
-    placeholder={placeholder}
-    className="flex-grow bg-transparent text-sm outline-none resize-none overflow-y-hidden"
-    rows={1}
-  />
-  <button
-    onClick={handleSend}
-    className=" text-black"
-  >
-    <IoSend />
-  </button>
-</div>
-      </div>} */}
+      
       {
-        indexPage?(<div className="md:max-w-3xl  max-w-md px-4 md:px-0 shadow-lg mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
-          {/* <div className="flex my-2 justify-center">
-              <button
-                onClick={handleStartAgain}
-                className="font-lato rounded-md transition-all bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
-                disabled={isTyping || loading}
-              >
-                Start again
-              </button>
-              
-            </div> */}
-          <div className="relative flex items-center justify-between border border-gray-600 rounded-sm px-4 py-3 shadow-md">
+        indexPage?(<div className="md:max-w-4xl  max-w-[24.5rem] px-4 md:px-0 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
+          
+          <div className="relative flex items-center justify-between border border-gray-600 rounded-sm px-4 py-3">
       <textarea
         ref={textareaRef}
         value={inputValue}
@@ -682,18 +653,9 @@ const ChatBot = ({
       
     </div>
     
-          </div>):(<div className="md:max-w-4xl  max-w-md px-4 md:px-0 shadow-lg mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
-      {/* <div className="flex my-2 justify-center">
-          <button
-            onClick={handleStartAgain}
-            className="font-lato rounded-md transition-all bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
-            disabled={isTyping || loading}
-          >
-            Start again
-          </button>
-          
-        </div> */}
-      <div className="relative flex items-center justify-between border border-gray-600 rounded-sm px-4 py-3 shadow-md">
+          </div>):(<div className="md:max-w-4xl  max-w-[24.5rem] px-4 md:px-0 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
+      
+      <div className="relative flex items-center justify-between border border-gray-600 rounded-sm px-4 py-3">
   <textarea
     ref={textareaRef}
     value={inputValue}

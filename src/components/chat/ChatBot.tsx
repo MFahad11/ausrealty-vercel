@@ -659,7 +659,7 @@ const ChatBot = ({
   </button>
 </div>
       </div>} */}
-      <div className="max-w-4xl mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white px-2 sm:px-0">
+      <div className="md:max-w-3xl  max-w-md  px-4 shadow-lg mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
       {/* <div className="flex my-2 justify-center">
           <button
             onClick={handleStartAgain}
@@ -670,7 +670,7 @@ const ChatBot = ({
           </button>
           
         </div> */}
-      <div className="relative flex items-center justify-between border border-gray-600 rounded-md px-4 py-3 shadow-md">
+      <div className="relative flex items-center justify-between border border-gray-600 rounded-sm px-4 py-3 shadow-md">
   <textarea
     ref={textareaRef}
     value={inputValue}

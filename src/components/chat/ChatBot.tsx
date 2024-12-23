@@ -167,17 +167,18 @@ const ChatBot = ({
         //   )
       }
       else{
-        setMessages([
-            {
-              role: "system",
-              content: 'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.',
-            },
+        // setMessages([
+        //     {
+        //       role: "system",
+        //       content: 'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.',
+        //     },
             
-          ]);
+        //   ]);
       }
-      if(prompt){
-        localStorage.setItem(prompt, JSON.stringify(messages));
-      }}
+      // if(prompt){
+      //   localStorage.setItem(prompt, JSON.stringify(messages));
+      // }
+      }
       
       
   }
@@ -658,8 +659,8 @@ const ChatBot = ({
   </button>
 </div>
       </div>} */}
-      <div className="max-w-4xl mx-auto fixed bottom-[5rem] pb-4 left-0 right-0 w-full bg-white px-2 sm:px-0">
-      <div className="flex my-2 justify-center">
+      <div className="max-w-4xl mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white px-2 sm:px-0">
+      {/* <div className="flex my-2 justify-center">
           <button
             onClick={handleStartAgain}
             className="font-lato rounded-md transition-all bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
@@ -668,8 +669,8 @@ const ChatBot = ({
             Start again
           </button>
           
-        </div>
-      <div className="relative flex items-center justify-between border border-gray-600 rounded-full px-4 py-3 shadow-md">
+        </div> */}
+      <div className="relative flex items-center justify-between border border-gray-600 rounded-md px-4 py-3 shadow-md">
   <textarea
     ref={textareaRef}
     value={inputValue}

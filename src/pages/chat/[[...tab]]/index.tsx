@@ -12,7 +12,7 @@ const ChatbotPage = (
 ) => {
   const [step, setStep] = useState(1);
   const [finalMessg, setFinalMessg] = useState("");
-  const [selectedBox, setSelectedBox] = useState("SELL OR LEASE MY PROPERTY");
+  const [selectedBox, setSelectedBox] = useState("");
   const [isBoxLoading, setIsBoxLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const router=useRouter();
@@ -146,11 +146,8 @@ const ChatbotPage = (
 
   return (
     <>
-    <NavBar />
-      <ToastContainer />
-     
-      
-          <div
+
+      <div
         className={`w-full fixed left-0 right-0 bg-white px-6 flex items-center justify-center bottom-0 pb-2 `}
         style={{ zIndex: 1001, overflow: "visible" }} // Ensure overflow is visible
       >

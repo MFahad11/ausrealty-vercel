@@ -34,15 +34,28 @@ export const getStaticProps = async ({ params }:{
   }
 
   const url = `https://graph.facebook.com/v21.0/17841401703973084?fields=media.limit(30){id,caption,like_count,comments_count,media_type,media_url,children{media_url,id}}&access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`;
-  const response = await axios.get(url);
+  try {
+     const response = await axios.get(url);
   const data = response?.data;
-
   return {
     props: {
       data,
     },
     revalidate: 86400, // 1 day
   };
+  } catch (error) {
+    console.log("error", error);
+    return {
+      props: {
+        data: null,
+      },
+      revalidate: 86400, // 1 day
+    };
+    
+  }
+ 
+
+  
 };
 
 export const getStaticPaths = async () => {

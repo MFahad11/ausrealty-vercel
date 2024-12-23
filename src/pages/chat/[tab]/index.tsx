@@ -17,6 +17,7 @@ const ChatbotPage = (
   const [isOpen, setIsOpen] = useState(false);
   const router=useRouter();
   const tab = router.query.tab;
+  console.log(tab);
   const [boxes, ] = useState<{
     title: string;
     description: string;
@@ -90,7 +91,8 @@ const ChatbotPage = (
 
   useEffect(() => {
     if (tab) {
-    const title=tab[0].replace(/-/g, " ").toUpperCase();
+      // @ts-ignore
+    const title=tab?.replace(/-/g, " ").toUpperCase();
     setSelectedBox(title);
     const index=boxes.findIndex((box) => box.title === title);
     scrollToCenter(index);
@@ -146,7 +148,7 @@ const ChatbotPage = (
 
   return (
     <>
-
+  <NavBar />
       <div
         className={`w-full fixed left-0 right-0 bg-white px-6 flex items-center justify-center bottom-0 pb-2 `}
         style={{ zIndex: 1001, overflow: "visible" }} // Ensure overflow is visible

@@ -325,3 +325,103 @@ export async function handleRenChat(
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
+export async function handleIdentifyIntent(
+  userInput: string,
+): 
+Promise<{ response: string }> {
+
+  try {
+   const systemPrompt=`You are an expert in identifying user intent and extracting relevant information. Your role is to analyze user input and determine their intent to help redirect them to the correct tab. This information is solely for internal use and not for user interaction. IMPORTANT: For every response, you should provide the extracted intent from the user's input in the following JSON format:
+{
+  "intent": "string",
+  "redirect": "string"
+}
+
+IMPORTANT: Your response should strictly be in the following format, with no additional text, explanations, or formatting or symbols:
+
+{
+  "intent": "string",
+  "redirect": "string"
+}
+
+Here are the possible intents and redirects you should handle:
+
+Buying Intent: If the user intends to buy a property:
+
+{
+  "intent": "buy",
+  "redirect": "looking-to-buy"
+}
+Renting Intent: If the user intends to rent a property:
+
+{
+  "intent": "rent",
+  "redirect": "looking-to-rent"
+}
+Selling Intent: If the user intends to sell a property:
+
+{
+  "intent": "sell",
+  "redirect": "sell-or-lease-my-property"
+}
+Leasing Intent: If the user intends to lease a property:
+
+{
+  "intent": "lease",
+  "redirect": "sell-or-lease-my-property"
+}
+Location Inquiry: If the user wants information about a location:
+
+{
+  "intent": "location",
+  "redirect": "location"
+}
+Moments from Home or Gallery Inquiry: If the user wants to know about "Moments from Home" or see the gallery:
+
+{
+  "intent": "moments-from-home",
+  "redirect": "moments-from-home"
+}
+Inside Ausrealty or About Us Inquiry: If the user wants to know about "Inside Ausrealty" or "About Us":
+
+{
+  "intent": "inside-ausrealty",
+  "redirect": "inside-ausrealty"
+}
+Our People Inquiry: If the user wants to know about "Our People":
+
+{
+  "intent": "our-people",
+  "redirect": "our-people"
+}
+  
+Impotant Notes:
+- You must provide only the structured JSON data in your response. nothing in addition. None of these symbol
+`
+    const messages = [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userInput },
+    ];
+    
+    const params: OpenAI.Chat.ChatCompletionCreateParams = {
+      // @ts-ignore
+      messages: messages,
+      model: 'gpt-4o',
+    };
+
+    // Call the OpenAI API with the conversation messages
+    // @ts-ignore
+    const completion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params);
+
+    // Extract the response text
+    const responseText = completion.choices[0].message?.content || "";
+   
+    
+
+    return { response: responseText};
+  }
+  catch (error) {
+    console.error("Error interacting with OpenAI API:", error);
+    return { response: "Failed to process the request. Please try again later." };
+  }
+}

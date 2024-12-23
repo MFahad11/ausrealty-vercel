@@ -64,10 +64,8 @@ function filterProperties(properties: Property[], filter: Filter): Property[] {
         filter.location && (property.addressParts.displayAddress.toLowerCase().includes(filter.location.toLowerCase()) || property.addressParts.displayAddress.toLowerCase()===filter?.location?.toLowerCase())
       
       if (!matchesSuburb && !matchesAddress && !matchesLocation) {
-        console.log('matchesSuburb', matchesSuburb)
+        
         return false; // Reject if none of the location filters match
-      }else{
-        console.log('matchesSuburbTrue', matchesSuburb)
       }
     }
 

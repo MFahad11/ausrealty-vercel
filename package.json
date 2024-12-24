@@ -32,7 +32,9 @@
     "tailwind-merge": "^2.5.5",
     "uuid": "^11.0.3",
     "yup": "^1.4.0",
-    "openai": "^4.3.0"
+    "openai": "^4.3.0",
+    "yup": "^1.4.0",
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@types/formidable": "^3.4.5",

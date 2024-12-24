@@ -422,7 +422,7 @@ const ChatBot = ({
     <div className="w-full h-full flex flex-col justify-between">
       <ToastContainer />
       <div className="max-w-4xl min-w-4xl mx-auto flex flex-col flex-grow pb-14 overflow-y-auto">
-        <div className="p-2 m-0 w-full rounded-lg mt-4">
+        <div className=" m-0 w-full rounded-lg mt-4">
           {title === "MOMENTS FROM HOME" && <InstaGrid data={instaData} />}
           {(title === "SELL OR LEASE MY PROPERTY" ||
             title === "LOOKING TO BUY" ||
@@ -456,7 +456,7 @@ const ChatBot = ({
               <div
                 id="msg"
                 ref={messagesContainerRef}
-                className="enhanced-textarea overflow-y-auto p-3 pl-0 pb-32"
+                className="enhanced-textarea overflow-y-auto pl-0 pb-32"
               >
                 {messages.map((message, index) => (
                   <div
@@ -466,16 +466,19 @@ const ChatBot = ({
                     }`}
                   >
                     <span
-                      className={`inline-block rounded-lg ${
+                      className={`inline-block rounded-lg max-w-[80%] p-3 ${
                         message.role === "system"
                           ? "bg-white rounded-br-none"
-                          : "text-start bg-gray-200 rounded-bl-none"
+                          : "text-start bg-gray-200 rounded-bl-none mr-2"
                       }
-                      ${message.properties && message.properties.length > 0 ? "max-w-[100%] p-0" : "max-w-[80%] p-3"}
+                     
                       
                       `}
                     >
                       <p>{message.content}</p>
+                      
+                    </span>
+                    <div>
                       {message.properties && message.properties.length > 0 && (
                         <div className="mt-4">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
@@ -485,13 +488,13 @@ const ChatBot = ({
                                 (
                                   <div
                                     key={index}
-                                    className="bg-white rounded-sm shadow-sm p-0 cursor-pointer border-lightgray border w-full"
+                                    className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
                                     onClick={() => {
                                       router.push(`/property/${property.id}`);
                                     }}
                                   >
                                     {property?.media && (
-                                      <div className="relative md:w-full md:h-64 aspect-16x9 overflow-hidden rounded-md mb-1">
+                                      <div className="relative md:w-full md:h-64 aspect-16x9 overflow-hidden mb-1">
                                         {property?.media?.category ===
                                         "image" ? (
                                           <img
@@ -510,9 +513,9 @@ const ChatBot = ({
                                     )}
                                     <div className="ml-4">
                                       <div className="mt-6">
-                                        <h4 className="mb-3 tracking-wide font-semibold">
+                                        {/* <h4 className="mb-3 tracking-wide font-semibold">
                                           FOR {property.objective.toUpperCase()}
-                                        </h4>
+                                        </h4> */}
                                         <h5 className="text-black font-light">
                                           {property.addressParts.displayAddress}
                                         </h5>
@@ -545,13 +548,12 @@ const ChatBot = ({
                         <div className="text-center mt-4">
                           <i className="fa-solid fa-spinner animate-spin"></i>
                         </div>
-                      )}
-                    </span>
+                      )}</div>
                   </div>
                 ))}
 
                 {isTyping && (
-                  <div className="text-left mb-2">
+                  <div className="text-left mb-2 ml-2">
                     <span className="inline-block p-3 max-w-[80%] bg-gray-200 rounded-lg animate-pulse">
                       Typing...
                     </span>

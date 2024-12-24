@@ -43,7 +43,7 @@ const ChatBotHandler = (
       description: "See what properties we have available",
       prompt:'LOOKING_TO_BUY_PROMPT',
         firstMessage: "Hi, let us know how we can help you. Any particular suburb or features you're looking for?",
-        placeholder : "Search for a property that suits you e.g. suburb, special features, location",
+        placeholder : "Search for a property e.g. suburb, special features, location",
         route: "looking-to-buy",
         index: 1,
     },

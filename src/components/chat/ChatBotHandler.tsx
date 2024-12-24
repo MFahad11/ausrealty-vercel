@@ -148,7 +148,6 @@ const ChatBotHandler = (
   };
 
   return (
- 
         <ChatBot
             title={selectedBox}
             firstMessage={boxes.find((box) => {
@@ -166,7 +165,6 @@ const ChatBotHandler = (
             scrollContainerRef={scrollContainerRef}
             boxRefs={boxRefs}
             />
-   
   );
 };
 

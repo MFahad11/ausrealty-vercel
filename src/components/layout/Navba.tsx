@@ -51,7 +51,7 @@ const NavBar: React.FC<NavBarProps> = ({
 
       </Link>
     </nav>
-    <StickyContact/>
+    {/* <StickyContact/> */}
 </>
   );
 };

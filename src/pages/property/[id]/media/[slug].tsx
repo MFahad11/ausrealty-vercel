@@ -110,10 +110,10 @@ export default function ImageGallery({ id }: { id: string }) {
                             setIsOpen(true);
                           }}
                         >
-                          <Image
+                          <img
                             src={item.url}
                             alt={item.category || "Property image"}
-                            fill
+                           
                             className="object-cover"
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             
@@ -131,10 +131,10 @@ export default function ImageGallery({ id }: { id: string }) {
                               setIsOpen(true);
                             }}
                           >
-                            <Image
+                            <img
                               src={item.url}
                               alt={item.category || "Property image"}
-                              fill
+                             
                               className="object-cover"
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                            

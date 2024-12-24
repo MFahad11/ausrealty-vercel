@@ -8,10 +8,12 @@ interface TabGroupProps {
     route: string
   }[]
   defaultTab?: string
+  activeTab?: string
+  setActiveTab: (tab: string) => void
 }
 
-export function TabGroup({ tabs, defaultTab }: TabGroupProps) {
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0].id)
+export function TabGroup({ tabs, defaultTab,activeTab, setActiveTab }: TabGroupProps) {
+  
   const navigate=useRouter()
   return (
     <div className="flex gap-4 p-1 w-fit rounded-lg">
@@ -37,4 +39,3 @@ export function TabGroup({ tabs, defaultTab }: TabGroupProps) {
     </div>
   )
 }
-

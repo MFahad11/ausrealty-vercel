@@ -14,7 +14,8 @@ export default function ImageGallery({ id }: { id: string }) {
   const [activeTab, setActiveTab] = useState("images");
   const property = usePropertyStore((state) => state.propertyData);
   const router = useRouter();
-  // const [property, setProperty] = useState<any>(null);
+  const {slug} = router.query;
+
   const [isLoading, setIsLoading] = useState(false);
   const setProperty = usePropertyStore((state) => state.setPropertyData);
   const getListing = async (id: string) => {
@@ -29,6 +30,12 @@ export default function ImageGallery({ id }: { id: string }) {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (slug) {
+      activeTab !== slug && setActiveTab(slug as string);
+    
+    }
+  }, [slug]);
   useEffect(() => {
     if (id && !property) {
       setIsLoading(true);
@@ -151,6 +158,7 @@ export default function ImageGallery({ id }: { id: string }) {
                             className="w-full h-full object-cover"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
+                            
                           />
                         </div>
                       )}

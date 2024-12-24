@@ -17,6 +17,7 @@ import {
   handleIdentifyIntent,
   handleRenChat,
 } from "@/utils/openai";
+import { LuRotateCcw } from "react-icons/lu";
 const ChatBot = ({
   title,
   firstMessage,
@@ -476,7 +477,6 @@ const ChatBot = ({
                       `}
                     >
                       <p>{message.content}</p>
-                      
                     </span>
                     <div>
                       {message.properties && message.properties.length > 0 && (
@@ -548,7 +548,8 @@ const ChatBot = ({
                         <div className="text-center mt-4">
                           <i className="fa-solid fa-spinner animate-spin"></i>
                         </div>
-                      )}</div>
+                      )}
+                    </div>
                   </div>
                 ))}
 
@@ -589,8 +590,17 @@ const ChatBot = ({
               onClick={handleSend}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
             >
-              <IoSend />
+              <IoSend title="Send" />
             </button>
+            <div className="absolute right-8 top-1/2 -translate-y-1/2">
+              <button
+                onClick={handleStartAgain}
+                className="p-2 text-darkergray transition-colors duration-200 rounded-full hover:bg-gray-100"
+                aria-label="Reset search"
+              >
+                <LuRotateCcw title="Restart" />
+              </button>
+            </div>
           </div>
 
           <div

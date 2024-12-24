@@ -148,62 +148,7 @@ const ChatBotHandler = (
   };
 
   return (
-    <>
-  {/* <NavBar /> */}
-      <div
-        className={`w-full fixed left-0 right-0 bg-white px-6 flex items-center justify-center bottom-0 pb-2 `}
-        style={{ zIndex: 1001, overflow: "visible" }} // Ensure overflow is visible
-      >
-        <div
-          ref={scrollContainerRef}
-          className="overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth"
-        >
-          {boxes.map((box, index) => (
-            <div
-              key={index}
-              ref={(el) => {
-                boxRefs.current[index] = el;
-              }}
-              className={`rounded-lg flex-shrink-0 inline-flex flex-col mr-4 px-4 py-3 justify-center relative
-               min-w-[227px] cursor-pointer
-                ${
-                  box.title === selectedBox
-                    ? "bg-mediumgray"
-                    : "border border-black"
-                }
-                
-                
-                `}
-              onClick={() => {
-                
-                handleBoxClick(box, index);
-              }}
-            >
-              <div
-                className={`relative text-start`}
-              >
-                {!isBoxLoading || box.title !== selectedBox ? (
-                  <div className="text-xs m-0 flex flex-col">
-                    <div className="flex">
-                     
-                      <h6
-                      className="mb-1 font-abchanel font-bold"
-                      >{box.title}</h6>
-                    </div>
-                    <span 
-                    className=" text-darkergray font-arial"
-                    >{box.description}</span>
-                  </div>
-                ) : (
-                  <i className="fa-solid fa-spinner animate-spin"></i>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-        
-      </div>
-      <div className="flex flex-col items-center">
+ 
         <ChatBot
             title={selectedBox}
             firstMessage={boxes.find((box) => {
@@ -218,13 +163,10 @@ const ChatBotHandler = (
             boxes={boxes}
             instaData={data}
             indexPage={indexPage}
+            scrollContainerRef={scrollContainerRef}
+            boxRefs={boxRefs}
             />
-      
-      </div>
-
-          
-      
-    </>
+   
   );
 };
 

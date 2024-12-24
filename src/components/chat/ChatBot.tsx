@@ -22,7 +22,9 @@ const ChatBot = ({
     boxes,
     instaData,
     handleBoxClick,
-    indexPage
+    indexPage,
+    scrollContainerRef,
+    boxRefs,
 }:{
     instaData: any
     title: string,
@@ -46,6 +48,8 @@ const ChatBot = ({
       description?: string;
       prompt: string;
     }, index:number) => void
+    scrollContainerRef: any
+    boxRefs: any
 }) => {
   const [messages, setMessages] = useState<
     Array<{ role: string; content: string
@@ -634,94 +638,59 @@ const ChatBot = ({
             />
           )
         }
-         {/* {
-          !title && (
-            <div
-            // place in the center
-            className="flex flex-col items-center justify-center min-h-[75vh]"
-            >
-              
-              <p className="text-center">Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.</p>
-              <div className="flex flex-wrap justify-center mt-4">
-                {boxes?.slice(0,3).map((box, index) => (
-                  <div
-                    key={index}
-                    className="w-full md:w-1/2 lg:w-1/3 p-2"
-                  >
-                    <button
-                      onClick={() => handleBoxClick(box, index)}
-                      className="w-full p-4 bg-gray-200 rounded-lg shadow-md"
-                    >
-                      <h3 className=" mb-1">{box.title}</h3>
-                      <p
-                      className="mb-0"
-                      >{box.description}</p>
-                    </button>
-                  </div>
-                ))}
-  </div>
-
-
-
-
-            </div>
-          )
-         } */}
+         
         </div>
       </div>
       
-      {
-        indexPage?(<div className="md:max-w-4xl  max-w-[24.5rem] px-4 md:px-0 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
-          
-          <div className="relative flex items-center justify-between border border-gray-600 rounded-sm px-4 py-3">
-      <textarea
-        ref={textareaRef}
+      <div
+          className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 pb-4 pt-2 text-center`}
+        >
+          <div className="flex flex-col gap-6">
+          <div className="w-full max-w-md mx-auto text-xs relative">
+      
+      <input
+              type="text"
         value={inputValue}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
-        placeholder="Send your query, we'll take you to the right tab."
-        className="flex-grow bg-transparent text-sm outline-none resize-none overflow-y-hidden"
-        disabled={intentExtracting}
-        rows={1}
-      />
-      {
-        intentExtracting ?(
-          
-            <i className="fa-solid fa-spinner animate-spin"></i>
-          
-
-        ):(<button
+        placeholder={indexPage?"How can we help? Tell use here":placeholder}
+        disabled={indexPage?intentExtracting:false}
+        className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-3 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
+            />
+      <button
         onClick={handleSend}
-        className=" text-black"
+        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
       >
         <IoSend />
-      </button>)
-      }
+      </button>
       
     </div>
-    
-          </div>):(<div className="md:max-w-4xl  max-w-[24.5rem] px-4 md:px-0 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] mx-auto fixed bottom-[4.5rem] pb-2 md:pb-6 left-0 right-0 w-full bg-white ">
-      
-      <div className="relative flex items-center justify-between border border-gray-600 rounded-sm px-4 py-3">
-  <textarea
-    ref={textareaRef}
-    value={inputValue}
-    onChange={handleInputChange}
-    onKeyPress={handleKeyPress}
-    placeholder={placeholder}
-    className="flex-grow bg-transparent text-sm outline-none resize-none overflow-y-hidden"
-    rows={1}
-  />
-  <button
-    onClick={handleSend}
-    className=" text-black"
-  >
-    <IoSend />
-  </button>
-</div>
-
-      </div>)
-      }
+  
+          <div className="overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth"
+          ref={scrollContainerRef}
+          >
+            {boxes.map((box, index) => (
+              <div
+                key={index}
+                ref={(el) => {
+                  boxRefs.current[index] = el;
+                }}
+                className={`bg-lightgray rounded-xl flex-shrink-0 inline-flex flex-col items-center hover:bg-mediumgray cursor-pointer mr-4 py-2.5 px-6 ${
+                  box.title === title ? "bg-mediumgray" : ""
+                }`}
+                onClick={() => {
+                  handleBoxClick(box, index);
+                }}
+              >
+                <div className="text-start text-xs relative">
+                  <h6>{box.title}</h6>
+                  <span className=" text-darkergray">{box.description}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          </div>
+        </div>
       
     </div>
   );

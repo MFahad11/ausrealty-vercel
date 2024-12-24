@@ -75,15 +75,26 @@ const ChatBot = ({
   const [isTyping, setIsTyping] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
+  const messagesEndRef = useRef(null);
+  useEffect(() => {
+    setMessages([]);
+    const savedMessages = localStorage.getItem(prompt);
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    } else {
+      if (title !== "SELL OR LEASE MY PROPERTY") {
+        initializeChat();
+      }
+    }
+  }, [prompt]);
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem(prompt, JSON.stringify(messages));
     }
-  }, [messages]);
-
-  useEffect(() => {
-    scrollToBottom();
+    if (messagesEndRef.current) {
+      // @ts-ignore
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -154,17 +165,7 @@ const ChatBot = ({
       // }
     }
   };
-  useEffect(() => {
-    setMessages([]);
-    const savedMessages = localStorage.getItem(prompt);
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
-    } else {
-      if (title !== "SELL OR LEASE MY PROPERTY") {
-        initializeChat();
-      }
-    }
-  }, [prompt]);
+
   const scrollToBottom = () => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
@@ -246,7 +247,7 @@ const ChatBot = ({
         );
       }
       if (data?.extractedInfo) {
-        if(data?.extractedInfo?.intent){
+        if (data?.extractedInfo?.intent) {
           router.push(`/chat/${data?.extractedInfo?.redirect}`);
           return;
         }
@@ -458,37 +459,37 @@ const ChatBot = ({
                 </span>
               </div>
             ) : (
-              <div
-                id="msg"
-                ref={messagesContainerRef}
-                className="enhanced-textarea overflow-y-auto pl-0 pb-32"
-              >
-                {messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={`mb-4 ${
-                      message.role === "system" ? "text-left" : "text-right"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block rounded-lg max-w-[80%] p-3 ${
-                        message.role === "system"
-                          ? "bg-white rounded-br-none"
-                          : "text-start bg-gray-200 rounded-bl-none mr-2"
-                      }
+              <>
+                <div
+                  id="msg"
+                  ref={messagesContainerRef}
+                  className="enhanced-textarea overflow-y-auto pl-0 pb-32"
+                >
+                  {messages.map((message, index) => (
+                    <div
+                      key={index}
+                      className={`mb-4 ${
+                        message.role === "system" ? "text-left" : "text-right"
+                      }`}
+                    >
+                      <span
+                        className={`inline-block rounded-lg max-w-[80%] p-3 ${
+                          message.role === "system"
+                            ? "bg-white rounded-br-none"
+                            : "text-start bg-gray-200 rounded-bl-none mr-2"
+                        }
                      
                       
                       `}
-                    >
-                      <p>{message.content}</p>
-                    </span>
-                    <div>
-                      {message.properties && message.properties.length > 0 && (
-                        <div className="mt-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                            {message.properties.map(
-                              (property, index) => (
-                                (
+                      >
+                        <p>{message.content}</p>
+                      </span>
+                      <div>
+                        {message.properties &&
+                          message.properties.length > 0 && (
+                            <div className="mt-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                {message.properties.map((property, index) => (
                                   <div
                                     key={index}
                                     className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
@@ -540,30 +541,30 @@ const ChatBot = ({
                                       </div>
                                     </div>
                                   </div>
-                                )
-                              )
-                            )}
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                        {message.isLoading && (
+                          <div className="text-center mt-4">
+                            <i className="fa-solid fa-spinner animate-spin"></i>
                           </div>
-                        </div>
-                      )}
-
-                      {message.isLoading && (
-                        <div className="text-center mt-4">
-                          <i className="fa-solid fa-spinner animate-spin"></i>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
-                {isTyping && (
-                  <div className="text-left mb-2 ml-2">
-                    <span className="inline-block p-3 max-w-[80%] bg-gray-200 rounded-lg animate-pulse">
-                      Typing...
-                    </span>
-                  </div>
-                )}
-              </div>
+                  {isTyping && (
+                    <div className="text-left mb-2 ml-2">
+                      <span className="inline-block p-3 max-w-[80%] bg-gray-200 rounded-lg animate-pulse">
+                        Typing...
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div ref={messagesEndRef} />
+              </>
             ))}
           {title === "INSIDE AUSREALTY" && (
             <ImageGrid data={INSIDE_AUSREALTY} isInsideAusrealty={true} />

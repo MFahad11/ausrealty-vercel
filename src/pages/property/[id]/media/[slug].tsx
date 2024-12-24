@@ -50,10 +50,10 @@ export default function ImageGallery({ id }: { id: string }) {
         className="max-w-[800px]"
       >
         <div className="relative aspect-[16/9]">
-          <Image
+          <img
             src={selectedImage}
             alt="Property image"
-            fill
+            // fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
@@ -104,7 +104,7 @@ export default function ImageGallery({ id }: { id: string }) {
                       {item?.type === "photo" && activeTab === "images" && (
                         <div
                           key={index}
-                          className={`${isFullWidth ? "col-span-2 relative aspect-[16/9]" : "relative aspect-square"}`}
+                          className={`${isFullWidth ? "col-span-2 relative aspect-[16/9] overflow-hidden" : "relative aspect-square overflow-hidden"}`}
                           onClick={() => {
                             setSelectedImage(item.url);
                             setIsOpen(true);
@@ -113,10 +113,10 @@ export default function ImageGallery({ id }: { id: string }) {
                           <img
                             src={item.url}
                             alt={item.category || "Property image"}
-                           
-                            className="object-cover"
+                            // fill
+                            className="w-full h-full object-cover"
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            
+                            loading="lazy"
                           />
                         </div>
                       )}
@@ -124,23 +124,22 @@ export default function ImageGallery({ id }: { id: string }) {
                       {item?.type === "floorplan" &&
                         activeTab === "floorplan" && (
                           <div
-                            key={index}
-                            className={`${isFullWidth ? "col-span-2 relative aspect-[16/9]" : "relative aspect-square"}`}
-                            onClick={() => {
-                              setSelectedImage(item.url);
-                              setIsOpen(true);
-                            }}
-                          >
-                            <img
-                              src={item.url}
-                              alt={item.category || "Property image"}
-                             
-                              className="object-cover"
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                           
-
-                            />
-                          </div>
+                          key={index}
+                          className={`${isFullWidth ? "col-span-2 relative aspect-[16/9] overflow-hidden" : "relative aspect-square overflow-hidden"}`}
+                          onClick={() => {
+                            setSelectedImage(item.url);
+                            setIsOpen(true);
+                          }}
+                        >
+                          <img
+                            src={item.url}
+                            alt={item.category || "Property image"}
+                            // fill
+                            className="w-full h-full object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            loading="lazy"
+                          />
+                        </div>
                       )}
                       {item?.type === "youtube" && activeTab === "video" && (
                         <div

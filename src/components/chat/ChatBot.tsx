@@ -290,7 +290,8 @@ const ChatBot = ({
                     propertyTypes: property?.propertyTypes,
                     saleMode: property?.saleMode,
                     suburb: property?.sub,
-                    media:  property?.media?.length >= 1 ? property?.media[0] : null,
+                    media:
+                      property?.media?.length >= 1 ? property?.media[0] : null,
                     id: property?.id,
                   }));
 
@@ -465,81 +466,77 @@ const ChatBot = ({
                     }`}
                   >
                     <span
-                      className={`inline-block p-3 max-w-[80%] rounded-lg ${
+                      className={`inline-block rounded-lg ${
                         message.role === "system"
                           ? "bg-white rounded-br-none"
                           : "text-start bg-gray-200 rounded-bl-none"
-                      }`}
+                      }
+                      ${message.properties && message.properties.length > 0 ? "max-w-[100%] p-0" : "max-w-[80%] p-3"}
+                      
+                      `}
                     >
                       <p>{message.content}</p>
                       {message.properties && message.properties.length > 0 && (
                         <div className="mt-4">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                            {message.properties.map((property, index) => (
-                              <div
-                                key={index}
-                                className="bg-white rounded-sm overflow-hidden shadow-md max-w-md"
-                                
-                              >
-                                {property?.media && (
-                                  <div className="relative h-64"
-                                  onClick={() => {
-                                    router.push(`/property/${property.id}/media/images`);
-                                  }}
+                            {message.properties.map(
+                              (property, index) => (
+                                console.log(property),
+                                (
+                                  <div
+                                    key={index}
+                                    className="bg-white rounded-sm shadow-sm p-0 cursor-pointer border-lightgray border w-full"
+                                    onClick={() => {
+                                      router.push(`/property/${property.id}`);
+                                    }}
                                   >
-                                    {property?.media?.category === "image" ? (
-                                      <img
-                                        src={property?.media?.url}
-                                        alt={property?.headline}
-                                        className="w-full h-full object-cover"
-                                      />
-                                    ) : (
-                                      <video
-                                        src={property?.media?.url}
-                                        className="w-full h-full object-cover"
-                                        controls
-                                      />
+                                    {property?.media && (
+                                      <div className="relative md:w-full md:h-64 aspect-16x9 overflow-hidden rounded-md mb-1">
+                                        {property?.media?.category ===
+                                        "image" ? (
+                                          <img
+                                            src={property?.media?.url}
+                                            alt={property?.headline}
+                                            className="w-full h-full object-cover"
+                                          />
+                                        ) : (
+                                          <video
+                                            src={property?.media?.url}
+                                            className="w-full h-full object-cover"
+                                            controls
+                                          />
+                                        )}
+                                      </div>
                                     )}
-                                    <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 rounded-md text-sm font-semibold">
-                                      FOR {property.objective.toUpperCase()}
+                                    <div className="ml-4">
+                                      <div className="mt-6">
+                                        <h4 className="mb-3 tracking-wide font-semibold">
+                                          FOR {property.objective.toUpperCase()}
+                                        </h4>
+                                        <h5 className="text-black font-light">
+                                          {property.addressParts.displayAddress}
+                                        </h5>
+                                      </div>
+
+                                      <div className="mb-6 text-sm">
+                                        <h4 className="text-black mb-0">
+                                          {/* 4B 4B 2C | House */}
+                                          {property?.bedrooms}B{" "}
+                                          {property?.bathrooms}B{" "}
+                                          {property?.carspaces}C |{" "}
+                                          {property?.propertyTypes?.length > 0
+                                            ? property?.propertyTypes?.join(",")
+                                            : "N/A"}
+                                        </h4>
+                                        <p className="leading-7">
+                                          Inspection Sat 30 Nov
+                                        </p>
+                                      </div>
                                     </div>
                                   </div>
-                                )}
-                                <div className="p-6"
-                                onClick={() => {
-                                  router.push(`/property/${property.id}`);
-                                }}
-                                >
-                                  <div className="flex justify-between items-start mb-2">
-                                    <h4 className="font-semibold mb-0">
-                                      {property.priceDetails.displayPrice}{" "}
-                                      {property.propertyTypes[0]
-                                        .charAt(0)
-                                        .toUpperCase() +
-                                        property.propertyTypes[0].slice(1)}
-                                    </h4>
-                                    <p className="bg-gray-100 px-3 py-1 rounded-full mb-0">
-                                      {property.propertyTypes[0]
-                                        .charAt(0)
-                                        .toUpperCase() +
-                                        property.propertyTypes[0].slice(1)}
-                                    </p>
-                                  </div>
-
-                                  <div className="border-t pt-2">
-                                    <p className="text-gray-800 mb-2">
-                                      {property.addressParts.displayAddress}
-                                    </p>
-                                    <p className="text-sm text-gray-600">
-                                      Available from{" "}
-                                      {dayjs(property.dateAvailable).format(
-                                        "DD MMM YYYY"
-                                      )}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
+                                )
+                              )
+                            )}
                           </div>
                         </div>
                       )}

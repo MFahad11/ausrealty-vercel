@@ -1,7 +1,42 @@
 import NavBar from '@/components/layout/Navba'
+import PageLoader from '@/components/ui/PageLoader';
+import axiosInstance from '@/utils/axios-instance';
+import dayjs from 'dayjs';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image'
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { usePropertyStore } from '@/store/propertyStore';
+export default function PropertyListing(
+  {id}: {id: string}
+) {
+  const router=useRouter();
+  // const [property, setProperty] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const setProperty = usePropertyStore((state) => state.setPropertyData);
+  const property = usePropertyStore((state) => state.propertyData);
+const getListing = async (id:string) => {
+  try {
+    const response= await axiosInstance.get(`/api/domain/listings/${id}`);
+    if(response?.data?.success){
+      setProperty(response?.data?.data);
+    }
+  } catch (error) {
+    console.log("error", error);
+  } finally {
+    setIsLoading(false);
+  }
+}
+  useEffect(() => {
+    if(id){
+      setIsLoading(true);
+      getListing(id);
+    }
+  }, [id])
+  if(isLoading || !property){
+    return <PageLoader/>
+  }
 
-export default function PropertyListing() {
   return (
     <>
     <NavBar
@@ -9,46 +44,67 @@ export default function PropertyListing() {
     />
     <div className="max-w-4xl mx-auto">
         <div className="flex flex-col items-center">
-      {/* Hero Image Section */}
-      <div className="relative min-w-[437px] min-h-[386px] w-full">
-        <Image
-          src="/property-image.png"
-          alt="Waterfront property exterior"
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
+      {
+        property?.media && property?.media.length > 0 && (
+          <div className="relative min-w-[437px] w-full cursor-pointer"
+          onClick={() => {
+            router.push(`/property/${id}/media/images`)
+          }}
+          >
+          {property?.media[0]?.category ===
+            "image" ? (
+              <img
+                src={property?.media[0]?.url}
+                alt={property?.headline}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <video
+                src={property?.media[0]?.url}
+                className="w-full h-full object-cover"
+                controls
+              />
+            )}
+            </div>
+        )
+      }
+      
 
       <div className="py-6 ml-6">
         <div className="mb-2">
           <h3 className="mb-3 tracking-wide font-semibold">
-            FOR SALE
+          FOR {property?.objective.toUpperCase()}
           </h3>
           <h4
           className='text-black'
           >
-          12 Dodson Avenue, Cronulla, NSW 2230
+          {property?.addressParts.displayAddress}
           </h4>
         </div>
 
         {/* Property Details */}
         <div className="mb-6 text-sm">
-          <h4
-          className='text-black'
-          >4B 4B 2C | House</h4>
+        <h4 className="text-black mb-0">
+                                          {/* 4B 4B 2C | House */}
+                                          {property?.bedrooms}B{" "}
+                                          {property?.bathrooms}B{" "}
+                                          {property?.carspaces}C |{" "}
+                                          {property?.propertyTypes?.length > 0
+                                            ? property?.propertyTypes?.join(",")
+                                            : "N/A"}
+                                        </h4>
           <p
           className="leading-7"
-          >Inspection Sat 30 Nov</p>
+          >Inspection {dayjs(property?.dateAvailable)?.format("DD/MM/YYYY")}</p>
         </div>
 
         {/* Description */}
         <div className="mb-6">
           <h4 className=" text-black mb-6 uppercase leading-7">
-            LEVEL STREET TO WATER MASTERPIECE, OFFERING BREATH-TAKING VIEWS
+            {property?.headline}
           </h4>
           <p className="leading-7">
-            "When designing this home, I focused on craftsmanship and durability. The Venetian plaster walls add texture, while the large windows were positioned to flood the interior with natural light and perfectly frame the waterfront views. The pool area was integrated into the design, with the surrounding stonework and glass balustrades enhancing the seamless flow between the home and the water. Every detail, from the lighting to the layout, was chosen to maximise the connection to the environment, blending indoor and outdoor living effortlessly." - Owner - This newly completed residence, designed by Dezcon, encapsulates Mediterranean-inspired elegance with a seamless flow between indoor and outdoor spaces. The architectural excellence and attention to detail make this waterfront home a masterpiece, offering a perfect balance of luxury and functionality for families seeking comfort and style- Offers four resort-style bedrooms, each with its own ensuite. The master suite stands out with its bespoke dressing room, double basin ensuite, and access to a private balcony - Bathrooms feature comfort and style, with premium Parisi fixtures and underfloor heating adding a luxurious touch- The kitchen, a chef's delight, features integrated SMEG appliances, a Viola marble finish, and an expansive butler's pantry. It is designed for both functionality and aesthetics, making it the perfect space for both casual meals and lavish entertaining- The expansive living and dining areas are bathed in natural light, with floor-to-ceiling glass showcasing breathtaking water views. The gas fireplace and custom joinery enhance the elegance, while the outdoor terraces provide an ideal setting for gatherings, complete with a European-inspired heated pool and boat ramp- Additional features include herringbone oak flooring, Venetian plaster walls and ceilings, and cutting-edge technology such as a VRV zoned air-conditioning system, KNX system works for lighting, access, curtains and temperature control including the gas fireplace, and a complete home security system. The property also includes a double garage with a remote turning circle, offering convenience for daily living- Located just moments from Cronulla's vibrant cafes, shops, and beaches, this home provides the ultimate in coastal lifestyle, combining privacy with proximity to the best of the area.
+            {property?.description}
           </p>
         </div>
       </div></div>
@@ -56,3 +112,23 @@ export default function PropertyListing() {
   )
 }
 
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [], // Pre-render no pages initially
+    fallback: true, // Enable fallback for on-demand generation
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (!params || !params.id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      id: params.id as string,
+    },
+  };
+};

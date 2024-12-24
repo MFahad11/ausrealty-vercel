@@ -246,6 +246,10 @@ const ChatBot = ({
         );
       }
       if (data?.extractedInfo) {
+        if(data?.extractedInfo?.intent){
+          router.push(`/chat/${data?.extractedInfo?.redirect}`);
+          return;
+        }
         setMessages((prevMessages) => {
           const newMessage = {
             role: "system",
@@ -484,7 +488,6 @@ const ChatBot = ({
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                             {message.properties.map(
                               (property, index) => (
-                                console.log(property),
                                 (
                                   <div
                                     key={index}

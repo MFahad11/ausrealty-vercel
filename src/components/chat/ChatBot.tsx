@@ -10,6 +10,7 @@ import { OUR_TEAM_DATA } from "@/constants/our-team";
 import { INSIDE_AUSREALTY } from "@/constants/inside-ausrealty";
 import { LOOKING_TO_RENT } from "@/constants/looking-to-rent";
 import Link from "next/link";
+import dayjs from "dayjs";
 import axiosInstance from "@/utils/axios-instance";
 import { handleBuyingChat, handleIdentifyIntent, handleRenChat } from "@/utils/openai";
 const ChatBot = ({
@@ -475,15 +476,14 @@ const ChatBot = ({
                     <div className="mt-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                         {message.properties.map((property, index) => (
-                          console.log(property),
                           <div
                             key={index}
-                            className="bg-white rounded-md shadow-sm p-4 cursor-pointer border-lightgray border"
+                            className="bg-white rounded-sm overflow-hidden shadow-md max-w-md"
                             onClick={() => {}}
                           >
                             {property?.media && (
-  <div className="relative md:w-full md:h-64 aspect-16x9 overflow-hidden rounded-md mb-1">
-    {property?.media?.category === 'image' ? (
+                              <div className="relative h-64">
+      {property?.media?.category === 'image' ? (
       <img
         src={property?.media?.url}
         alt={property?.headline}
@@ -496,20 +496,32 @@ const ChatBot = ({
         controls
       />
     )}
-  </div>
+        <div className="absolute top-4 left-4 bg-black text-white px-3 py-1 rounded-md text-sm font-semibold">
+          FOR {property.objective.toUpperCase()}
+        </div>
+      </div>
+  
 )}
-                            <h5 className="font-semibold mb-1">
-                              {property?.addressParts.displayAddress}
-                            </h5>
-                            <p className="mb-2">
-                              {property?.headline}
-                            </p>
-                            <div className="flex justify-between">
-                              <span className="font-semibold">
-                                {property?.priceDetails.displayPrice}
-                              </span>
-                              
-                            </div>
+<div className="p-6">
+        <div className="flex justify-between items-start mb-2">
+          <h4 className="font-semibold mb-0">
+            {property.priceDetails.displayPrice} {property.propertyTypes[0].charAt(0).toUpperCase() + property.propertyTypes[0].slice(1)}
+          </h4>
+          <p className="bg-gray-100 px-3 py-1 rounded-full mb-0">
+            {property.propertyTypes[0].charAt(0).toUpperCase() + property.propertyTypes[0].slice(1)}
+          </p>
+        </div>
+
+        
+        <div className="border-t pt-2">
+          <p className="text-gray-800 mb-2">{property.addressParts.displayAddress}</p>
+          <p className="text-sm text-gray-600">
+            Available from {dayjs(property.dateAvailable).format('DD MMM YYYY')}
+          </p>
+        
+        </div>
+      </div>
+
                           </div>
                         ))}
                       </div>
@@ -524,85 +536,7 @@ const ChatBot = ({
                 </span>
               </div>
             ))}
-            {/* <div
-                className={`mb-4 text-left`}
-              >
-                <span
-                  className={`inline-block  pl-5 pr-8 py-6  max-w-[90%] bg-gray-200 rounded-md `}
-                >
-                  <Form fields={[
-                    {
-                      label: 'Preferred Suburb (s)',
-                      name: 'suburb',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Price Range (e.g., $1M - $1.5M)',
-                      name: 'priceRange',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Number of Bedrooms',
-                      name: 'bedrooms',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Must-Haves (e.g., pool, waterfront)',
-                      name: 'mustHaves',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    }
-                  ]} />
-                </span>
-              </div>
-              <div
-                className={`mb-4 text-left`}
-              >
-                <span
-                  className={`inline-block pl-5 pr-8 py-6  max-w-[80%] bg-gray-200 rounded-md `}
-                >
-                  <Form fields={[
-                    {
-                      label: 'Your Name',
-                      name: 'name',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Contact Number',
-                      name: 'contactNumber',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Email Address',
-                      name: 'email',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Property Address',
-                      name: 'propertyAddress',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },
-                    {
-                      label: 'Estimated Value or Recent Appraisal (if you have one)',
-                      name: 'estimatedValue',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    },{
-                      label: 'Reason for Selling (e.g., downsizing, relocating, etc.)',
-                      name: 'reasonForSelling',
-                      type: 'text',
-                      placeholder: 'Type here...'
-                    }
-                  ]} />
-                </span>
-              </div> */}
+            
 
 
             {isTyping && (
@@ -646,16 +580,16 @@ const ChatBot = ({
           className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 pb-4 pt-2 text-center`}
         >
           <div className="flex flex-col gap-6">
-          <div className="w-full max-w-md mx-auto text-xs relative">
+          <div className="w-full max-w-md mx-auto relative">
       
       <input
               type="text"
         value={inputValue}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
-        placeholder={indexPage?"How can we help? Tell use here":placeholder}
+        placeholder={indexPage?"How can we help? Tell us here":placeholder}
         disabled={indexPage?intentExtracting:false}
-        className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-3 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
+        className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
             />
       <button
         onClick={handleSend}

@@ -29,19 +29,29 @@ const NavBar: React.FC<NavBarProps> = ({
     >
       {/* Back Button - conditionally rendered */}
       {showBackButton && (
-        <Link 
-          href={backButtonLink || '/'} 
+        <button 
+          onClick={() => {
+            console.log('back button clicked', backButtonLink)
+            if(backButtonLink){
+              router.push(backButtonLink)
+            }
+            else{
+              router.back()
+            }
+
+          }}
+          
           className="absolute left-4 md:left-48 top-1/2 -translate-y-1/2"
         >
           <BiChevronLeft className={`h-6 w-6
             ${backgroundColor === 'white' ? 'text-black' : 'text-white'}
             `}/>
-        </Link>
+        </button>
       )}
       
       {/* Centered Logo */}
       <Link href={'/'} className="flex items-center justify-center">
-        <Image 
+        <img 
           src={
             backgroundColor === 'white' ? '/logo.png' : '/logo-white.png'
           } 

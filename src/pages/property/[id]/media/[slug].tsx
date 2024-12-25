@@ -86,12 +86,12 @@ export default function ImageGallery({ id }: { id: string }) {
                 route: "/video",
               },
               {
-                id:"Description",
+                id:"description",
                 label:"Description",
                 route:"/description"
               },
               {
-                id:"Contact",
+                id:"contact",
                 label:"Contact",
                 route:"/contact"
               }
@@ -101,96 +101,115 @@ export default function ImageGallery({ id }: { id: string }) {
           />
         </div>
         <div className=" mt-40 mb-6  container mx-auto px-1 pb-8 pt-0">
-          <div className="grid grid-cols-2 gap-1">
-            {property?.media &&
-              property?.media.length > 0 &&
-              property.media.map(
-                (
-                  item: {
-                    url: string;
-                    category: string;
-                    type: string;
-                  },
-                  index: number
-                ) => {
-                  const layoutType = index % 4;
-                  const isFullWidth = layoutType === 0 || layoutType === 3;
-  
-                  return (
-                    <>
-                      {item?.type === "photo" && activeTab === "images" && (
-                        <div
-                          key={index}
-                          className={`${isFullWidth ? "col-span-2 relative aspect-[16/9] overflow-hidden" : "relative aspect-square overflow-hidden"}`}
-                          onClick={() => {
-                            setSelectedImage(item.url);
-                            setIsOpen(true);
-                          }}
-                        >
-                          <img
-                            src={item.url}
-                            alt={item.category || "Property image"}
-                            // fill
-                            className="w-full h-full object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            loading="lazy"
-                          />
-                        </div>
-                      )}
-
-                      {item?.type === "floorplan" &&
-                        activeTab === "floorplan" && (
+          {
+            activeTab === 'description' && (
+              <div className="p-4">
+                <h2 className="text-2xl font-semibold mb-2">Description</h2>
+                <p>{property?.description}</p>
+              </div>
+            )
+          }
+          {
+            activeTab === 'Contact' && (
+              <div className="p-4">
+                <h2 className="text-2xl font-semibold mb-2">Contact</h2>
+                <p>{property?.contact}</p>
+              </div>
+            )
+          }
+          {
+            (activeTab==='images' || activeTab==='floorplan' || activeTab==='video') && (<div className="grid grid-cols-2 gap-1">
+              {property?.media &&
+                property?.media.length > 0 &&
+                property.media.map(
+                  (
+                    item: {
+                      url: string;
+                      category: string;
+                      type: string;
+                    },
+                    index: number
+                  ) => {
+                    const layoutType = index % 4;
+                    const isFullWidth = layoutType === 0 || layoutType === 3;
+    
+                    return (
+                      <>
+                        {item?.type === "photo" && activeTab === "images" && (
                           <div
-                          key={index}
-                          className={`${isFullWidth ? "col-span-2 relative aspect-[16/9] overflow-hidden" : "relative aspect-square overflow-hidden"}`}
-                          onClick={() => {
-                            setSelectedImage(item.url);
-                            setIsOpen(true);
-                          }}
-                        >
-                          <img
-                            src={item.url}
-                            alt={item.category || "Property image"}
-                            // fill
-                            className="w-full h-full object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            loading="lazy"
-                          />
-                        </div>
-                      )}
-                      {item?.type === "youtube" && activeTab === "video" && (
-                        <div
-                          key={index}
-                          className={`${isFullWidth ? "col-span-2 relative aspect-[16/9]" : "relative aspect-square"}`}
-                        >
-                          <iframe
-                            src={item.url}
-                            className="w-full h-full object-cover"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            
-                          />
-                        </div>
-                      )}
-                      
-                    </>
-                  );
-                }
-              )}
-              {property?.media.filter((item:{
-                type:string
-              }) => item.type === 'photo').length === 0 && activeTab === 'images' && (
-      <div className="col-span-2 text-center p-4"><p>No images available.</p></div>
-    )}
-    {property?.media.filter((item:{
-     type:string
-    }) => item.type === 'floorplan').length === 0 && activeTab === 'floorplan' && (
-      <div className="col-span-2 text-center p-4"><p>No floor plans available.</p></div>
-    )}
-    {property?.media.filter((item:{ type:string }) => item.type === 'youtube').length === 0 && activeTab === 'video' && (
-      <div className="col-span-2 text-center p-4"><p>No videos available.</p></div> 
-    )}
-          </div>
+                            key={index}
+                            className={`${isFullWidth ? "col-span-2 relative aspect-[16/9] overflow-hidden" : "relative aspect-square overflow-hidden"}`}
+                            onClick={() => {
+                              setSelectedImage(item.url);
+                              setIsOpen(true);
+                            }}
+                          >
+                            <img
+                              src={item.url}
+                              alt={item.category || "Property image"}
+                              // fill
+                              className="w-full h-full object-cover"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              loading="lazy"
+                            />
+                          </div>
+                        )}
+  
+                        {item?.type === "floorplan" &&
+                          activeTab === "floorplan" && (
+                            <div
+                            key={index}
+                            className={`${isFullWidth ? "col-span-2 relative aspect-[16/9] overflow-hidden" : "relative aspect-square overflow-hidden"}`}
+                            onClick={() => {
+                              setSelectedImage(item.url);
+                              setIsOpen(true);
+                            }}
+                          >
+                            <img
+                              src={item.url}
+                              alt={item.category || "Property image"}
+                              // fill
+                              className="w-full h-full object-cover"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              loading="lazy"
+                            />
+                          </div>
+                        )}
+                        {item?.type === "youtube" && activeTab === "video" && (
+                          <div
+                            key={index}
+                            className={`${isFullWidth ? "col-span-2 relative aspect-[16/9]" : "relative aspect-square"}`}
+                          >
+                            <iframe
+                              src={item.url}
+                              className="w-full h-full object-cover"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              
+                            />
+                          </div>
+                        )}
+                        
+                      </>
+                    );
+                  }
+                )}
+                {property?.media.filter((item:{
+                  type:string
+                }) => item.type === 'photo').length === 0 && activeTab === 'images' && (
+        <div className="col-span-2 text-center p-4"><p>No images available.</p></div>
+      )}
+      {property?.media.filter((item:{
+       type:string
+      }) => item.type === 'floorplan').length === 0 && activeTab === 'floorplan' && (
+        <div className="col-span-2 text-center p-4"><p>No floor plans available.</p></div>
+      )}
+      {property?.media.filter((item:{ type:string }) => item.type === 'youtube').length === 0 && activeTab === 'video' && (
+        <div className="col-span-2 text-center p-4"><p>No videos available.</p></div> 
+      )}
+            </div>)
+          }
+          
         </div>
       </div>
     </>

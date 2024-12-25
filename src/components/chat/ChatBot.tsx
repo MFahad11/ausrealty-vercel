@@ -18,6 +18,7 @@ import {
   handleRenChat,
 } from "@/utils/openai";
 import { LuRotateCcw } from "react-icons/lu";
+import EmblaCarousel from "../ui/carousel";
 const ChatBot = ({
   title,
   firstMessage,
@@ -297,7 +298,7 @@ const ChatBot = ({
                     saleMode: property?.saleMode,
                     suburb: property?.sub,
                     media:
-                      property?.media?.length >= 1 ? property?.media[0] : null,
+                      property?.media?.length >= 1 ? property?.media : null,
                     id: property?.id,
                   }));
 
@@ -494,26 +495,14 @@ const ChatBot = ({
                                     key={index}
                                     className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
                                     onClick={() => {
-                                      router.push(`/property/${property.id}`);
+                                      router.push(`/property/${property.id}/media/images`);
                                     }}
                                   >
                                     {property?.media && (
-                                      <div className="relative md:w-full md:h-64 aspect-16x9 overflow-hidden mb-1">
-                                        {property?.media?.category ===
-                                        "image" ? (
-                                          <img
-                                            src={property?.media?.url}
-                                            alt={property?.headline}
-                                            className="w-full h-full object-cover"
-                                          />
-                                        ) : (
-                                          <video
-                                            src={property?.media?.url}
-                                            className="w-full h-full object-cover"
-                                            controls
-                                          />
-                                        )}
-                                      </div>
+                                      
+                                        <EmblaCarousel
+                                        slides={property?.media}
+                                        />
                                     )}
                                     <div className="ml-4">
                                       <div className="mt-6">

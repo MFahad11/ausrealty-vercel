@@ -67,7 +67,7 @@ export default function ImageGallery({ id }: { id: string }) {
         </div>
       </Modal>
       <div className="max-w-4xl mx-auto mt-20">
-        <div className="mt-4 mb-6 ml-4">
+      <div className="pl-4 py-4 fixed top-[4.4rem] z-50 bg-white overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth w-full">
           <TabGroup
             tabs={[
               {
@@ -85,12 +85,22 @@ export default function ImageGallery({ id }: { id: string }) {
                 label: "Video",
                 route: "/video",
               },
+              {
+                id:"Description",
+                label:"Description",
+                route:"/description"
+              },
+              {
+                id:"Contact",
+                label:"Contact",
+                route:"/contact"
+              }
             ]}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
           />
         </div>
-        <div className="container mx-auto px-1 pb-8 mt-0 pt-0">
+        <div className=" mt-40 mb-6  container mx-auto px-1 pb-8 pt-0">
           <div className="grid grid-cols-2 gap-1">
             {property?.media &&
               property?.media.length > 0 &&

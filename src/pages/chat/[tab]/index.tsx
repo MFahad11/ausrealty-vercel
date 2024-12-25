@@ -13,9 +13,12 @@ const ChatbotPage = (
   return (
     <>
   <NavBar />
-  <ChatBotHandler
+  <div
+  className="mt-10"
+  ><ChatBotHandler
       data={data}
-    />
+    /></div>
+  
     </>
   );
 };

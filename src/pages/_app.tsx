@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import '@/components/ui/carousel/css/carousel.css';
 import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 

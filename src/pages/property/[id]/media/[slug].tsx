@@ -47,7 +47,9 @@ export default function ImageGallery({ id }: { id: string }) {
   }
   return (
     <>
-      <NavBar backgroundColor="black" showBackButton={true} />
+      <NavBar backgroundColor="black" showBackButton={true} 
+      backButtonLink={`/chat/looking-to-buy`}
+      />
       {/* 
     @ts-ignore */}
 

@@ -1,7 +1,7 @@
 
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
 
-import NavBar from "@/components/layout/Navba";
+import NavBar from "@/components/layout/Navbar";
 import axios from "axios";
 import React from "react";
 import "react-toastify/dist/ReactToastify.css";

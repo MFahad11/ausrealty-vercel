@@ -1,4 +1,4 @@
-import NavBar from '@/components/layout/Navba'
+import NavBar from '@/components/layout/Navbar'
 import PageLoader from '@/components/ui/PageLoader';
 import axiosInstance from '@/utils/axios-instance';
 import dayjs from 'dayjs';

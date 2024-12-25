@@ -1,4 +1,4 @@
-import NavBar from "@/components/layout/Navba";
+import NavBar from "@/components/layout/Navbar";
 import Modal from "@/components/ui/Modal";
 import { TabGroup } from "@/components/ui/TabGroup";
 import Image from "next/image";
@@ -66,7 +66,7 @@ export default function ImageGallery({ id }: { id: string }) {
           />
         </div>
       </Modal>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto mt-20">
         <div className="mt-4 mb-6 ml-4">
           <TabGroup
             tabs={[

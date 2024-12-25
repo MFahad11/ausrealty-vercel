@@ -1,6 +1,6 @@
 import ChatBot from "@/components/chat/ChatBot";
 import ImageGrid from "@/components/chat/ImageGrid";
-import NavBar from "@/components/layout/Navba";
+import NavBar from "@/components/layout/Navbar";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useState, useRef,  useEffect } from "react";

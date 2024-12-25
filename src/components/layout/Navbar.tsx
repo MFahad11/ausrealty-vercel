@@ -22,9 +22,8 @@ const NavBar: React.FC<NavBarProps> = ({
 }) => {
   const router=useRouter();
   return (
-    <>
     <nav 
-      className={`flex items-center justify-center relative w-full p-4`} 
+      className={`top-0 fixed z-[10000] flex items-center justify-center  w-full p-4`} 
       style={{ backgroundColor }}
     >
       {/* Back Button - conditionally rendered */}
@@ -57,14 +56,13 @@ const NavBar: React.FC<NavBarProps> = ({
           } 
           alt={logoAlt} 
           className=" object-contain"
-            width={199}
-            height={36}
+            width={210}
+            height={40}
         />
 
       </Link>
     </nav>
-    {/* <StickyContact/> */}
-</>
+    
   );
 };
 

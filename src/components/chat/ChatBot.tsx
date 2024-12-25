@@ -463,7 +463,7 @@ const ChatBot = ({
                 <div
                   id="msg"
                   ref={messagesContainerRef}
-                  className="enhanced-textarea overflow-y-auto pl-0 pb-32"
+                  className="enhanced-textarea overflow-y-auto pl-0 pb-32 "
                 >
                   {messages.map((message, index) => (
                     <div
@@ -588,23 +588,29 @@ const ChatBot = ({
                 indexPage ? "How can we help? Tell us here" : placeholder
               }
               disabled={indexPage ? intentExtracting : false}
-              className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
+              className="start-campaign-input uppercase w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
             />
             <button
               onClick={handleSend}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
             >
-              <IoSend title="Send" />
+              <IoSend title="Send" 
+              className="w-5 h-5"
+              />
             </button>
-            <div className="absolute right-8 top-1/2 -translate-y-1/2">
+            {
+              !indexPage && (
               <button
                 onClick={handleStartAgain}
-                className="p-2 text-darkergray transition-colors duration-200 rounded-full hover:bg-gray-100"
+                className="p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-3/4 -translate-y-3/4 bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none"
                 aria-label="Reset search"
               >
-                <LuRotateCcw title="Restart" />
+                <LuRotateCcw title="Restart" className="w-6 h-6" />
               </button>
-            </div>
+              )
+            }
+            
+            
           </div>
 
           <div

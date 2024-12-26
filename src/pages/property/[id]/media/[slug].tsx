@@ -8,15 +8,20 @@ import { usePropertyStore } from "@/store/propertyStore";
 import { GetStaticProps } from "next";
 import axiosInstance from "@/utils/axios-instance";
 import PageLoader from "@/components/ui/PageLoader";
+import { IoSend } from "react-icons/io5";
+import { toast } from "react-toastify";
+import { handleIdentifyIntent } from "@/utils/openai";
 export default function ImageGallery({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [intentExtracting, setIntentExtracting] = useState(false);
   const [activeTab, setActiveTab] = useState("images");
   const property = usePropertyStore((state) => state.propertyData);
   const router = useRouter();
   const {slug} = router.query;
 
   const [isLoading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const setProperty = usePropertyStore((state) => state.setPropertyData);
   const getListing = async (id: string) => {
     try {
@@ -29,6 +34,49 @@ export default function ImageGallery({ id }: { id: string }) {
     } finally {
       setIsLoading(false);
     }
+  };
+  const handleInputChange = (e: any) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleKeyPress = (e: any) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+  const searchData = async (userInput: string) => {
+    const data = await handleIdentifyIntent(userInput);
+      if (data?.response) {
+        const { redirect = "/" ,page} = JSON.parse(data?.response);
+        setIntentExtracting(false);
+        if(page==="chat"){
+          router.push(`/chat/${redirect}`);
+        }else{
+          router.push(`/property/${id}/media/${redirect}`);
+        }
+        
+        // router.push(`/${data?.response?.redirect}`)
+      }
+  };
+  const handleSend = () => {
+    if (!inputValue.trim()) {
+        toast.error("Please type something");
+        return;
+   }
+   const userMessage = { role: "user", content: inputValue };
+   setIntentExtracting(true);
+    setInputValue("");
+        try {
+          searchData(userMessage?.content);
+        } catch (error: any) {
+          const errorMessage =
+            error.response?.data?.message ||
+            error.message ||
+            "An unexpected error occurred";
+          toast.error(errorMessage);
+          setIntentExtracting(false);
+        }
   };
   useEffect(() => {
     if (slug) {
@@ -102,7 +150,7 @@ export default function ImageGallery({ id }: { id: string }) {
             setActiveTab={setActiveTab}
           />
         </div>
-        <div className=" mt-40 mb-6  container mx-auto px-1 pb-8 pt-0">
+        <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">
           {
             activeTab === 'description' && (
               <div className="p-4">
@@ -213,6 +261,36 @@ export default function ImageGallery({ id }: { id: string }) {
           }
           
         </div>
+        <div
+                className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 py-4 text-center`}
+              >
+                <div className="flex flex-col gap-6">
+                  <div className="w-full max-w-md mx-auto relative">
+                    <input
+                      type="text"
+                      value={inputValue}
+                      onChange={handleInputChange}
+                      onKeyPress={handleKeyPress}
+                      placeholder={"How can we help? Tell us here"}
+                      // disabled={indexPage ? intentExtracting : false}
+                      autoCapitalize="on"
+                      
+                      className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
+                    />
+                    <button
+                      onClick={handleSend}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
+                    >
+                      <IoSend title="Send" 
+                      className="w-5 h-5"
+                      />
+                    </button>
+                   
+                    
+                    
+                  </div>
+      </div>
+      </div>
       </div>
     </>
   );

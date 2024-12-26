@@ -30,7 +30,6 @@ const NavBar: React.FC<NavBarProps> = ({
       {showBackButton && (
         <button 
           onClick={() => {
-            console.log('back button clicked', backButtonLink)
             if(backButtonLink){
               router.push(backButtonLink)
             }

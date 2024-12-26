@@ -498,7 +498,7 @@ const ChatBot = ({
                                       router.push(`/property/${property.id}/media/images`);
                                     }}
                                   >
-                                    {property?.media && (
+                                    {(property?.media && Array.isArray(property?.media)) && (
                                       
                                         <EmblaCarousel
                                         slides={property?.media}
@@ -525,7 +525,7 @@ const ChatBot = ({
                                             : "N/A"}
                                         </h4>
                                         <p className="leading-7">
-                                          Inspection Sat 30 Nov
+                                          Inspection {dayjs(property?.dateAvailable)?.format("DD/MM/YYYY")}
                                         </p>
                                       </div>
                                     </div>
@@ -568,7 +568,7 @@ const ChatBot = ({
       >
         <div className="flex flex-col gap-6">
           <div className="w-full max-w-md mx-auto relative">
-           <input
+            <input
               type="text"
               value={inputValue}
               onChange={handleInputChange}

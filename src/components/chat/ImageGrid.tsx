@@ -27,7 +27,6 @@ export default function ImageGrid(
   const [selectedMedia, setSelectedMedia] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
 
-  console.log(data)
   return (
     <>
     <div className="max-w-4xl lg:h-[555px] h-[474px] mx-auto px-4 py-8 enhanced-textarea overflow-y-auto">

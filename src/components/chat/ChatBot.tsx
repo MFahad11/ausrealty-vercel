@@ -93,8 +93,6 @@ const ChatBot = ({
         else{
           toast.error("No messages found");
         }
-      }else{
-        toast.error("No isSendMessage found");
       }
     } else {
       if (title !== "SELL OR LEASE MY PROPERTY") {

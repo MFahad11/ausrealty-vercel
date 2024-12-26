@@ -87,10 +87,14 @@ const ChatBot = ({
         const getStoredMessages = localStorage.getItem(prompt);
         if(getStoredMessages){
           const getLatestMessage = JSON.parse(getStoredMessages);
-          // setIsTyping(true);
           localStorage.removeItem(`${prompt}_send_message`);
           searchData(getLatestMessage[getLatestMessage.length-1]?.content);
         }
+        else{
+          toast.error("No messages found");
+        }
+      }else{
+        toast.error("No isSendMessage found");
       }
     } else {
       if (title !== "SELL OR LEASE MY PROPERTY") {
@@ -189,8 +193,6 @@ const ChatBot = ({
       toast.error("Please type something");
       return;
     }
-
-    setIsTyping(true);
     const userMessage = { role: "user", content: inputValue };
     if (!indexPage) {
       setMessages([...messages, userMessage]);
@@ -229,6 +231,7 @@ const ChatBot = ({
   };
   const searchData = async (userInput: string) => {
     let data: any;
+    setIsTyping(true);
     if (indexPage) {
       const data = await handleIdentifyIntent(userInput);
       if (data?.response) {
@@ -247,7 +250,9 @@ const ChatBot = ({
           localStorage.setItem(`${prompt}_send_message`, 'true');
           // searchData(userInput);
         }
-        
+        else{
+          toast.error("No prompt found");
+        }
       }
     } 
     else {

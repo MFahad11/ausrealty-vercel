@@ -85,7 +85,7 @@ export default function ImageGallery({ id }: { id: string }) {
     }
   }, [slug]);
   useEffect(() => {
-    if (id && !property) {
+    if (id) {
       setIsLoading(true);
       getListing(id);
     }

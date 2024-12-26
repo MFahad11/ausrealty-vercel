@@ -568,7 +568,7 @@ const ChatBot = ({
       >
         <div className="flex flex-col gap-6">
           <div className="w-full max-w-md mx-auto relative">
-            <input
+           <input
               type="text"
               value={inputValue}
               onChange={handleInputChange}
@@ -577,7 +577,9 @@ const ChatBot = ({
                 indexPage ? "How can we help? Tell us here" : placeholder
               }
               disabled={indexPage ? intentExtracting : false}
-              className="w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
+              autoCapitalize="on"
+              
+              className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
             />
             <button
               onClick={handleSend}

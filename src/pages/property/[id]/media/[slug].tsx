@@ -11,6 +11,7 @@ import PageLoader from "@/components/ui/PageLoader";
 import { IoSend } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { handleIdentifyIntent } from "@/utils/openai";
+import PropertyDetails from "@/components/property/PropertyDetails";
 export default function ImageGallery({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -153,10 +154,11 @@ export default function ImageGallery({ id }: { id: string }) {
         <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">
           {
             activeTab === 'description' && (
-              <div className="p-4">
-                <h2 className="text-2xl font-semibold mb-2">Description</h2>
-                <p>{property?.description}</p>
-              </div>
+              // <div className="p-4">
+              //   <h2 className="text-2xl font-semibold mb-2">Description</h2>
+              //   <p>{property?.description}</p>
+              // </div>
+              <PropertyDetails property={property} />
             )
           }
           {

@@ -318,7 +318,9 @@ const ChatBot = ({
                     priceRange: property?.priceRange,
                     propertyTypes: property?.propertyTypes,
                     saleMode: property?.saleMode,
+                    saleDetails: property?.saleDetails,
                     suburb: property?.sub,
+                    status: property?.status,
                     media:
                       property?.media?.length >= 1 ? property?.media : null,
                     id: property?.id,
@@ -516,7 +518,7 @@ const ChatBot = ({
                                     key={index}
                                     className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
                                     onClick={() => {
-                                      router.push(`/property/${property.id}/media/images`);
+                                      router.push(`/property/${property?.id}/media/images`);
                                     }}
                                   >
                                     {(property?.media && Array.isArray(property?.media)) && (
@@ -526,12 +528,18 @@ const ChatBot = ({
                                         />
                                     )}
                                     <div className="ml-4">
-                                      <div className="mt-6">
-                                        {/* <h4 className="mb-3 tracking-wide font-semibold">
-                                          FOR {property.objective.toUpperCase()}
-                                        </h4> */}
+                                      <div className="mt-4 flex flex-col space-y-2">
+                                        <h5 className="tracking-wide">
+                                        {property?.priceDetails.displayPrice}
+                                        </h5>
                                         <h5 className="text-black font-light">
-                                          {property.addressParts.displayAddress}
+                                        Sale Method: {property?.saleDetails?.saleMethod}
+                                        </h5>
+                                        <h5 className="text-black font-light">
+                                          Status: {property?.status}
+                                        </h5>
+                                        <h5 className="text-black font-light">
+                                          {property?.addressParts.displayAddress}
                                         </h5>
                                       </div>
 

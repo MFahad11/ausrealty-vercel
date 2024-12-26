@@ -231,21 +231,28 @@ const ChatBot = ({
     let data: any;
     setIsTyping(true);
     if (indexPage) {
+      toast.info("Extracting intent...");
       const data = await handleIdentifyIntent(userInput);
       if (data?.response) {
+        toast.success("Intent extracted successfully");
         const { redirect = "/",prompt } = JSON.parse(data?.response);
         setIntentExtracting(false);
         if(prompt){
+          toast.success("Intent extracted successfully now in prompt");
           const getStoredMessages = localStorage.getItem(prompt);
           if(getStoredMessages){
+            toast.success("get stored messages");
             const storedMessages=JSON.parse(getStoredMessages);
             localStorage.setItem(prompt, JSON.stringify([...storedMessages, {role: "user", content: userInput}]));
           }else{
+            toast.success("no stored messages");
             const messages = [{role: "user", content: userInput}];
             localStorage.setItem(prompt, JSON.stringify(messages));
           }
+
           router.push(`/chat/${redirect}`);
           localStorage.setItem(`${prompt}_send_message`, 'true');
+          toast.success("Redirected to prompt");
           // searchData(userInput);
         }
         else{
@@ -274,7 +281,9 @@ const ChatBot = ({
         );
       }
       if (data?.extractedInfo) {
+        toast.success("extracted info successfully");
         if (data?.extractedInfo?.intent) {
+          toast.success("intent extracted successfully");
           router.push(`/chat/${data?.extractedInfo?.redirect}`);
           return;
         }

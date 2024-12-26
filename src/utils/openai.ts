@@ -354,7 +354,8 @@ Promise<{ response: string }> {
 {
   "intent": "string",
   "redirect": "string",
-  "page": "string"
+  "page": "string",
+  "prompt": "string"
 }
 
 IMPORTANT: Your response should strictly be in the following format, with no additional text, explanations, or formatting or symbols:
@@ -362,7 +363,8 @@ IMPORTANT: Your response should strictly be in the following format, with no add
 {
   "intent": "string",
   "redirect": "string",
-  "page": "string"
+  "page": "string",
+  "prompt": "string"
 }
 
 Here are the possible intents and redirects you should handle:
@@ -372,14 +374,16 @@ Buying Intent: If the user intends to buy a property:
 {
   "intent": "buy",
   "redirect": "looking-to-buy",
-  "page": "chat"
+  "page": "chat",
+  "prompt":"LOOKING_TO_BUY_PROMPT"
 }
 Renting Intent: If the user intends to rent a property:
 
 {
   "intent": "rent",
   "redirect": "looking-to-rent",
-  "page": "chat"
+  "page": "chat",
+  "prompt":"LOOKING_TO_RENT_PROMPT"
 }
 Selling Intent: If the user intends to sell a property:
 
@@ -494,4 +498,3 @@ Impotant Notes:
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
-

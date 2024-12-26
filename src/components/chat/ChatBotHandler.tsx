@@ -102,7 +102,7 @@ const ChatBotHandler = (
   // set a use effect to clear stale data from local storage if the local storage not contains or the updatedData is false
   useEffect(() => {
     const updatedData = localStorage.getItem("updatedData");
-    if (updatedData || updatedData === "true") {
+    if (updatedData === "true") {
       localStorage.clear();
       document.cookie.split(";").forEach((cookie) => {
         const [name] = cookie.split("=");

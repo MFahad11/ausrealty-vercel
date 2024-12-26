@@ -87,7 +87,7 @@ const ChatBot = ({
         const getStoredMessages = localStorage.getItem(prompt);
         if(getStoredMessages){
           const getLatestMessage = JSON.parse(getStoredMessages);
-          setIsTyping(true);
+          // setIsTyping(true);
           localStorage.removeItem(`${prompt}_send_message`);
           searchData(getLatestMessage[getLatestMessage.length-1]?.content);
         }
@@ -232,7 +232,6 @@ const ChatBot = ({
     if (indexPage) {
       const data = await handleIdentifyIntent(userInput);
       if (data?.response) {
-        setIsTyping(false);
         const { redirect = "/",prompt } = JSON.parse(data?.response);
         setIntentExtracting(false);
         if(prompt){
@@ -347,7 +346,6 @@ const ChatBot = ({
       }
     }
     setIsTyping(false);
-    
   };
   const generateStory = async () => {
     if (messages.length < 10) {

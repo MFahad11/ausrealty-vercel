@@ -18,7 +18,6 @@ const ChatBotHandler = (
   const [isOpen, setIsOpen] = useState(false);
   const router=useRouter();
   const tab = router.query.tab;
-  console.log(tab);
   const [boxes, ] = useState<{
     title: string;
     description: string;

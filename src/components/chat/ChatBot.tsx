@@ -82,6 +82,16 @@ const ChatBot = ({
     const savedMessages = localStorage.getItem(prompt);
     if (savedMessages) {
       setMessages(JSON.parse(savedMessages));
+      const isSendMessage = localStorage.getItem(`${prompt}_send_message`);
+      if(isSendMessage){
+        const getStoredMessages = localStorage.getItem(prompt);
+        if(getStoredMessages){
+          const getLatestMessage = JSON.parse(getStoredMessages);
+          setIsTyping(true);
+          localStorage.removeItem(`${prompt}_send_message`);
+          searchData(getLatestMessage[getLatestMessage.length-1]?.content);
+        }
+      }
     } else {
       if (title !== "SELL OR LEASE MY PROPERTY") {
         initializeChat();
@@ -92,7 +102,7 @@ const ChatBot = ({
     if (messages.length > 0) {
       localStorage.setItem(prompt, JSON.stringify(messages));
     }
-    if (messagesEndRef.current) {
+    if (messagesEndRef.current && messages.length > 2) {
       // @ts-ignore
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
@@ -222,12 +232,26 @@ const ChatBot = ({
     if (indexPage) {
       const data = await handleIdentifyIntent(userInput);
       if (data?.response) {
-        const { redirect = "/" } = JSON.parse(data?.response);
+        setIsTyping(false);
+        const { redirect = "/",prompt } = JSON.parse(data?.response);
         setIntentExtracting(false);
-        router.push(`/chat/${redirect}`);
-        // router.push(`/${data?.response?.redirect}`)
+        if(prompt){
+          const getStoredMessages = localStorage.getItem(prompt);
+          if(getStoredMessages){
+            const storedMessages=JSON.parse(getStoredMessages);
+            localStorage.setItem(prompt, JSON.stringify([...storedMessages, {role: "user", content: userInput}]));
+          }else{
+            const messages = [{role: "user", content: userInput}];
+            localStorage.setItem(prompt, JSON.stringify(messages));
+          }
+          router.push(`/chat/${redirect}`);
+          localStorage.setItem(`${prompt}_send_message`, 'true');
+          // searchData(userInput);
+        }
+        
       }
-    } else {
+    } 
+    else {
       if (title === "LOOKING TO BUY") {
         data = await handleBuyingChat(
           userInput,
@@ -322,8 +346,8 @@ const ChatBot = ({
         });
       }
     }
-
     setIsTyping(false);
+    
   };
   const generateStory = async () => {
     if (messages.length < 10) {

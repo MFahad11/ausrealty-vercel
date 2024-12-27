@@ -17,7 +17,9 @@ const extractJsonContent = (text: string): any => {
     const parseJson = JSON.parse(jsonMatch);
     const hasValidValue = Object.keys(parseJson).some((key) => {
       const value = parseJson[key];
-      return value !== null && (!Array.isArray(value) || value.length > 0);
+      // dont include objective and saleMode in this check
+      return key !== "objective" && key !== "saleMode" && value !== null && (!Array.isArray(value) || value.length > 0);
+      // return value !== null && (!Array.isArray(value) || value.length > 0);
     });
     return hasValidValue ? parseJson : null;
   } catch {
@@ -53,7 +55,7 @@ export async function handleBuyingChat(
     conversationHistory.push({ role: "user", content: userInput,properties:[] });
     
     // Define the system-level prompt for the "Buying" use case
-    const systemPrompt = `You are an expert real estate agent in Australia, assisting users in finding properties to buy only. Your role is to interact professionally, extract relevant information silently, and guide the user in refining their property search.
+    const systemPrompt = `You are an expert real estate agent in Australia, assisting users in finding properties to buy only. You have a database of properties from which you will look into. Your role is to interact professionally, extract relevant information silently, and guide the user in refining their property search.
 
 IMPORTANT: For EVERY response, you MUST provide TWO parts:
 1. Your natural conversational response
@@ -99,8 +101,9 @@ Your responsibilities:
 
 2. **Respond Like an Agent**:
    MANDATORY RESPONSE STRUCTURE:
-   1. ALWAYS start with search results with sentences similar to below:
-      - "I am searching for properties currently available. Showing you the best options in a moment."
+   1. ALWAYS start with as you are searching for properties that meet the user's preferences.
+    2. Your tone conversation must be human-like and professional.
+
    
 
 3. **Encourage Exploration**:

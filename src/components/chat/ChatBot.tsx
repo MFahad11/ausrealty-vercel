@@ -643,7 +643,7 @@ const ChatBot = ({
                   {isTyping && (
                     <div className="text-left mb-2 ml-2">
                       <span className="inline-block p-3 max-w-[80%] bg-gray-200 rounded-lg animate-pulse">
-                        Typing...
+                        Getting the information for you, please wait...
                       </span>
                     </div>
                   )}

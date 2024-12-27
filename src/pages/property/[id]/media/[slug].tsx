@@ -12,6 +12,7 @@ import { IoSend } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { handleIdentifyIntent } from "@/utils/openai";
 import PropertyDetails from "@/components/property/PropertyDetails";
+import AgentsPage from "@/components/property/AgentDetails";
 export default function ImageGallery({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -162,11 +163,8 @@ export default function ImageGallery({ id }: { id: string }) {
             )
           }
           {
-            activeTab === 'Contact' && (
-              <div className="p-4">
-                <h2 className="text-2xl font-semibold mb-2">Contact</h2>
-                <p>{property?.contact}</p>
-              </div>
+            activeTab === 'contact' && (
+              <AgentsPage />
             )
           }
           {

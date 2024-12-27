@@ -1,4 +1,5 @@
 import filterProperties from '@/utils/filterations/buy-page-filter';
+import { handleBuyingChat } from '@/utils/openai';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, 
@@ -25,11 +26,17 @@ export default async function handler(req: NextApiRequest,
         });
         return response.data;
     }));
-
-
-    combinedResponse=filterProperties(combinedResponse.flat(),extractedInfo);
+    combinedResponse=combinedResponse.flat().filter((property:any) => {
+        if (extractedInfo.objective && property.objective !== extractedInfo.objective) {
+            return false;
+        }
+        if (extractedInfo.saleMode && property.saleMode !== extractedInfo.saleMode) {
+            return false;
+        }
+        return true;
+    });
     res.status(200).json({
-        data:combinedResponse,
+        data:combinedResponse || [],
         success: true,
     });
     

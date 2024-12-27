@@ -71,7 +71,7 @@ export default function PropertyDetails({ property }: { property: PropertyType }
       </div>
 
       {/* Price and Status */}
-      <div className="mb-8 flex flex-wrap gap-4">
+      <div className="mb-8 flex flex-wrap gap-2">
         <div className="inline-block bg-black text-white px-4 py-2 rounded-sm text-sm font-medium">
           {property.priceDetails?.displayPrice || 'Price not available'}
         </div>
@@ -82,6 +82,15 @@ export default function PropertyDetails({ property }: { property: PropertyType }
           {property.channel || 'Channel not specified'}
         </div>
       </div>
+      
+      {/* Inspection Details */}
+      {property.inspectionDetails?.isByAppointmentOnly && (
+        <div className="bg-gray-50 p-6 rounded-lg">
+          <p className="text-center font-medium">
+            Inspections available by appointment only
+          </p>
+        </div>
+      )}
 
       {/* Description Section */}
       <div className="mb-12">
@@ -164,15 +173,6 @@ export default function PropertyDetails({ property }: { property: PropertyType }
         </div>
       </div>
 
-      {/* Inspection Details */}
-      {property.inspectionDetails?.isByAppointmentOnly && (
-        <div className="bg-gray-50 p-6 rounded-lg">
-          <p className="text-center font-medium">
-            Inspections available by appointment only
-          </p>
-        </div>
-      )}
     </div>
   )
 }
-

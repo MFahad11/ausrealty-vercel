@@ -71,6 +71,7 @@ const ChatBot = ({
   >([]);
   const [intentExtracting, setIntentExtracting] = useState(false);
   const router = useRouter();
+  const [fetchedProperties, setFetchedProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -79,17 +80,18 @@ const ChatBot = ({
   const messagesEndRef = useRef(null);
   useEffect(() => {
     setMessages([]);
+    setFetchedProperties([]);
     const savedMessages = localStorage.getItem(prompt);
     if (savedMessages) {
       setMessages(JSON.parse(savedMessages));
       const isSendMessage = localStorage.getItem(`${prompt}_send_message`);
-      if(isSendMessage){
+      if (isSendMessage) {
         const getStoredMessages = localStorage.getItem(prompt);
-        if(getStoredMessages){
+        if (getStoredMessages) {
           const getLatestMessage = JSON.parse(getStoredMessages);
-          
+
           localStorage.removeItem(`${prompt}_send_message`);
-          searchData(getLatestMessage[getLatestMessage.length-1]?.content);
+          searchData(getLatestMessage[getLatestMessage.length - 1]?.content);
         }
       }
     } else {
@@ -231,66 +233,55 @@ const ChatBot = ({
     if (indexPage) {
       const data = await handleIdentifyIntent(userInput);
       if (data?.response) {
-        const { redirect = "/",prompt } = JSON.parse(data?.response);
+        const { redirect = "/", prompt } = JSON.parse(data?.response);
         setIntentExtracting(false);
-        if(prompt){
+        if (prompt) {
           const getStoredMessages = localStorage.getItem(prompt);
-          if(getStoredMessages){
-            const storedMessages=JSON.parse(getStoredMessages);
-            localStorage.setItem(prompt, JSON.stringify([...storedMessages, {role: "user", content: userInput}]));
-          }else{
-            const messages = [{role: "user", content: userInput}];
+          if (getStoredMessages) {
+            const storedMessages = JSON.parse(getStoredMessages);
+            localStorage.setItem(
+              prompt,
+              JSON.stringify([
+                ...storedMessages,
+                { role: "user", content: userInput },
+              ])
+            );
+          } else {
+            const messages = [{ role: "user", content: userInput }];
             localStorage.setItem(prompt, JSON.stringify(messages));
           }
           router.push(`/chat/${redirect}`);
-          localStorage.setItem(`${prompt}_send_message`, 'true');
+          localStorage.setItem(`${prompt}_send_message`, "true");
           // searchData(userInput);
         }
-        
       }
-    } 
-    else {
+    } else {
+      const body: {
+        objective?: string;
+        saleMode?: string;
+      } | null = {};
       if (title === "LOOKING TO BUY") {
-        data = await handleBuyingChat(
-          userInput,
-          messages.map(({ content, role, properties }) => ({
-            content,
-            role,
-            properties: properties || [],
-          }))
-        );
+        body["objective"] = "sale";
+        body["saleMode"] = "buy";
       } else if (title === "LOOKING TO RENT") {
-        data = await handleRenChat(
-          userInput,
-          messages.map(({ content, role, properties }) => ({
-            content,
-            role,
-            properties: properties || [],
-          }))
-        );
+        body["objective"] = "rent";
+        body["saleMode"] = "rent";
       }
-      if (data?.extractedInfo) {
-        if (data?.extractedInfo?.intent) {
-          router.push(`/chat/${data?.extractedInfo?.redirect}`);
-          return;
-        }
-        setMessages((prevMessages) => {
-          const newMessage = {
-            role: "system",
-            content: data?.response,
-            properties: [],
-            isLoading: true,
-          };
-          const updatedMessages = [...prevMessages, newMessage];
-          return updatedMessages;
-        });
-        try {
+      try {
+        let storedProperties = fetchedProperties || [];
+        if(storedProperties.length===0){
           const response = await axiosInstance.post("/api/domain/listings", {
-            extractedInfo: data?.extractedInfo,
+          extractedInfo: body,
           });
           if (response.data.success) {
             const properties = response.data.data;
-            if (properties.length == 0) {
+            if (properties.length > 0) {
+              setFetchedProperties(() => {
+                const updatedProperties = properties;
+                return updatedProperties;
+              });
+              storedProperties = properties;
+            }else{
               setMessages((prevMessages) => {
                 const newMessage = {
                   role: "system",
@@ -300,50 +291,122 @@ const ChatBot = ({
                 const updatedMessages = [...prevMessages, newMessage];
                 return updatedMessages;
               });
-            } else {
-              setMessages((prevMessages) => {
-                const updatedMessages = [...prevMessages];
-                updatedMessages[prevMessages.length - 1].properties =
-                  properties?.map((property: any) => ({
-                    addressParts: property?.addressParts,
-                    headline: property?.headline,
-                    priceDetails: property?.priceDetails,
-                    bedrooms: property?.bedrooms,
-                    bathrooms: property?.bathrooms,
-                    carspaces: property?.carspaces,
-                    channel: property?.channel,
-                    features: property?.features,
-                    location: property?.location,
-                    objective: property?.objective,
-                    priceRange: property?.priceRange,
-                    propertyTypes: property?.propertyTypes,
-                    saleMode: property?.saleMode,
-                    saleDetails: property?.saleDetails,
-                    suburb: property?.sub,
-                    status: property?.status,
-                    media:
-                      property?.media?.length >= 1 ? property?.media : null,
-                    id: property?.id,
-                  }));
-
-                updatedMessages[prevMessages.length - 1].isLoading = false;
-                return updatedMessages;
-              });
             }
           }
-        } catch (error: any) {
-          const errorMessage =
-            error.response?.data?.message ||
-            error.message ||
-            "An unexpected error occurred";
-          toast.error(errorMessage);
         }
-      } else {
-        setMessages((prevMessages) => {
-          const newMessage = { role: "system", content: data?.response };
-          const updatedMessages = [...prevMessages, newMessage];
-          return updatedMessages;
-        });
+        if (title === "LOOKING TO BUY") {
+          data = await handleBuyingChat(
+            userInput,
+            messages.map(({ content, role }) => ({
+              content,
+              role,
+            })),
+            storedProperties?.map((property: any) => ({
+              id: property?.id,
+              propertyTypes: property?.propertyTypes,
+              channel: property?.channel,
+              addressParts: property?.addressParts,
+              bathrooms: property?.bathrooms,
+              bedrooms: property?.bedrooms,
+              buildingArea: property?.buildingAreaSqm,
+              buildingAreaSqm: property?.buildingAreaSqm,
+              carspaces: property?.carspaces,
+              dateAvailable: property?.dateAvailable,
+              dateListed: property?.dateListed,
+              description: property?.description,
+              features: property?.features,
+              headline: property?.headline,
+              inspectionDetails: property?.inspectionDetails,
+              isNewDevelopment: property?.isNewDevelopment,
+              landArea: property?.landArea,
+              landAreaSqm: property?.landAreaSqm,
+              priceDetails: property?.priceDetails,
+              highlights: property?.highlights,
+              propertyId: property?.propertyId,
+            }))
+          );
+        } else if (title === "LOOKING TO RENT") {
+          data = await handleRenChat(
+            userInput,
+            messages.map(({ content, role }) => ({
+              content,
+              role,
+            })),
+            storedProperties?.map((property: any) => ({
+              id: property?.id,
+              propertyTypes: property?.propertyTypes,
+              channel: property?.channel,
+              addressParts: property?.addressParts,
+              bathrooms: property?.bathrooms,
+              bedrooms: property?.bedrooms,
+              buildingArea: property?.buildingAreaSqm,
+              buildingAreaSqm: property?.buildingAreaSqm,
+              carspaces: property?.carspaces,
+              dateAvailable: property?.dateAvailable,
+              dateListed: property?.dateListed,
+              description: property?.description,
+              features: property?.features,
+              headline: property?.headline,
+              inspectionDetails: property?.inspectionDetails,
+              isNewDevelopment: property?.isNewDevelopment,
+              landArea: property?.landArea,
+              landAreaSqm: property?.landAreaSqm,
+              priceDetails: property?.priceDetails,
+              highlights: property?.highlights,
+              propertyId: property?.propertyId,
+            }))
+          );
+        }
+        if (data?.extractedInfo) {
+          if (data?.extractedInfo?.intent) {
+            router.push(`/chat/${data?.extractedInfo?.redirect}`);
+            setIsTyping(false);
+            return;
+          }
+          setMessages((prevMessages) => {
+            const newMessage = {
+              role: "system",
+              content: data?.response,
+              // add the media array property in each property object again based on id or propertyId
+              properties:
+                data?.extractedInfo?.map((info: any) => {
+                 
+                  const property = storedProperties.find(
+                    (property: any) =>
+                    {
+                      return property.id == info.id ||
+                      property.propertyId == info.propertyId
+                    }
+                  );
+                  if (property) {
+                    return {
+                      ...property,
+                      media:
+                        property?.media?.length >= 1
+                          ? property?.media
+                          : null,
+                    };
+                  }
+                  return null;
+                }) || [],
+              isLoading: false,
+            };
+            const updatedMessages = [...prevMessages, newMessage];
+            return updatedMessages;
+          });
+        } else {
+          setMessages((prevMessages) => {
+            const newMessage = { role: "system", content: data?.response };
+            const updatedMessages = [...prevMessages, newMessage];
+            return updatedMessages;
+          });
+        }
+      } catch (error: any) {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "An unexpected error occurred";
+        toast.error(errorMessage);
       }
     }
     setIsTyping(false);
@@ -518,43 +581,47 @@ const ChatBot = ({
                                     key={index}
                                     className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
                                     onClick={() => {
-                                      router.push(`/property/${property?.id}/media/images`);
+                                      router.push(
+                                        `/property/${property?.id}/media/images`
+                                      );
                                     }}
                                   >
-                                    {(property?.media && Array.isArray(property?.media)) && (
-                                      
+                                    {property?.media &&
+                                      Array.isArray(property?.media) && (
                                         <EmblaCarousel
-                                        slides={property?.media}
+                                          slides={property?.media}
                                         />
-                                    )}
+                                      )}
                                     <div className="ml-4">
                                       <div className="mt-4 flex flex-col space-y-2">
                                         <h5 className="tracking-wide">
-                                        {property?.priceDetails.displayPrice}
+                                          {property?.priceDetails.displayPrice}
                                         </h5>
+
                                         <h5 className="text-black font-light">
-                                        Sale Method: {property?.saleDetails?.saleMethod}
-                                        </h5>
-                                        <h5 className="text-black font-light">
-                                          Status: {property?.status}
-                                        </h5>
-                                        <h5 className="text-black font-light">
-                                          {property?.addressParts.displayAddress}
+                                          {
+                                            property?.addressParts
+                                              .displayAddress
+                                          }
                                         </h5>
                                       </div>
 
                                       <div className="mb-6 text-sm">
                                         <h4 className="text-black mb-0">
                                           {/* 4B 4B 2C | House */}
-                                          {property?.bedrooms}B{" "}
-                                          {property?.bathrooms}B{" "}
+                                          {
+                                            property?.bedrooms
+                                          }B {property?.bathrooms}B{" "}
                                           {property?.carspaces}C |{" "}
                                           {property?.propertyTypes?.length > 0
                                             ? property?.propertyTypes?.join(",")
                                             : "N/A"}
                                         </h4>
                                         <p className="leading-7">
-                                          Inspection {dayjs(property?.dateAvailable)?.format("DD/MM/YYYY")}
+                                          Inspection{" "}
+                                          {dayjs(
+                                            property?.dateAvailable
+                                          )?.format("DD/MM/YYYY")}
                                         </p>
                                       </div>
                                     </div>
@@ -607,19 +674,15 @@ const ChatBot = ({
               }
               disabled={indexPage ? intentExtracting : false}
               autoCapitalize="on"
-              
               className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
             />
             <button
               onClick={handleSend}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
             >
-              <IoSend title="Send" 
-              className="w-5 h-5"
-              />
+              <IoSend title="Send" className="w-5 h-5" />
             </button>
-            {
-              !indexPage && (
+            {!indexPage && (
               <button
                 onClick={handleStartAgain}
                 className="p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-3/4 -translate-y-3/4 bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none"
@@ -627,10 +690,7 @@ const ChatBot = ({
               >
                 <LuRotateCcw title="Restart" className="w-6 h-6" />
               </button>
-              )
-            }
-            
-            
+            )}
           </div>
 
           <div

@@ -138,9 +138,9 @@ export default function ImageGallery({ id }: { id: string }) {
                 route: "/video",
               },
               {
-                id:"description",
-                label:"Description",
-                route:"/description"
+                id:"details",
+                label:"Details",
+                route:"/details"
               },
               {
                 id:"contact",
@@ -154,10 +154,10 @@ export default function ImageGallery({ id }: { id: string }) {
         </div>
         <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">
           {
-            activeTab === 'description' && (
+            activeTab === 'details' && (
               // <div className="p-4">
-              //   <h2 className="text-2xl font-semibold mb-2">Description</h2>
-              //   <p>{property?.description}</p>
+              //   <h2 className="text-2xl font-semibold mb-2">details</h2>
+              //   <p>{property?.details}</p>
               // </div>
               <PropertyDetails property={property} />
             )

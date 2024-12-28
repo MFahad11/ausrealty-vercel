@@ -569,7 +569,9 @@ const ChatBot = ({
                       
                       `}
                       >
-                        <p>{message.content}</p>
+                        <p
+                        className="capitalize"
+                        >{message.content}</p>
                       </span>
                       <div>
                         {message.properties &&

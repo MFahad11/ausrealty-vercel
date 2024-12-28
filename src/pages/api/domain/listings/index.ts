@@ -16,10 +16,10 @@ export default async function handler(req: NextApiRequest,
                 "X-Api-Key": process.env.DOMAIN_API_KEY,
                 "X-Api-Call-Source": "live-api-browser",
             },
-            
         });
         return response.data;
     }));
+    
     combinedResponse = combinedResponse.flat().filter((property:any) => {
         if (extractedInfo.objective && property.objective !== extractedInfo.objective) {
             return false;

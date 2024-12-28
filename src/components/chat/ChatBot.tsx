@@ -269,14 +269,14 @@ const ChatBot = ({
       }
       try {
         let storedProperties = fetchedProperties || [];
+        
+        
         if(storedProperties.length===0){
           const response = await axiosInstance.post("/api/domain/listings", {
           extractedInfo: body,
           });
           if (response.data.success) {
-            let objectSuburbs=[]
             const properties = response.data.data;
-            console.log(properties,'properties')
             if (properties.length > 0) {
               setFetchedProperties(() => {
                 const updatedProperties = properties;
@@ -307,23 +307,16 @@ const ChatBot = ({
               id: property?.id,
               propertyTypes: property?.propertyTypes,
               channel: property?.channel,
-              addressParts: property?.addressParts,
+              displayAddress: property?.addressParts?.displayAddress,
+              postcode: property?.addressParts?.postcode,
+              suburb: property?.addressParts?.suburb,
               bathrooms: property?.bathrooms,
               bedrooms: property?.bedrooms,
-              buildingArea: property?.buildingAreaSqm,
-              buildingAreaSqm: property?.buildingAreaSqm,
               carspaces: property?.carspaces,
-              dateAvailable: property?.dateAvailable,
-              dateListed: property?.dateListed,
               description: property?.description,
               features: property?.features,
-              headline: property?.headline,
               inspectionDetails: property?.inspectionDetails,
-              isNewDevelopment: property?.isNewDevelopment,
-              landArea: property?.landArea,
-              landAreaSqm: property?.landAreaSqm,
               priceDetails: property?.priceDetails,
-              highlights: property?.highlights,
               propertyId: property?.propertyId,
             }))
           );
@@ -338,23 +331,16 @@ const ChatBot = ({
               id: property?.id,
               propertyTypes: property?.propertyTypes,
               channel: property?.channel,
-              addressParts: property?.addressParts,
+              displayAddress: property?.addressParts?.displayAddress,
+              postcode: property?.addressParts?.postcode,
+              suburb: property?.addressParts?.suburb,
               bathrooms: property?.bathrooms,
               bedrooms: property?.bedrooms,
-              buildingArea: property?.buildingAreaSqm,
-              buildingAreaSqm: property?.buildingAreaSqm,
               carspaces: property?.carspaces,
-              dateAvailable: property?.dateAvailable,
-              dateListed: property?.dateListed,
               description: property?.description,
               features: property?.features,
-              headline: property?.headline,
               inspectionDetails: property?.inspectionDetails,
-              isNewDevelopment: property?.isNewDevelopment,
-              landArea: property?.landArea,
-              landAreaSqm: property?.landAreaSqm,
               priceDetails: property?.priceDetails,
-              highlights: property?.highlights,
               propertyId: property?.propertyId,
             }))
           );

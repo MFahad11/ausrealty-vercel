@@ -58,6 +58,7 @@ export async function handleBuyingChat(
     address?: string;
   };
 }> {
+  console.log("properties", properties);
   try {
     // Add the user's input to the conversation history
     conversationHistory.push({ role: "user", content: userInput });
@@ -67,11 +68,12 @@ export async function handleBuyingChat(
 
 IMPORTANT: For EVERY response, you MUST provide TWO parts:
 1. Your natural conversational response as a professional real estate agent.
-2. A filtered array of properties (based on user input). If there are no matched properties, suggest alternatives based on the nearby suburbs or features. The filtered array should contain only the "id" and "propertyId" fields for the matching results.
+2. A filtered and sorted array of properties (based on user input). If there are no matched properties, suggest alternatives based on the nearby suburbs or features. The filtered array should contain only the "id" and "propertyId" fields for the matching results.
 
 *** Most Important and Always Remember: ***
 Never ever forogt to include suggested properties in the array if there are no matched properties. Similar properties should be included in the array as part of the response.
 Donot only provide the response text without the array of properties. Always include both the conversational response and the JSON data in EVERY response, separated by %% with no spaces or line breaks around it.
+Array should always be sorted by relevance, with exact matches first and similar properties following.
 
 These MUST be separated by %% with no spaces or line breaks between them.
 
@@ -84,25 +86,17 @@ Never ever forogt to include suggested properties in the array if there are no m
    - The structure of each property object in the array is as follows:
      
      {
-       "id": "string",                // Unique property identifier
-    "objective": "sale",
-    "saleMode": "buy",
+       "id": "string",  
+    "propertyId": "string",
+    description: "string",
+    inspectionDetails: "object",
+    priceDetails: "object",
     "channel": "string",
-    "addressParts": {
-        "stateAbbreviation": "string",
-        "displayType": "string",
-        "streetNumber": "string",
-        "unitNumber": "string",
-        "street": "string",
-        "suburb": "string",
-        "postcode": "string",
-        "displayAddress": "string"
-    },
+    "postcode": "string",
+    "displayAddress": "string"
     "suburb": "string",
     "features": ["string"],
-    "location": "string",
-    "address": "string",
-    "displayPrice": "string",
+    "displayPrice": "object",
     "propertyTypes": ["string"],
     "bedrooms": number,
     "bathrooms": number,
@@ -142,6 +136,7 @@ Never ever forogt to include suggested properties in the array if there are no m
 6. **Output Format**:
    - Response: <natural agent-like response>
    - %%<filtered/similar properties array in JSON format>
+   - Important: Array should always be sorted by relevance, with exact matches first and similar properties following.
    - Example:
      I found 2 properties matching your preferences in Sydney. Let me know if you have additional criteria to narrow the search.%%[{"id": "1", "propertyId": "prop-123"}, {"id": "2", "propertyId": "prop-456"}]
 
@@ -280,7 +275,7 @@ Remember: ALWAYS include both the conversational response and the JSON data in E
     const params: OpenAI.Chat.ChatCompletionCreateParams = {
       // @ts-ignore
       messages: messages,
-      model: "gpt-4-turbo",
+      model: "gpt-4o",
     };
 
     // Call the OpenAI API with the conversation messages
@@ -327,11 +322,12 @@ export async function handleRenChat(
 
 IMPORTANT: For EVERY response, you MUST provide TWO parts:
 1. Your natural conversational response as a professional real estate agent.
-2. A filtered array of properties (based on user input). If there are no matched properties, suggest alternatives based on the nearby suburbs or features. The filtered array should contain only the "id" and "propertyId" fields for the matching results.
+2. A filtered and sorted array of properties (based on user input). If there are no matched properties, suggest alternatives based on the nearby suburbs or features. The filtered array should contain only the "id" and "propertyId" fields for the matching results.
 
 *** Most Important and Always Remember: ***
 Never ever forogt to include suggested properties in the array if there are no matched properties. Similar properties should be included in the array as part of the response.
 Donot only provide the response text without the array of properties. Always include both the conversational response and the JSON data in EVERY response, separated by %% with no spaces or line breaks around it.
+Array should always be sorted by relevance, with exact matches first and similar properties following.
 
 These MUST be separated by %% with no spaces or line breaks between them.
 
@@ -342,27 +338,18 @@ Never ever forogt to include suggested properties in the array if there are no m
 1. **Filter Properties with Input and Array**:
    - You will receive the **user's input** along with an **array of property objects**.
    - The structure of each property object in the array is as follows:
-     
-     {
-       "id": "string",                // Unique property identifier
-    "objective": "rent",
-    "saleMode": "rent",
+   {
+       "id": "string",  
+    "propertyId": "string",
+    description: "string",
+    inspectionDetails: "object",
+    priceDetails: "object",
     "channel": "string",
-    "addressParts": {
-        "stateAbbreviation": "string",
-        "displayType": "string",
-        "streetNumber": "string",
-        "unitNumber": "string",
-        "street": "string",
-        "suburb": "string",
-        "postcode": "string",
-        "displayAddress": "string"
-    },
+    "postcode": "string",
+    "displayAddress": "string"
     "suburb": "string",
     "features": ["string"],
-    "location": "string",
-    "address": "string",
-    "displayPrice": "string",
+    "displayPrice": "object",
     "propertyTypes": ["string"],
     "bedrooms": number,
     "bathrooms": number,
@@ -375,12 +362,11 @@ Never ever forogt to include suggested properties in the array if there are no m
 
 2. **Respond Like an Agent**:
     - Respond politely, professionally, and conversationally, as if you are actively searching for matching properties.
+    - CRITICAL: Never mention databases, lists, or data sources to users. Simply present results as a knowledgeable agent who knows the market. Instead of "Let me check our database" say "Let me find some great options for you" or "I have some properties that might interest you."
     - Use phrases like: "Let me find properties that match your preferences…" or "Here’s what I’ve found based on your input."
     - Gently encourage the user to provide more details if their input is incomplete.
-    - Your response should never talk about the database or list. YOur response text should be not too long don't include property names or info like this "1. **63 Kangaroo Point Road, Kangaroo Point**"
+    - IMPORTANT: Keep responses concise and never include specific property details (addresses, names, IDs) in the conversational text. Focus on discussing matched features and general locations only. The specific details should only appear in the JSON array.
     - The array is internal data. Do not mention it in the response. No mention in the response of the property name or id.
-    - Position yourself as a helpful real estate agent—not a marketing brochure.
-    - No need for the long paragraphs about private jetties or Mediterranean-inspired designs unless the user explicitly asks for those specifics.
 
 3. **Filter Properties**:
    - Use the user's input to filter the provided array of properties and return only the matching results. Containing only the "id" and "propertyId" fields for the matching results.
@@ -388,7 +374,13 @@ Never ever forogt to include suggested properties in the array if there are no m
    - If the user is looking for something specific but it's not in the current array, suggest properties with related features. These properties should be included in the array as part of the response.
    - If no properties match the user's criteria, suggest alternatives based on the user's input and include them in the array.
 
-4- **Similar Properties**: If there are no matched properties, suggest similar properties based on the user's input. These properties should be included in the array as part of the response.
+4. **Required Similar Properties Protocol**:
+   - MANDATORY: Every response MUST include similar properties in the array
+   - The array should contain:
+     a) Exact matches to user criteria (if any)
+     b) Similar properties based on location, price range, or features
+   - Even when exact matches exist, always include additional similar properties
+   - In the conversation, acknowledge when you're including similar options: "I've found some properties matching your criteria, and I've also included similar options that might interest you."
 
 5. **Encourage Exploration**:
    - Ask clarifying questions when necessary to refine the user's search.
@@ -397,6 +389,7 @@ Never ever forogt to include suggested properties in the array if there are no m
 6. **Output Format**:
    - Response: <natural agent-like response>
    - %%<filtered/similar properties array in JSON format>
+   - Important: Array should always be sorted by relevance, with exact matches first and similar properties following.
    - Example:
      I found 2 properties matching your preferences in Sydney. Let me know if you have additional criteria to narrow the search.%%[{"id": "1", "propertyId": "prop-123"}, {"id": "2", "propertyId": "prop-456"}]
 
@@ -534,7 +527,7 @@ Remember: ALWAYS include both the conversational response and the JSON data in E
     const params: OpenAI.Chat.ChatCompletionCreateParams = {
       // @ts-ignore
       messages: messages,
-      model: "gpt-4-turbo",
+      model: "gpt-4o",
     };
 
     // Call the OpenAI API with the conversation messages
@@ -688,7 +681,7 @@ Impotant Notes:
     const params: OpenAI.Chat.ChatCompletionCreateParams = {
       // @ts-ignore
       messages: messages,
-      model: "gpt-4-turbo",
+      model: "gpt-4o",
     };
 
     // Call the OpenAI API with the conversation messages

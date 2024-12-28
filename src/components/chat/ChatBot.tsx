@@ -274,7 +274,9 @@ const ChatBot = ({
           extractedInfo: body,
           });
           if (response.data.success) {
+            let objectSuburbs=[]
             const properties = response.data.data;
+            console.log(properties,'properties')
             if (properties.length > 0) {
               setFetchedProperties(() => {
                 const updatedProperties = properties;

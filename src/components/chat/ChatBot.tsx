@@ -108,7 +108,7 @@ const ChatBot = ({
       // @ts-ignore
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
+  }, []);
 
   useEffect(() => {
     resizeTextarea();
@@ -558,7 +558,6 @@ const ChatBot = ({
                       `}
                       >
                         <p
-                        className="capitalize"
                         >{message.content}</p>
                       </span>
                       <div>

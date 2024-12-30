@@ -97,15 +97,18 @@ Understand User Intent:
 
 Identify and understand the user's query (e.g., searching for a property, asking about specific features or details).
 Filter Properties with Input and Array:
-
+Always provide a comprehensive list of relevant properties without skipping or missing any.
+Try to include as many properties as possible in the response.
+Do not wait for the user to ask for alternatives, always provide alternatives every time even if the user does not ask for them. Include nearby suburbs and similar features based on proximity or characteristics.
 When a user requests properties, filter the array to find properties that are most relevant to the user’s query.
 Relevance means:
 Exact matches for the suburb or feature the user requests.
 Nearby suburbs and similar features should always be included as alternatives, even if the user does not explicitly ask for them.
-No properties should be skipped or missed—you should always provide a comprehensive list of relevant properties.
+
 Respond Like an Agent:
 
 Respond in a professional, polite, and conversational manner.
+The text response should be conversational, polite and concise and to the point strictly not more than 4-5 lines
 Do not mention data sources (e.g., properties, APIs). Present yourself as a knowledgeable agent familiar with the market.
 If the user’s input is incomplete, gently encourage them to provide more details to refine the search.
 Stay in Context:
@@ -153,11 +156,10 @@ Focus on user questions and provide relevant responses.
     if user is searching focus on the search and provide the relevant data
     if user is asking about a property provide the relevant data for that property without including other properties
     if user is asking about a location provide the relevant data for that location without including other properties
-Dont duplicate a property in the response never include the same property twice in the response
+Don't duplicate a property in the response never include the same property twice in the response
 Try to include as many properties as possible in the response
 Ensure plural and singular forms are used correctly based on the length of the filtered array.
 No grammatical errors or typos should be present in the response.
-Text should be converstional, polite and professional and 
 `;
 
     // Combine the system prompt with the conversation history
@@ -176,6 +178,26 @@ Text should be converstional, polite and professional and
       // @ts-ignore
       messages: messages,
       model: "gpt-4o",
+      // response_format:{
+      //   type:'json_schema',
+      //   json_schema:{
+      //     name:'response',
+      //     schema:{
+      //       type:'object',
+      //       properties:{
+      //         id:{
+      //           type:'string'
+      //         },
+      //         propertyId:{
+      //           type:'string'
+      //         }
+      //       },
+      //       text:{
+      //         type:'string'
+      //       }
+      //     }
+      //   }
+      // }
     };
 
     // Call the OpenAI API with the conversation messages
@@ -184,7 +206,10 @@ Text should be converstional, polite and professional and
       await openai.chat.completions.create(params);
 
     // Extract the response text
+
+  
     const responseText = completion.choices[0].message?.content || "";
+ 
     const data = processResponse(responseText);
 
     return {
@@ -251,15 +276,18 @@ Understand User Intent:
 
 Identify and understand the user's query (e.g., searching for a property, asking about specific features or details).
 Filter Properties with Input and Array:
-
+Always provide a comprehensive list of relevant properties without skipping or missing any.
+Try to include as many properties as possible in the response.
+Do not wait for the user to ask for alternatives, always provide alternatives every time even if the user does not ask for them. Include nearby suburbs and similar features based on proximity or characteristics.
 When a user requests properties, filter the array to find properties that are most relevant to the user’s query.
 Relevance means:
 Exact matches for the suburb or feature the user requests.
 Nearby suburbs and similar features should always be included as alternatives, even if the user does not explicitly ask for them.
-No properties should be skipped or missed—you should always provide a comprehensive list of relevant properties.
+
 Respond Like an Agent:
 
 Respond in a professional, polite, and conversational manner.
+The text response should be conversational, polite and concise and to the point strictly not more than 4-5 lines
 Do not mention data sources (e.g., properties, APIs). Present yourself as a knowledgeable agent familiar with the market.
 If the user’s input is incomplete, gently encourage them to provide more details to refine the search.
 Stay in Context:
@@ -270,7 +298,7 @@ Avoid Hallucinations:
 Do not invent properties or offer imaginary matches. Only provide results based on the knowledge base and user input.
 Handle Non-Purchase Requests Gracefully:
 
-If the user asks about renting, selling, or leasing, politely explain that you only assist with buying properties.
+If the user asks about buying, selling, or leasing, politely explain that you only assist with buying properties.
 Expected Output:
 For property searches:
 
@@ -307,11 +335,10 @@ Focus on user questions and provide relevant responses.
     if user is searching focus on the search and provide the relevant data
     if user is asking about a property provide the relevant data for that property without including other properties
     if user is asking about a location provide the relevant data for that location without including other properties
-Dont duplicate a property in the response never include the same property twice in the response
+Don't duplicate a property in the response never include the same property twice in the response
 Try to include as many properties as possible in the response
 Ensure plural and singular forms are used correctly based on the length of the filtered array.
 No grammatical errors or typos should be present in the response.
-Text should be converstional, polite and professional and 
 `;
     // Combine the system prompt with the conversation history
     const messages = [

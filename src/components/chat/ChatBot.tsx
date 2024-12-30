@@ -17,7 +17,7 @@ import {
   handleIdentifyIntent,
   handleRenChat,
 } from "@/utils/openai";
-import { LuRotateCcw } from "react-icons/lu";
+import { LuChevronDown, LuRotateCcw } from "react-icons/lu";
 import EmblaCarousel from "../ui/carousel";
 const ChatBot = ({
   title,
@@ -76,6 +76,7 @@ const ChatBot = ({
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+  const [showScrollButton, setShowScrollButton] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesEndRef = useRef(null);
   useEffect(() => {
@@ -104,11 +105,24 @@ const ChatBot = ({
     if (messages.length > 0) {
       localStorage.setItem(prompt, JSON.stringify(messages));
     }
-    if (messagesEndRef.current && messages.length > 2) {
-      // @ts-ignore
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    
+  }, [messages]);
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+
+      // Show button when not at the bottom of the page
+      const notAtBottom = scrollTop + windowHeight < documentHeight - 50 // 20px threshold
+      setShowScrollButton(notAtBottom)
     }
-  }, []);
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Check initial state
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     resizeTextarea();
@@ -180,11 +194,11 @@ const ChatBot = ({
   };
 
   const scrollToBottom = () => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop =
-        messagesContainerRef.current.scrollHeight;
-    }
-  };
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    })
+  }
 
   const handleSend = async () => {
     if (!inputValue.trim()) {
@@ -504,7 +518,7 @@ const ChatBot = ({
   return (
     <div className="w-full h-full flex flex-col justify-between">
       <ToastContainer />
-      <div className="max-w-4xl min-w-4xl mx-auto flex flex-col flex-grow pb-14 overflow-y-auto">
+      <div className="max-w-4xl w-full mx-auto flex flex-col flex-grow pb-14 overflow-y-auto">
         <div className=" m-0 w-full rounded-lg mt-4">
           {title === "MOMENTS FROM HOME" && <InstaGrid data={instaData} />}
           {(title === "SELL OR LEASE MY PROPERTY" ||
@@ -682,6 +696,18 @@ const ChatBot = ({
                 <LuRotateCcw title="Restart" className="w-6 h-6" />
               </button>
             )}
+            {
+              (!indexPage && showScrollButton)  && (
+                <button
+        onClick={scrollToBottom}
+        className="p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-[80%] -translate-y-3/4 bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none"
+        
+        aria-label="Scroll to bottom"
+      >
+        <LuChevronDown className="w-6 h-6" />
+      </button>
+              )
+            }
           </div>
 
           <div

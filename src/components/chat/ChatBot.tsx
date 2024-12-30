@@ -318,6 +318,7 @@ const ChatBot = ({
               inspectionDetails: property?.inspectionDetails,
               priceDetails: property?.priceDetails,
               propertyId: property?.propertyId,
+              headline: property?.headline,
             }))
           );
         } else if (title === "LOOKING TO RENT") {
@@ -342,6 +343,7 @@ const ChatBot = ({
               inspectionDetails: property?.inspectionDetails,
               priceDetails: property?.priceDetails,
               propertyId: property?.propertyId,
+              headline: property?.headline,
             }))
           );
         }

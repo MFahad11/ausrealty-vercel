@@ -39,7 +39,9 @@ export default function PeopleModal({ isOpen, onClose,data }: PeopleModalProps) 
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2>
+        <h2
+        className='uppercase'
+        >
             {data.name}
         </h2>
         <p>

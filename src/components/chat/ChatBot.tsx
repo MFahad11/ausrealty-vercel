@@ -274,6 +274,7 @@ const ChatBot = ({
         objective?: string;
         saleMode?: string;
       } | null = {};
+     
       if (title === "LOOKING TO BUY") {
         body["objective"] = "sale";
         body["saleMode"] = "buy";
@@ -333,6 +334,7 @@ const ChatBot = ({
               priceDetails: property?.priceDetails,
               propertyId: property?.propertyId,
               headline: property?.headline,
+              agents:"auseralty.com.au"
             }))
           );
         } else if (title === "LOOKING TO RENT") {
@@ -358,6 +360,7 @@ const ChatBot = ({
               priceDetails: property?.priceDetails,
               propertyId: property?.propertyId,
               headline: property?.headline,
+              agents:"auseralty.com.au"
             }))
           );
         }

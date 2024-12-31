@@ -66,12 +66,12 @@ export default function InstaGrid(
                     muted
                     playsInline
                     autoPlay
-                  />):(<Image
+                  />):(<img
                     key={i}
                     src={src?.media_url}
                     alt={`Grid item ${index + 1} - ${i + 1}`}
-                    fill={i === 0}
-                    layout={i === 0 ? 'fill' : 'responsive'}
+                    // fill={i === 0}
+                    // layout={i === 0 ? 'fill' : 'responsive'}
                     width={i === 0 ? undefined : 300}
                     height={i === 0 ? undefined : 300}
                     className={`object-cover ${i === 0 ? 'col-span-2 row-span-2' : ''}`}

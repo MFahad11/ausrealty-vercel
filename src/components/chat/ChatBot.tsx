@@ -703,7 +703,7 @@ const ChatBot = ({
               (!indexPage && showScrollButton)  && (
                 <button
         onClick={scrollToBottom}
-        className="p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-[80%] -translate-y-[80%] bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none"
+        className="p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-[82%] -translate-y-[82%] bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none"
         
         aria-label="Scroll to bottom"
       >

@@ -38,7 +38,7 @@ export default function ImageGrid(
             setIsOpen(true)
           }}
           >
-            <Image
+            <img
                   src={item?.image as string}
                   alt={`Grid item ${index + 1}`}
                   // fill

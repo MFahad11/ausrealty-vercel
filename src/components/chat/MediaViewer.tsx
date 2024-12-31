@@ -67,11 +67,11 @@ export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
       </div>
       <div className="relative w-full h-[calc(100vh-15rem)] flex items-center justify-center">
         {media?.media_type === 'CAROUSEL_ALBUM' && Array.isArray(media.children?.data) ? (
-          <Image
+          <img
             src={media.children?.data[currentIndex]?.media_url}
             alt={`Viewed image ${currentIndex + 1}`}
-            layout="fill"
-            objectFit="contain"
+            // layout="fill"
+            className="object-contain"
             loading='eager'
           />
         ) : media?.media_type === 'VIDEO' ? (
@@ -82,11 +82,11 @@ export function MediaViewer({ isOpen, onClose, media }: MediaViewerProps) {
             autoPlay
           />
         ) : (
-          <Image
+          <img
             src={media?.media_url as string}
             alt="Viewed image"
-            layout="fill"
-            objectFit="contain"
+            // layout="fill"
+            className="object-contain"
             loading='eager'
           />
         )}

@@ -93,10 +93,10 @@ export default function InstaGrid(
                   autoPlay
                 />
               ) : (
-                <Image
+                <img
                   src={item?.media_url as string}
                   alt={`Grid item ${index + 1}`}
-                  fill
+                  // fill
                   className="object-cover"
                   sizes="(max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
                   loading='lazy'

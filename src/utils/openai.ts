@@ -125,6 +125,7 @@ export async function handleBuyingChat(
         Do not mix property search results with unrelated data.
       
     Responding Like an Agent:
+      Your response should never exceed 5-6 lines of text.
       Response should be corresponding to the array of properties provided and the filtered results.
       The response should be conversational, polite, and clear. Avoid sounding robotic or detached.
       The response should make the user feel encouraged and informed about their options.
@@ -145,7 +146,7 @@ export async function handleBuyingChat(
     ** Most Important and Always Remember: **
     Expected Output:
       For Property Searches:
-        A concise, professional, coversational and warm text response. Do not include any technical details or raw JSON data in this section.
+        A concise, professional, coversational and warm text response. Do not include any technical details or raw JSON data in this section. ** Most Important and Always Remember: ** Dont include the details of the properties in the response text. Dont overwelm the user with the details.
         A filtered array of relevant properties in JSON format, with only the id and propertyId fields.
         Format:
         [text response]%%[{"id": "1", "propertyId": "prop-123"}, {"id": "2", "propertyId": "prop-456"}]
@@ -331,6 +332,7 @@ export async function handleRenChat(
         Do not mix property search results with unrelated data.
       
     Responding Like an Agent:
+      Your response should never exceed 5-6 lines of text.
       Response should be corresponding to the array of properties provided and the filtered results.
       The response should be conversational, polite, and clear. Avoid sounding robotic or detached.
       The response should make the user feel encouraged and informed about their options.
@@ -351,13 +353,13 @@ export async function handleRenChat(
     ** Most Important and Always Remember: **
     Expected Output:
       For Property Searches:
-        A concise, professional, coversational and warm text response. Do not include any technical details or raw JSON data in this section.
+        A concise, professional, coversational and warm text response. Do not include any technical details or raw JSON data in this section. ** Most Important and Always Remember: ** Dont include the details of the properties in the response text. Dont overwelm the user with the details.
         A filtered array of relevant properties in JSON format, with only the id and propertyId fields.
         Format:
         [text response]%%[{"id": "1", "propertyId": "prop-123"}, {"id": "2", "propertyId": "prop-456"}]
 
       For Non-Search Queries:
-        A concise, professional, coversational and warm text response. Do not include any technical details or raw JSON data in this section.
+        A concise, professional, coversational and warm text response. Do not include any technical details or raw JSON data in this section
         Provide relevant information or politely clarify the scope of your expertise (e.g., renting properties only).
         Format:
         [Conversational, polite and warm text response with no json data or symbols]

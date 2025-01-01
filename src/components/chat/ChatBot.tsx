@@ -81,6 +81,7 @@ const ChatBot = ({
   const [showScrollButton, setShowScrollButton] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesEndRef = useRef(null);
+  const botResponseRef = useRef(null);
   useEffect(() => {
     setMessages([]);
     setFetchedProperties([]);
@@ -194,20 +195,44 @@ const ChatBot = ({
       // }
     }
   };
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
 
-  const scrollToBottom = () => {
-    // @ts-ignore
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      // Show button when not at the bottom of the page
+      const notAtBottom = scrollTop + windowHeight < documentHeight - 50 // 20px threshold
+      setShowScrollButton(notAtBottom)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Check initial state
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToElement = (ref:any) => {
+    if (ref?.current) {
+      ref.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   };
-
-  // Initial scroll when component mounts
+  
   useEffect(() => {
-    scrollToBottom();
+    console.log("scrolling to end")
+    scrollToElement(messagesEndRef);
   }, []);
-
-  // Scroll whenever messages change or during typing
+  
   useEffect(() => {
-    scrollToBottom();
+    // if the last message is user message, then call the below function
+    if (messages[messages.length - 1]?.role === "user") {
+      console.log("scrolling to end",'user')
+      scrollToElement(messagesEndRef);
+    }
+    
   }, [messages]);
 
   const handleSend = async () => {
@@ -217,7 +242,9 @@ const ChatBot = ({
     }
     const userMessage = { role: "user", content: inputValue };
     if (!indexPage) {
+      
       setMessages([...messages, userMessage]);
+      // scrollToElement(messagesEndRef);
     } else {
       setIntentExtracting(true);
     }
@@ -508,7 +535,7 @@ const ChatBot = ({
         }
         return prevMessages;
       });
-      
+      // scrollToElement(botResponseRef);
       charIndex++;
       if (charIndex > text.length) {
         // update the isLoading property to false
@@ -599,15 +626,13 @@ const ChatBot = ({
                 >
                   {messages.map((message, index) => (
                     <>
-                    {
-                        // if last message then 
-                        index === messages.length - 1 && (<div ref={messagesEndRef} />)
-                      }
+                    
                     <div
                       key={index}
                       className={`mb-4 ${
                         message.role === "system" ? "text-left" : "text-right"
                       }`}
+                      
                     >
                       
                       <span
@@ -619,10 +644,16 @@ const ChatBot = ({
                      
                       
                       `}
+                      ref={
+                          message.role === "system" && index === messages.length - 1
+                            ? botResponseRef
+                            : null
+                        }
                       
                       >
                         
-                        <p className="text-[16px] font-light "
+                        <p className="text-[16px] font-light"
+                        
                         >
                           
                           {message.content}</p>
@@ -711,6 +742,7 @@ const ChatBot = ({
                     
                   </div>
                   )}
+                  <div ref={messagesEndRef} />
                 </div>
                 
               </>
@@ -757,7 +789,12 @@ const ChatBot = ({
             {
               (!indexPage && showScrollButton)  && (
                 <button
-        onClick={scrollToBottom}
+        onClick={
+          () => {
+            scrollToElement(messagesEndRef);
+
+          }
+        }
         className="p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-[82%] -translate-y-[82%] bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none"
         
         aria-label="Scroll to bottom"

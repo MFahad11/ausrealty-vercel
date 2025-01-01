@@ -125,8 +125,11 @@ export async function handleBuyingChat(
         Do not mix property search results with unrelated data.
       
     Responding Like an Agent:
+
       Your response should never exceed 2-3 lines of text.
       Response should be corresponding to the array of properties provided and the filtered results.
+        Single Property: "We’ve found a great option that matches your search. " or similar.
+        Multiple Properties: "We’ve found several options for you to consider." or similar.
       The response should be conversational, polite, and clear. Avoid sounding robotic or detached.
       The response should make the user feel encouraged and informed about their options.
       For example, when presenting properties, mention both exact matches and alternatives in a way that feels like a helpful suggestion, rather than just listing options.
@@ -134,12 +137,12 @@ export async function handleBuyingChat(
       Limit responses to 2-3 lines of text for clarity and brevity.
       Donot add loads of information in the  text, keep it simple and to the point.
      
-
       ** Most Important and Always Remember: **
       Your response text should not be or contain symbol like this:
         1- "**Property Type:** House - **Bedrooms:** 7 - **Bathrooms:** 4 - **Car Spaces:** 2 - **Description:** This be.."
         2- Also i dont want to see any of these symbols in the response text: "**", ":" etc.
         3- Your response text should not like a list it should be a conversation.
+      Avoid list-like formatting in the text response. The response should be conversational and flow naturally, without bullet points or enumeration.
 
       
     ** Most Important and Always Remember: **
@@ -170,6 +173,7 @@ export async function handleBuyingChat(
       Alternatives Are Mandatory:
         Always include nearby suburbs or similar features, even if not explicitly requested.
 
+
       Consistency:
         Ensure the text response corresponds exactly to the filtered array. Do not mention properties not included in the array.
 
@@ -186,7 +190,7 @@ export async function handleBuyingChat(
         The text response should always be professional, conversational, and user-friendly, with no technical details or symbols like [{ }].
 
       Separate text response and JSON output clearly.
-        The text response should only describe the properties conversationally. The filtered array of properties should always be in a separate section (after %%) and not referenced in the text.
+        The text response should never mention or imply the presence of a JSON array. Keep the conversational response entirely separate from the technical data.
 `;  
 
     // Combine the system prompt with the conversation history
@@ -205,7 +209,7 @@ export async function handleBuyingChat(
       // @ts-ignore
       messages: messages,
       model: "gpt-4o",
-      temperature: 0 // this is to ensure the response is deterministic
+      
       // response_format:{
       //   type:'json_schema',
       //   json_schema:{
@@ -333,6 +337,8 @@ export async function handleRenChat(
     Responding Like an Agent:
       Your response should never exceed 2-3 lines of text.
       Response should be corresponding to the array of properties provided and the filtered results.
+        Single Property: "We’ve found a great option that matches your search. " or similar.
+        Multiple Properties: "We’ve found several options for you to consider." or similar.
       The response should be conversational, polite, and clear. Avoid sounding robotic or detached.
       The response should make the user feel encouraged and informed about their options.
       For example, when presenting properties, mention both exact matches and alternatives in a way that feels like a helpful suggestion, rather than just listing options.
@@ -346,7 +352,7 @@ export async function handleRenChat(
         1- "**Property Type:** House - **Bedrooms:** 7 - **Bathrooms:** 4 - **Car Spaces:** 2 - **Description:** This be.."
         2- Also i dont want to see any of these symbols in the response text: "**", ":" etc.
         3- Your response text should not like a list it should be a conversation.
-
+      Avoid list-like formatting in the text response. The response should be conversational and flow naturally, without bullet points or enumeration.
       
     ** Most Important and Always Remember: **
     Expected Output:
@@ -392,7 +398,7 @@ export async function handleRenChat(
         The text response should always be professional, conversational, and user-friendly, with no technical details or symbols like [{ }].
 
       Separate text response and JSON output clearly.
-        The text response should only describe the properties conversationally. The filtered array of properties should always be in a separate section (after %%) and not referenced in the text.
+        The text response should never mention or imply the presence of a JSON array. Keep the conversational response entirely separate from the technical data.
 
 `;
     // Combine the system prompt with the conversation history

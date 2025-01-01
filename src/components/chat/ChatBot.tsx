@@ -109,22 +109,22 @@ const ChatBot = ({
     }
     
   }, [messages]);
-  useEffect(() => {
-    const handleScroll = () => {
-      const windowHeight = window.innerHeight
-      const documentHeight = document.documentElement.scrollHeight
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const windowHeight = window.innerHeight
+  //     const documentHeight = document.documentElement.scrollHeight
+  //     const scrollTop = window.pageYOffset || document.documentElement.scrollTop
 
-      // Show button when not at the bottom of the page
-      const notAtBottom = scrollTop + windowHeight < documentHeight - 50 // 20px threshold
-      setShowScrollButton(notAtBottom)
-    }
+  //     // Show button when not at the bottom of the page
+  //     const notAtBottom = scrollTop + windowHeight < documentHeight - 50 // 20px threshold
+  //     setShowScrollButton(notAtBottom)
+  //   }
 
-    window.addEventListener('scroll', handleScroll)
-    handleScroll() // Check initial state
+  //   window.addEventListener('scroll', handleScroll)
+  //   handleScroll() // Check initial state
 
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  //   return () => window.removeEventListener('scroll', handleScroll)
+  // }, [messages])
 
   useEffect(() => {
     resizeTextarea();
@@ -196,11 +196,18 @@ const ChatBot = ({
   };
 
   const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth',
-    })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Initial scroll when component mounts
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  // Scroll whenever messages change or during typing
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSend = async () => {
     if (!inputValue.trim()) {
@@ -590,12 +597,18 @@ const ChatBot = ({
                   className="enhanced-textarea overflow-y-auto pl-0 pb-32 "
                 >
                   {messages.map((message, index) => (
+                    <>
+                    {
+                        // if last message then 
+                        index === messages.length - 1 && (<div ref={messagesEndRef} />)
+                      }
                     <div
                       key={index}
                       className={`mb-4 ${
                         message.role === "system" ? "text-left" : "text-right"
                       }`}
                     >
+                      
                       <span
                         className={`inline-block rounded-lg max-w-[80%] p-3 ${
                           message.role === "system"
@@ -605,10 +618,15 @@ const ChatBot = ({
                      
                       
                       `}
+                      
                       >
+                        
                         <p className="text-[16px] font-light "
-                        >{message.content}</p>
+                        >
+                          
+                          {message.content}</p>
                       </span>
+                      
                       <div>
                         {message.properties &&
                           message.properties.length > 0 && (
@@ -679,7 +697,7 @@ const ChatBot = ({
 
                         
                       </div>
-                    </div>
+                    </div></>
                   ))}
 
                   {botThinking && (
@@ -693,7 +711,7 @@ const ChatBot = ({
                   </div>
                   )}
                 </div>
-                <div ref={messagesEndRef} />
+                
               </>
             ))}
           {title === "INSIDE AUSREALTY" && (

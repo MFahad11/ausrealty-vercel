@@ -76,6 +76,7 @@ const ChatBot = ({
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [botThinking, setBotThinking] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const [showScrollButton, setShowScrollButton] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -239,12 +240,13 @@ const ChatBot = ({
         "An unexpected error occurred";
       toast.error(errorMessage);
       setIsTyping(false);
+      setBotThinking(false);
       setIntentExtracting(false);
     }
   };
   const searchData = async (userInput: string) => {
     let data: any;
-    setIsTyping(true);
+    setBotThinking(true);
     if (indexPage) {
       const data = await handleIdentifyIntent(userInput);
       if (data?.response) {
@@ -299,17 +301,18 @@ const ChatBot = ({
                 return updatedProperties;
               });
               storedProperties = properties;
-            }else{
-              setMessages((prevMessages) => {
-                const newMessage = {
-                  role: "system",
-                  content:
-                    "Unable to find any properties that match your criteria. But you can always provide more information to help us find the right property for you.",
-                };
-                const updatedMessages = [...prevMessages, newMessage];
-                return updatedMessages;
-              });
             }
+            // else{
+            //   setMessages((prevMessages) => {
+            //     const newMessage = {
+            //       role: "system",
+            //       content:
+            //         "Unable to find any properties that match your criteria. But you can always provide more information to help us find the right property for you.",
+            //     };
+            //     const updatedMessages = [...prevMessages, newMessage];
+            //     return updatedMessages;
+            //   });
+            // }
           }
         }
         if (title === "LOOKING TO BUY") {
@@ -368,7 +371,7 @@ const ChatBot = ({
         if (data?.extractedInfo) {
           if (data?.extractedInfo?.intent) {
             router.push(`/chat/${data?.extractedInfo?.redirect}`);
-            setIsTyping(false);
+            setBotThinking(false);
             return;
           }
           setMessages((prevMessages) => {
@@ -397,7 +400,7 @@ const ChatBot = ({
                   }
                   return null;
                 }) || [],
-              isLoading: false,
+              isLoading: true,
             };
             const updatedMessages = [...prevMessages, newMessage];
             typewriterEffect(data?.response, updatedMessages.length - 1);
@@ -411,15 +414,18 @@ const ChatBot = ({
             return updatedMessages;
           });
         }
+        setBotThinking(false);
       } catch (error: any) {
         const errorMessage =
           error.response?.data?.message ||
           error.message ||
           "An unexpected error occurred";
         toast.error(errorMessage);
+        setBotThinking(false);
+
       }
     }
-    setIsTyping(false);
+    
   };
   const generateStory = async () => {
     if (messages.length < 10) {
@@ -477,6 +483,7 @@ const ChatBot = ({
   };
 
   const typewriterEffect = (text:string, index:number) => {
+    setIsTyping(true);
     let charIndex = 0;  // Start from 0, not -1
     
     const interval = setInterval(() => {
@@ -495,9 +502,21 @@ const ChatBot = ({
       
       charIndex++;
       if (charIndex > text.length) {
+        // update the isLoading property to false
+        setMessages(prevMessages => {
+          const updatedMessages = [...prevMessages];
+          updatedMessages[index] = {
+            ...updatedMessages[index],
+            isLoading: false
+          };
+          return updatedMessages;
+        }
+        );
+        setIsTyping(false);
         clearInterval(interval);
       }
     }, 25);    
+    
     return () => clearInterval(interval);
   };
 
@@ -593,89 +612,84 @@ const ChatBot = ({
                         {message.properties &&
                           message.properties.length > 0 && (
                             <div className="mt-4">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                                {message.properties.map((property, index) => (
-                                  <div
-                                    key={index}
-                                    className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
-                                    onClick={() => {
-                                      router.push(
-                                        `/property/${property?.id}/media/images`
-                                      );
-                                    }}
-                                  >
-                                    {property?.media &&
-                                      Array.isArray(property?.media) && (
-                                        <EmblaCarousel
-                                          slides={property?.media}
-                                        />
-                                      )}
-                                    <div className="ml-4">
-                                      <div className="mt-4 flex flex-col space-y-2">
-                                        <h5 className="tracking-wide">
-                                          {property?.priceDetails.displayPrice}
-                                        </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                            {message.properties.map((property, index) => (
+                              message.isLoading ? (                            
+                              <ContentLoader viewBox="0 0 500 280" height={280} width={500} className="ml-2">
+                                <rect x="3" y="3" rx="10" ry="10" width="400" height="180" />
+                                <rect x="6" y="190" rx="0" ry="0" width="292" height="15" />
+                                <rect x="4" y="215" rx="0" ry="0" width="239" height="15" />
+                                <rect x="4" y="242" rx="0" ry="0" width="274" height="15" />
+                              </ContentLoader>):(<div
+                                key={index}
+                                className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
+                                onClick={() => {
+                                  router.push(
+                                    `/property/${property?.id}/media/images`
+                                  );
+                                }}
+                              >
+                                {property?.media &&
+                                  Array.isArray(property?.media) && (
+                                    <EmblaCarousel
+                                      slides={property?.media}
+                                    />
+                                  )}
+                                <div className="ml-4">
+                                  <div className="mt-4 flex flex-col space-y-2">
+                                    <h5 className="tracking-wide">
+                                      {property?.priceDetails.displayPrice}
+                                    </h5>
 
-                                        <h5 className="text-black font-light">
-                                          {
-                                            property?.addressParts
-                                              .displayAddress
-                                          }
-                                        </h5>
-                                      </div>
-
-                                      <div className="mb-6 text-sm">
-                                        <h4 className="text-black mb-0">
-                                          {/* 4B 4B 2C | House */}
-                                          {
-                                            property?.bedrooms
-                                          }B {property?.bathrooms}B{" "}
-                                          {property?.carspaces}C |{" "}
-                                          {property?.propertyTypes?.length > 0
-                                            ? property?.propertyTypes?.join(",")
-                                            : "N/A"}
-                                        </h4>
-                                        <p className="leading-7">
-                                          Inspection{" "}
-                                          {dayjs(
-                                            property?.dateAvailable
-                                          )?.format("DD/MM/YYYY")}
-                                        </p>
-                                      </div>
-                                    </div>
+                                    <h5 className="text-black font-light">
+                                      {
+                                        property?.addressParts
+                                          .displayAddress
+                                      }
+                                    </h5>
                                   </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
 
-                        {message.isLoading && (
-                          <div className="text-center mt-4">
-                            <i className="fa-solid fa-spinner animate-spin"></i>
+                                  <div className="mb-6 text-sm">
+                                    <h4 className="text-black mb-0">
+                                      {/* 4B 4B 2C | House */}
+                                      {
+                                        property?.bedrooms
+                                      }B {property?.bathrooms}B{" "}
+                                      {property?.carspaces}C |{" "}
+                                      {property?.propertyTypes?.length > 0
+                                        ? property?.propertyTypes?.join(",")
+                                        : "N/A"}
+                                    </h4>
+                                    <p className="leading-7">
+                                      Inspection{" "}
+                                      {dayjs(
+                                        property?.dateAvailable
+                                      )?.format("DD/MM/YYYY")}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>)
+                            ))}
                           </div>
-                        )}
+                        </div>)
+                              
+                            
+                      }
+
+                        
                       </div>
                     </div>
                   ))}
 
-                  {isTyping && (
-                    <div className="text-left mb-2 ml-2">
-                      <span className="inline-block p-3 max-w-[80%] bg-gray-200 rounded-lg animate-pulse">
-                        Getting the information for you, please wait...
-                      </span>
-                      {/* <ContentLoader viewBox="0 0 800 400" height={375} width={500}>
-      <path d="M484.52,64.61H15.65C7.1,64.61.17,71.2.17,79.31V299.82c0,8.12,6.93,14.7,15.48,14.7H484.52c8.55,0,15.48-6.58,15.48-14.7V79.31C500,71.2,493.07,64.61,484.52,64.61Zm-9,204.34c0,11.84-7.14,21.44-15.94,21.44H436.39L359.16,171.52c-7.1-10.92-19.67-11.16-27-.51L258.64,277.94C253.78,285,245.73,286,240,280.2l-79.75-80.62c-6-6.06-14.33-5.7-20,.88L62.34,290.39H40.63c-8.8,0-15.94-9.6-15.94-21.44V110.19c0-11.84,7.14-21.44,15.94-21.44H459.54c8.8,0,15.94,9.6,15.94,21.44Z" />
-      <ellipse cx="27.53" cy="26.15" rx="27.53" ry="26.15" />
-      <rect x="69.36" y="0.5" width="87.36" height="16.48" rx="4.5" />
-      <rect x="0.53" y="328.35" width="87.36" height="16.48" rx="4.5" />
-      <rect x="95.84" y="328.35" width="87.36" height="16.48" rx="4.5" />
-      <rect x="195.38" y="328.35" width="304.45" height="16.48" rx="4.5" />
-      <rect x="412.47" y="358.52" width="87.36" height="16.48" rx="4.5" />
-      <rect x="291.22" y="358.52" width="113.31" height="16.48" rx="4.5" />
-      <rect x="0.53" y="358.52" width="282.21" height="16.48" rx="4.5" />
-      <rect x="69.36" y="25.22" width="164.67" height="27.07" rx="3.83" />
-    </ContentLoader> */}
-                    </div>
+                  {botThinking && (
+                    <div className="text-left mb-2 p-3 space-x-1 flex items-center max-w-[80%] ">
+        <div className="rounded-full h-3 w-3 bg-black animate-pulse"></div>
+                    
+                    <p className="animate-pulse">
+                      Getting the information for you
+                    </p>
+                    
+                  </div>
                   )}
                 </div>
                 <div ref={messagesEndRef} />
@@ -702,13 +716,13 @@ const ChatBot = ({
               placeholder={
                 indexPage ? "How can we help? Tell us here" : placeholder
               }
-              disabled={indexPage ? intentExtracting : false}
               autoCapitalize="on"
               className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
             />
             <button
               onClick={handleSend}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
+              disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}
             >
               <IoSend title="Send" className="w-5 h-5" />
             </button>
@@ -747,9 +761,14 @@ const ChatBot = ({
                 }}
                 className={`bg-lightgray rounded-xl flex-shrink-0 inline-flex flex-col items-center hover:bg-mediumgray cursor-pointer mr-4 py-2.5 px-6 ${
                   box.title === title ? "bg-mediumgray" : ""
-                }`}
+                }
+                ${(botThinking || isTyping) ? "cursor-not-allowed" : ""}
+                `}
                 onClick={() => {
-                  handleBoxClick(box, index);
+                  if(!isTyping && !botThinking){
+                    handleBoxClick(box, index);
+                  }
+                  
                 }}
               >
                 <div className="text-start text-xs relative">

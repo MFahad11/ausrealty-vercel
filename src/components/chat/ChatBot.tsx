@@ -414,7 +414,7 @@ const ChatBot = ({
             return updatedMessages;
           });
         }
-        setBotThinking(false);
+        
       } catch (error: any) {
         const errorMessage =
           error.response?.data?.message ||
@@ -484,6 +484,7 @@ const ChatBot = ({
 
   const typewriterEffect = (text:string, index:number) => {
     setIsTyping(true);
+    setBotThinking(false);
     let charIndex = 0;  // Start from 0, not -1
     
     const interval = setInterval(() => {

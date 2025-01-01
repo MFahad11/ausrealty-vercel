@@ -11,7 +11,7 @@ module.exports = {
         lightergray: "#f9fafb",
       },
       fontFamily: {
-        sans: ["Lato", "sans-serif"], // Override the default Tailwind sans font stack
+        sans: ["Lato"], // Override the default Tailwind sans font stack
       lato: ["Lato", "sans-serif"], // Explicit declaration for Lato
       abchanel: ['ABC Corporate Extra Light'],
       arial: ["Arial", "Helvetica", "sans-serif"],

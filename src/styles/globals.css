@@ -4,6 +4,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import url('https://db.onlinewebfonts.com/c/03c62e0b065e5635dac558cfe4731817?family=ABChanel+Corpo+Extra+Light');
 @font-face {
   font-family: "ABC Corporate Extra Light";
   src: url("../pages/fonts/abc-corporate-extra-light.ttf") format("truetype");
@@ -12,6 +19,11 @@
 @font-face {
   font-family: "AB Chanel";
   src: url("../pages/fonts/abchanel.ttf") format("truetype");
+  font-style: normal;
+}
+@font-face {
+  font-family: "Lato";
+  src: url("../pages/fonts/Lato.ttf") format("truetype");
   font-style: normal;
 }
 body {
@@ -142,7 +154,8 @@ code {
 
   p {
     margin: 0;
-    font-family: 'Lato', sans-serif;
+    /* font-size: 13px  !important; */
+    font-weight: 300 !important;
   }
 
 }
@@ -547,9 +560,3 @@ input[type="radio"] {
   background: #a0a0a0;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
-@import url('https://db.onlinewebfonts.com/c/03c62e0b065e5635dac558cfe4731817?family=ABChanel+Corpo+Extra+Light');

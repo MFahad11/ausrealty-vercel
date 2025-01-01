@@ -577,7 +577,7 @@ const ChatBot = ({
                       
                       `}
                       >
-                        <p
+                        <p className="text-[16px] font-light "
                         >{message.content}</p>
                       </span>
                       <div>

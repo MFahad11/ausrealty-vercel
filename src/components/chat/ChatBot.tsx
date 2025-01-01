@@ -196,6 +196,7 @@ const ChatBot = ({
   };
 
   const scrollToBottom = () => {
+    // @ts-ignore
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 

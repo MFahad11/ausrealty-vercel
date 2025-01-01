@@ -2,11 +2,18 @@ import Button from "@/components/ui/Button";
 import { useRouter } from "next/router";
 import axios from "axios";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
+import Head from "next/head";
 
 export default function Index({data}: {data: any}) {
   const navigate=useRouter();
   return (
     <>
+    
+    <Head>
+    <title>
+      Ausrealty
+    </title>
+    </Head>
   <div className="max-w-md mx-auto px-4 flex flex-col space-y-8 items-center md:mt-4">
     {/* Video Container */}
     <div className="relative w-full max-w-[417px] h-[656px] md:h-[670px] flex-shrink-0">

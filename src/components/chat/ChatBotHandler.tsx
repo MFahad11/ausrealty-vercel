@@ -3,7 +3,7 @@ import ImageGrid from "@/components/chat/ImageGrid";
 import NavBar from "@/components/layout/Navbar";
 import axios from "axios";
 import { useRouter } from "next/router";
-import React, { useState, useRef,  useEffect } from "react";
+import React, { useState, useRef,  useEffect, useCallback } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,8 +16,17 @@ const ChatBotHandler = (
   const [selectedBox, setSelectedBox] = useState("");
   const [isBoxLoading, setIsBoxLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [currentText, setCurrentText] = useState('');
+  const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
   const router=useRouter();
   const tab = router.query.tab;
+  const placeholders = [
+    "How we can help?",
+    "Ask us anything"
+  ];
+ 
+  
   const [boxes, ] = useState<{
     title: string;
     description: string;
@@ -88,7 +97,40 @@ const ChatBotHandler = (
     },
 
   ]); 
-
+  useEffect(() => {
+    const typingSpeed = 100; // Speed of typing in milliseconds
+    const deletingSpeed = 50; // Speed of deleting in milliseconds
+    const pauseBetweenWords = 1700; // Pause before starting to delete
+    
+    const getCurrentPlaceholder = () => placeholders[currentPlaceholderIndex];
+    
+    if (!isDeleting && currentText !== getCurrentPlaceholder()) {
+      // Typing
+      const timeout = setTimeout(() => {
+        setCurrentText(getCurrentPlaceholder().substring(0, currentText.length + 1));
+      }, typingSpeed);
+      return () => clearTimeout(timeout);
+    } 
+    else if (!isDeleting && currentText === getCurrentPlaceholder()) {
+      // Pause before deleting
+      const timeout = setTimeout(() => {
+        setIsDeleting(true);
+      }, pauseBetweenWords);
+      return () => clearTimeout(timeout);
+    }
+    else if (isDeleting && currentText !== '') {
+      // Deleting
+      const timeout = setTimeout(() => {
+        setCurrentText(currentText.substring(0, currentText.length - 1));
+      }, deletingSpeed);
+      return () => clearTimeout(timeout);
+    }
+    else if (isDeleting && currentText === '') {
+      // Move to next placeholder
+      setIsDeleting(false);
+      setCurrentPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+    }
+  }, [currentText, isDeleting, currentPlaceholderIndex, placeholders]);
   useEffect(() => {
     if (tab) {
       // @ts-ignore
@@ -153,7 +195,7 @@ const ChatBotHandler = (
             
                 return box.title === selectedBox})?.firstMessage || ""}
             prompt={boxes.find((box) => box.title === selectedBox)?.prompt || ""}
-            placeholder={boxes.find((box) => box.title === selectedBox)?.placeholder || "Type here"}
+            placeholder={currentText}
             route={boxes.find((box) => box.title === selectedBox)?.route || ""}
             index={boxes.find((box) => box.title === selectedBox)?.index || 0}
             // @ts-ignore

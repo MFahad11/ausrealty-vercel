@@ -714,8 +714,7 @@ const ChatBot = ({
               value={inputValue}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
-              placeholder={
-                indexPage ? "How can we help? Tell us here" : placeholder
+              placeholder={placeholder
               }
               autoCapitalize="on"
               className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"

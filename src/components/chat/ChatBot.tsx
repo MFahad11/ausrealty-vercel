@@ -177,9 +177,9 @@ const ChatBot = ({
           //   content: firstMessage?.includes('Sell')?`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`:`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best properties. Otherwise, message us over what you’re looking for and we’ll show you what we have to offer.`,
           // }
         ]);
-        //   typewriterEffect(
-        //     `Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`, 0
-        //   )
+          // typewriterEffect(
+          //   `Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`, 0
+          // )
       } else {
         // setMessages([
         //     {
@@ -400,12 +400,14 @@ const ChatBot = ({
               isLoading: false,
             };
             const updatedMessages = [...prevMessages, newMessage];
+            typewriterEffect(data?.response, updatedMessages.length - 1);
             return updatedMessages;
           });
         } else {
           setMessages((prevMessages) => {
             const newMessage = { role: "system", content: data?.response };
             const updatedMessages = [...prevMessages, newMessage];
+            typewriterEffect(data?.response, updatedMessages.length - 1);
             return updatedMessages;
           });
         }
@@ -474,22 +476,29 @@ const ChatBot = ({
     }
   };
 
-  const typewriterEffect = (text: string, index: number) => {
-    let charIndex = -1;
+  const typewriterEffect = (text:string, index:number) => {
+    let charIndex = 0;  // Start from 0, not -1
+    
     const interval = setInterval(() => {
-      setMessages((prevMessages) => {
+      setMessages(prevMessages => {
         const updatedMessages = [...prevMessages];
-
-        if (updatedMessages[index].content.length < text.length) {
-          updatedMessages[index].content += text.charAt(charIndex);
+        // Only update if we haven't reached the end of the text
+        if (charIndex < text.length) {
+          updatedMessages[index] = {
+            ...updatedMessages[index],
+            content: text.slice(0, charIndex + 1)  // Use slice instead of charAt
+          };
+          return updatedMessages;
         }
-        return updatedMessages;
+        return prevMessages;
       });
+      
       charIndex++;
-      if (charIndex === text.length) {
+      if (charIndex > text.length) {
         clearInterval(interval);
       }
-    }, 20);
+    }, 25);    
+    return () => clearInterval(interval);
   };
 
   const resizeTextarea = () => {

@@ -286,6 +286,7 @@ const ChatBot = ({
         const { redirect = "/", prompt:extractedPrompt } = JSON.parse(intent?.response);
         
         if (extractedPrompt && extractedPrompt !== prompt) {
+          setFetchedProperties([]);
           const getStoredMessages = localStorage.getItem(extractedPrompt);
           if (getStoredMessages) {
             const storedMessages = JSON.parse(getStoredMessages);
@@ -737,7 +738,7 @@ const ChatBot = ({
               placeholder={placeholder
               }
               autoCapitalize="on"
-              className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
+              className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden font-lato text-[16px] font-light"
             />
             <button
               onClick={handleSend}

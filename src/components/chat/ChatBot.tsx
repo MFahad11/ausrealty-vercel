@@ -93,9 +93,8 @@ const ChatBot = ({
         const getStoredMessages = localStorage.getItem(prompt);
         if (getStoredMessages) {
           const getLatestMessage = JSON.parse(getStoredMessages);
-
           localStorage.removeItem(`${prompt}_send_message`);
-          searchData(getLatestMessage[getLatestMessage.length - 1]?.content);
+          searchData(getLatestMessage[getLatestMessage.length - 1]?.content, false);
         }
       }
     } else {
@@ -222,14 +221,12 @@ const ChatBot = ({
   };
   
   useEffect(() => {
-    console.log("scrolling to end")
     scrollToElement(messagesEndRef);
   }, []);
   
   useEffect(() => {
     // if the last message is user message, then call the below function
     if (messages[messages.length - 1]?.role === "user") {
-      console.log("scrolling to end",'user')
       scrollToElement(messagesEndRef);
     }
     
@@ -279,20 +276,21 @@ const ChatBot = ({
       setIntentExtracting(false);
     }
   };
-  const searchData = async (userInput: string) => {
+  const searchData = async (userInput: string, extractIntent=true) => {
     let data: any;
+    let redirecting=false;
     setBotThinking(true);
-    if (indexPage) {
-      const data = await handleIdentifyIntent(userInput);
-      if (data?.response) {
-        const { redirect = "/", prompt } = JSON.parse(data?.response);
-        setIntentExtracting(false);
-        if (prompt) {
-          const getStoredMessages = localStorage.getItem(prompt);
+      if(extractIntent){
+        const intent = await handleIdentifyIntent(userInput);
+      if (intent?.response) {
+        const { redirect = "/", prompt:extractedPrompt } = JSON.parse(intent?.response);
+        
+        if (extractedPrompt && extractedPrompt !== prompt) {
+          const getStoredMessages = localStorage.getItem(extractedPrompt);
           if (getStoredMessages) {
             const storedMessages = JSON.parse(getStoredMessages);
             localStorage.setItem(
-              prompt,
+              extractedPrompt,
               JSON.stringify([
                 ...storedMessages,
                 { role: "user", content: userInput },
@@ -300,210 +298,180 @@ const ChatBot = ({
             );
           } else {
             const messages = [{ role: "user", content: userInput }];
-            localStorage.setItem(prompt, JSON.stringify(messages));
+            localStorage.setItem(extractedPrompt, JSON.stringify(messages));
           }
+          // remove the last message from the messages array for the current prompt
+          const currentPromptMessages = localStorage.getItem(prompt);
+          if (currentPromptMessages) {
+            const messages = JSON.parse(currentPromptMessages);
+            messages.pop();
+            localStorage.setItem(prompt, JSON.stringify(messages));
+            setMessages(messages);
+          }
+
+
+          localStorage.setItem(`${extractedPrompt}_send_message`, "true");
+          setIntentExtracting(false);
+          redirecting=true;
           router.push(`/chat/${redirect}`);
-          localStorage.setItem(`${prompt}_send_message`, "true");
+          
           // searchData(userInput);
         }
       }
-    } else {
-      const body: {
-        objective?: string;
-        saleMode?: string;
-      } | null = {};
-     
-      if (title === "LOOKING TO BUY") {
-        body["objective"] = "sale";
-        body["saleMode"] = "buy";
-      } else if (title === "LOOKING TO RENT") {
-        body["objective"] = "rent";
-        body["saleMode"] = "rent";
       }
-      try {
-        let storedProperties = fetchedProperties || [];
-        
-        
-        if(storedProperties.length===0){
-          const response = await axiosInstance.post("/api/domain/listings", {
-          extractedInfo: body,
-          });
-          if (response.data.success) {
-            const properties = response.data.data;
-            if (properties.length > 0) {
-              setFetchedProperties(() => {
-                const updatedProperties = properties;
-                return updatedProperties;
-              });
-              storedProperties = properties;
-            }
-            // else{
-            //   setMessages((prevMessages) => {
-            //     const newMessage = {
-            //       role: "system",
-            //       content:
-            //         "Unable to find any properties that match your criteria. But you can always provide more information to help us find the right property for you.",
-            //     };
-            //     const updatedMessages = [...prevMessages, newMessage];
-            //     return updatedMessages;
-            //   });
-            // }
-          }
-        }
+      if(!indexPage && !redirecting){
+        const body: {
+          objective?: string;
+          saleMode?: string;
+        } | null = {};
+       
         if (title === "LOOKING TO BUY") {
-          data = await handleBuyingChat(
-            userInput,
-            messages.map(({ content, role }) => ({
-              content,
-              role,
-            })),
-            storedProperties?.map((property: any) => ({
-              id: property?.id,
-              propertyTypes: property?.propertyTypes,
-              channel: property?.channel,
-              displayAddress: property?.addressParts?.displayAddress,
-              postcode: property?.addressParts?.postcode,
-              suburb: property?.addressParts?.suburb,
-              bathrooms: property?.bathrooms,
-              bedrooms: property?.bedrooms,
-              carspaces: property?.carspaces,
-              description: property?.description,
-              features: property?.features,
-              inspectionDetails: property?.inspectionDetails,
-              priceDetails: property?.priceDetails,
-              propertyId: property?.propertyId,
-              headline: property?.headline,
-              agents:"auseralty.com.au"
-            }))
-          );
+          body["objective"] = "sale";
+          body["saleMode"] = "buy";
         } else if (title === "LOOKING TO RENT") {
-          data = await handleRenChat(
-            userInput,
-            messages.map(({ content, role }) => ({
-              content,
-              role,
-            })),
-            storedProperties?.map((property: any) => ({
-              id: property?.id,
-              propertyTypes: property?.propertyTypes,
-              channel: property?.channel,
-              displayAddress: property?.addressParts?.displayAddress,
-              postcode: property?.addressParts?.postcode,
-              suburb: property?.addressParts?.suburb,
-              bathrooms: property?.bathrooms,
-              bedrooms: property?.bedrooms,
-              carspaces: property?.carspaces,
-              description: property?.description,
-              features: property?.features,
-              inspectionDetails: property?.inspectionDetails,
-              priceDetails: property?.priceDetails,
-              propertyId: property?.propertyId,
-              headline: property?.headline,
-              agents:"auseralty.com.au"
-            }))
-          );
+          body["objective"] = "rent";
+          body["saleMode"] = "rent";
         }
-        if (data?.extractedInfo) {
-          if (data?.extractedInfo?.intent) {
-            router.push(`/chat/${data?.extractedInfo?.redirect}`);
-            setBotThinking(false);
-            return;
+        try {
+          let storedProperties = fetchedProperties || [];
+          
+          
+          if(storedProperties.length===0){
+            const response = await axiosInstance.post("/api/domain/listings", {
+            extractedInfo: body,
+            });
+            if (response.data.success) {
+              const properties = response.data.data;
+              if (properties.length > 0) {
+                setFetchedProperties(() => {
+                  const updatedProperties = properties;
+                  return updatedProperties;
+                });
+                storedProperties = properties;
+              }
+              // else{
+              //   setMessages((prevMessages) => {
+              //     const newMessage = {
+              //       role: "system",
+              //       content:
+              //         "Unable to find any properties that match your criteria. But you can always provide more information to help us find the right property for you.",
+              //     };
+              //     const updatedMessages = [...prevMessages, newMessage];
+              //     return updatedMessages;
+              //   });
+              // }
+            }
           }
-          setMessages((prevMessages) => {
-            const newMessage = {
-              role: "system",
-              content: data?.response,
-              // add the media array property in each property object again based on id or propertyId
-              properties:
-                data?.extractedInfo?.map((info: any) => {
-                 
-                  const property = storedProperties.find(
-                    (property: any) =>
-                    {
-                      return property.id == info.id ||
-                      property.propertyId == info.propertyId
+          if (title === "LOOKING TO BUY") {
+            data = await handleBuyingChat(
+              userInput,
+              messages.map(({ content, role }) => ({
+                content,
+                role,
+              })),
+              storedProperties?.map((property: any) => ({
+                id: property?.id,
+                propertyTypes: property?.propertyTypes,
+                channel: property?.channel,
+                displayAddress: property?.addressParts?.displayAddress,
+                postcode: property?.addressParts?.postcode,
+                suburb: property?.addressParts?.suburb,
+                bathrooms: property?.bathrooms,
+                bedrooms: property?.bedrooms,
+                carspaces: property?.carspaces,
+                description: property?.description,
+                features: property?.features,
+                inspectionDetails: property?.inspectionDetails,
+                priceDetails: property?.priceDetails,
+                propertyId: property?.propertyId,
+                headline: property?.headline,
+                agents:"auseralty.com.au"
+              }))
+            );
+          } else if (title === "LOOKING TO RENT") {
+            data = await handleRenChat(
+              userInput,
+              messages.map(({ content, role }) => ({
+                content,
+                role,
+              })),
+              storedProperties?.map((property: any) => ({
+                id: property?.id,
+                propertyTypes: property?.propertyTypes,
+                channel: property?.channel,
+                displayAddress: property?.addressParts?.displayAddress,
+                postcode: property?.addressParts?.postcode,
+                suburb: property?.addressParts?.suburb,
+                bathrooms: property?.bathrooms,
+                bedrooms: property?.bedrooms,
+                carspaces: property?.carspaces,
+                description: property?.description,
+                features: property?.features,
+                inspectionDetails: property?.inspectionDetails,
+                priceDetails: property?.priceDetails,
+                propertyId: property?.propertyId,
+                headline: property?.headline,
+                agents:"auseralty.com.au"
+              }))
+            );
+          }
+          if (data?.extractedInfo) {
+            if (data?.extractedInfo?.intent) {
+              router.push(`/chat/${data?.extractedInfo?.redirect}`);
+              setBotThinking(false);
+              return;
+            }
+            setMessages((prevMessages) => {
+              const newMessage = {
+                role: "system",
+                content: data?.response,
+                // add the media array property in each property object again based on id or propertyId
+                properties:
+                  data?.extractedInfo?.map((info: any) => {
+                   
+                    const property = storedProperties.find(
+                      (property: any) =>
+                      {
+                        return property.id == info.id ||
+                        property.propertyId == info.propertyId
+                      }
+                    );
+                    if (property) {
+                      return {
+                        ...property,
+                        media:
+                          property?.media?.length >= 1
+                            ? property?.media
+                            : null,
+                      };
                     }
-                  );
-                  if (property) {
-                    return {
-                      ...property,
-                      media:
-                        property?.media?.length >= 1
-                          ? property?.media
-                          : null,
-                    };
-                  }
-                  return null;
-                }) || [],
-              isLoading: true,
-            };
-            const updatedMessages = [...prevMessages, newMessage];
-            typewriterEffect(data?.response, updatedMessages.length - 1);
-            return updatedMessages;
-          });
-        } else {
-          setMessages((prevMessages) => {
-            const newMessage = { role: "system", content: data?.response };
-            const updatedMessages = [...prevMessages, newMessage];
-            typewriterEffect(data?.response, updatedMessages.length - 1);
-            return updatedMessages;
-          });
+                    return null;
+                  }) || [],
+                isLoading: true,
+              };
+              const updatedMessages = [...prevMessages, newMessage];
+              typewriterEffect(data?.response, updatedMessages.length - 1);
+              return updatedMessages;
+            });
+          } else {
+            setMessages((prevMessages) => {
+              const newMessage = { role: "system", content: data?.response };
+              const updatedMessages = [...prevMessages, newMessage];
+              typewriterEffect(data?.response, updatedMessages.length - 1);
+              return updatedMessages;
+            });
+          }
+          
+        } catch (error: any) {
+          const errorMessage =
+            error.response?.data?.message ||
+            error.message ||
+            "An unexpected error occurred";
+          toast.error(errorMessage);
+          setBotThinking(false);
+  
         }
-        
-      } catch (error: any) {
-        const errorMessage =
-          error.response?.data?.message ||
-          error.message ||
-          "An unexpected error occurred";
-        toast.error(errorMessage);
-        setBotThinking(false);
-
       }
-    }
-    
-  };
-  const generateStory = async () => {
-    if (messages.length < 10) {
-      toast.error(
-        "Please have atleast 5 conversations to generate a better story"
-      );
-      return;
-    }
-    setLoading(true);
-
-    try {
-      //   const response = await axios.post(
-      //     `${process.env.REACT_APP_BACKEND_URL}/api/story`,
-      //     {
-      //       userMessage: prompt==='FOR_SOMEONE_PROMPT'?`Please write a story based on the conversation attached. Write the story as if the person is speaking directly to the person mention in the story (e.g., their mum, friend, or anyone relevant to the story). Ensure the tone feels like they're reminiscing with someone important to them. Use only the specified HTML tags for formatting the output. Ensure that the text is well-structured and formatted clearly with the following HTML tags:
-      //         - <h4> for headings
-      //         - <p> for paragraphs
-      //         Ensure the story follows the structure provided. Do not use bold formatting for headings; instead, use the appropriate HTML tags as specified.`:`
-      //         Please write a story based on the conversation attached. Use only the specified HTML tags for formatting the output. Ensure that the text is well-structured and formatted clearly with the following HTML tags:
-      //         - <h4> for headings
-      //         - <p> for paragraphs
-      //         Ensure the story follows the structure provided. Do not use bold formatting for headings; instead, use the appropriate HTML tags as specified.`,
-      //       chatHistory: messages,
-      //       prompt:'GENERATE_STORY_PROMPT'
-      //     }
-      //   );
-      //   if (response.data.success) {
-      //     const result = response.data.message;
-      //     localStorage.setItem(`introStoryLines_${prompt}`, response.data.introStory);
-      //     setFinalMessg(result);
-      //     setLoading(false);
-      //     setStep(2);
-      //     localStorage.setItem(stepKey, 2);
-      //     localStorage.setItem(finalMessgKey, result);
-      //   }
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "An unexpected error occurred";
-      toast.error(errorMessage);
-      setLoading(false);
-    }
   };
 
   const handleInputChange = (e: any) => {

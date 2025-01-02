@@ -40,7 +40,7 @@ const ChatBotHandler = (
       title: "SELL OR LEASE MY PROPERTY",
       description: "See what your home is worth",
       prompt:"SELL_MY_PROPERTY_PROMPT",
-      firstMessage: "Start by entering your address or desired location below.",
+      firstMessage: "Would you like a price assessment or information regarding the sale or rental of your property?",
       placeholder: "Type your address or location and/or specific features",
       route: "sell-or-lease-my-property",
       index: 0,

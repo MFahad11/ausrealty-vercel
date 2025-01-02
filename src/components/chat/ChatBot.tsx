@@ -98,9 +98,9 @@ const ChatBot = ({
         }
       }
     } else {
-      if (title !== "SELL OR LEASE MY PROPERTY") {
+      // if (title !== "SELL OR LEASE MY PROPERTY") {
         initializeChat();
-      }
+      // }
     }
   }, [prompt]);
   useEffect(() => {
@@ -162,36 +162,62 @@ const ChatBot = ({
   //     }
   //   };
   const initializeChat = async () => {
-    if (title !== "SELL OR LEASE MY PROPERTY") {
-      if (firstMessage) {
-        setMessages([
-          {
-            role: "system",
-            content: firstMessage,
-          },
-          // {
-          //     role: "user",
-          //     content: firstMessage,
-          // },
-          // {
-          //   role: "system",
-          //   content: firstMessage?.includes('Sell')?`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`:`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best properties. Otherwise, message us over what you’re looking for and we’ll show you what we have to offer.`,
-          // }
-        ]);
-          // typewriterEffect(
-          //   `Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`, 0
-          // )
-      } else {
-        // setMessages([
-        //     {
-        //       role: "system",
-        //       content: 'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.',
-        //     },
-        //   ]);
-      }
-      // if(prompt){
-      //   localStorage.setItem(prompt, JSON.stringify(messages));
-      // }
+    // if (title !== "SELL OR LEASE MY PROPERTY") {
+    //   if (firstMessage) {
+    //     setMessages([
+    //       {
+    //         role: "system",
+    //         content: firstMessage,
+    //       },
+    //       // {
+    //       //     role: "user",
+    //       //     content: firstMessage,
+    //       // },
+    //       // {
+    //       //   role: "system",
+    //       //   content: firstMessage?.includes('Sell')?`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`:`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best properties. Otherwise, message us over what you’re looking for and we’ll show you what we have to offer.`,
+    //       // }
+    //     ]);
+    //       // typewriterEffect(
+    //       //   `Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`, 0
+    //       // )
+    //   } else {
+    //     // setMessages([
+    //     //     {
+    //     //       role: "system",
+    //     //       content: 'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.',
+    //     //     },
+    //     //   ]);
+    //   }
+    //   // if(prompt){
+    //   //   localStorage.setItem(prompt, JSON.stringify(messages));
+    //   // }
+    // }
+    if (firstMessage) {
+      setMessages([
+        {
+          role: "system",
+          content: firstMessage,
+        },
+        // {
+        //     role: "user",
+        //     content: firstMessage,
+        // },
+        // {
+        //   role: "system",
+        //   content: firstMessage?.includes('Sell')?`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`:`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best properties. Otherwise, message us over what you’re looking for and we’ll show you what we have to offer.`,
+        // }
+      ]);
+        // typewriterEffect(
+        //   `Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`, 0
+        // )
+    } else {
+      // setMessages([
+      //     {
+      //       role: "system",
+      //       content: 'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.',
+      //     },
+      //   ]);
     }
   };
   useEffect(() => {
@@ -566,162 +592,293 @@ const ChatBot = ({
           {(title === "SELL OR LEASE MY PROPERTY" ||
             title === "LOOKING TO BUY" ||
             title === "LOOKING TO RENT") &&
-            (title === "SELL OR LEASE MY PROPERTY" && messages?.length === 0 ? (
-              <div className={`mb-4 text-left`}>
-                <span
-                  className={`inline-block p-3 max-w-[80%] rounded-lg bg-white`}
-                >
-                  <p>
-                    Hi! Let us know how we can help you. Otherwise, please click
-                    one of the categories below to get started.
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    <Link
-                      href="/sell-or-lease-my-property font-lato"
-                      className="text-black underline"
-                    >
-                      Sell My Property
-                    </Link>
-                    <Link
-                      href="/sell-or-lease-my-property font-lato"
-                      className="text-black underline"
-                    >
-                      Lease My Property
-                    </Link>
-                  </div>
-                </span>
-              </div>
-            ) : (
-              <>
-                <div
-                  id="msg"
-                  ref={messagesContainerRef}
-                  className="enhanced-textarea overflow-y-auto pl-0 pb-32 "
-                >
-                  {messages.map((message, index) => (
-                    <>
+        //     (title === "SELL OR LEASE MY PROPERTY" && messages?.length === 0 ? (
+        //       <div className={`mb-4 text-left`}>
+        //         <span
+        //           className={`inline-block p-3 max-w-[80%] rounded-lg bg-white`}
+        //         >
+        //           <p>
+        //             Hi! Let us know how we can help you. Otherwise, please click
+        //             one of the categories below to get started.
+        //           </p>
+        //           <div className="mt-2 flex flex-wrap gap-2">
+        //             <Link
+        //               href="/sell-or-lease-my-property font-lato"
+        //               className="text-black underline"
+        //             >
+        //               Sell My Property
+        //             </Link>
+        //             <Link
+        //               href="/sell-or-lease-my-property font-lato"
+        //               className="text-black underline"
+        //             >
+        //               Lease My Property
+        //             </Link>
+        //           </div>
+        //         </span>
+        //       </div>
+        //     ) : (
+        //       <>
+        //         <div
+        //           id="msg"
+        //           ref={messagesContainerRef}
+        //           className="enhanced-textarea overflow-y-auto pl-0 pb-32 "
+        //         >
+        //           {messages.map((message, index) => (
+        //             <>
                     
-                    <div
-                      key={index}
-                      className={`mb-4 ${
-                        message.role === "system" ? "text-left" : "text-right"
-                      }`}
+        //             <div
+        //               key={index}
+        //               className={`mb-4 ${
+        //                 message.role === "system" ? "text-left" : "text-right"
+        //               }`}
                       
-                    >
+        //             >
                       
-                      <span
-                        className={`inline-block rounded-lg max-w-[80%] p-3 ${
-                          message.role === "system"
-                            ? "bg-white rounded-br-none"
-                            : "text-start bg-gray-200 rounded-bl-none mr-2"
-                        }
+        //               <span
+        //                 className={`inline-block rounded-lg max-w-[80%] p-3 ${
+        //                   message.role === "system"
+        //                     ? "bg-white rounded-br-none"
+        //                     : "text-start bg-gray-200 rounded-bl-none mr-2"
+        //                 }
                      
                       
-                      `}
-                      ref={
-                          message.role === "system" && index === messages.length - 1
-                            ? botResponseRef
-                            : null
-                        }
+        //               `}
+        //               ref={
+        //                   message.role === "system" && index === messages.length - 1
+        //                     ? botResponseRef
+        //                     : null
+        //                 }
                       
-                      >
+        //               >
                         
-                        <p className="text-[16px] font-light"
+        //                 <p className="text-[16px] font-light"
                         
-                        >
+        //                 >
                           
-                          {message.content}</p>
-                      </span>
+        //                   {message.content}</p>
+        //               </span>
                       
-                      <div>
-                        {message.properties &&
-                          message.properties.length > 0 && (
-                            <div className="mt-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                            {message.properties.map((property, index) => (
-                              message.isLoading ? (                            
-                              <ContentLoader viewBox="0 0 500 280" height={280} width={500} className="ml-2">
-                                <rect x="3" y="3" rx="10" ry="10" width="400" height="180" />
-                                <rect x="6" y="190" rx="0" ry="0" width="292" height="15" />
-                                <rect x="4" y="215" rx="0" ry="0" width="239" height="15" />
-                                <rect x="4" y="242" rx="0" ry="0" width="274" height="15" />
-                              </ContentLoader>):(<div
-                                key={index}
-                                className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
-                                onClick={() => {
-                                  router.push(
-                                    `/property/${property?.id}/media/images`
-                                  );
-                                }}
-                              >
-                                {property?.media &&
-                                  Array.isArray(property?.media) && (
-                                    <EmblaCarousel
-                                      slides={property?.media}
-                                    />
-                                  )}
-                                <div className="ml-4">
-                                  <div className="mt-4 flex flex-col space-y-2">
-                                    <h5 className="tracking-wide">
-                                      {property?.priceDetails.displayPrice}
-                                    </h5>
+        //               <div>
+        //                 {message.properties &&
+        //                   message.properties.length > 0 && (
+        //                     <div className="mt-4">
+        //                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+        //                     {message.properties.map((property, index) => (
+        //                       message.isLoading ? (                            
+        //                       <ContentLoader viewBox="0 0 500 280" height={280} width={500} className="ml-2">
+        //                         <rect x="3" y="3" rx="10" ry="10" width="400" height="180" />
+        //                         <rect x="6" y="190" rx="0" ry="0" width="292" height="15" />
+        //                         <rect x="4" y="215" rx="0" ry="0" width="239" height="15" />
+        //                         <rect x="4" y="242" rx="0" ry="0" width="274" height="15" />
+        //                       </ContentLoader>):(<div
+        //                         key={index}
+        //                         className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
+        //                         onClick={() => {
+        //                           router.push(
+        //                             `/property/${property?.id}/media/images`
+        //                           );
+        //                         }}
+        //                       >
+        //                         {property?.media &&
+        //                           Array.isArray(property?.media) && (
+        //                             <EmblaCarousel
+        //                               slides={property?.media}
+        //                             />
+        //                           )}
+        //                         <div className="ml-4">
+        //                           <div className="mt-4 flex flex-col space-y-2">
+        //                             <h5 className="tracking-wide">
+        //                               {property?.priceDetails.displayPrice}
+        //                             </h5>
 
-                                    <h5 className="text-black font-light">
-                                      {
-                                        property?.addressParts
-                                          .displayAddress
-                                      }
-                                    </h5>
-                                  </div>
+        //                             <h5 className="text-black font-light">
+        //                               {
+        //                                 property?.addressParts
+        //                                   .displayAddress
+        //                               }
+        //                             </h5>
+        //                           </div>
 
-                                  <div className="mb-6 text-sm">
-                                    <h4 className="text-black mb-0">
-                                      {/* 4B 4B 2C | House */}
-                                      {
-                                        property?.bedrooms
-                                      }B {property?.bathrooms}B{" "}
-                                      {property?.carspaces}C |{" "}
-                                      {property?.propertyTypes?.length > 0
-                                        ? property?.propertyTypes?.join(",")
-                                        : "N/A"}
-                                    </h4>
-                                    <p className="leading-7">
-                                      Inspection{" "}
-                                      {dayjs(
-                                        property?.dateAvailable
-                                      )?.format("DD/MM/YYYY")}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>)
-                            ))}
-                          </div>
-                        </div>)
+        //                           <div className="mb-6 text-sm">
+        //                             <h4 className="text-black mb-0">
+        //                               {/* 4B 4B 2C | House */}
+        //                               {
+        //                                 property?.bedrooms
+        //                               }B {property?.bathrooms}B{" "}
+        //                               {property?.carspaces}C |{" "}
+        //                               {property?.propertyTypes?.length > 0
+        //                                 ? property?.propertyTypes?.join(",")
+        //                                 : "N/A"}
+        //                             </h4>
+        //                             <p className="leading-7">
+        //                               Inspection{" "}
+        //                               {dayjs(
+        //                                 property?.dateAvailable
+        //                               )?.format("DD/MM/YYYY")}
+        //                             </p>
+        //                           </div>
+        //                         </div>
+        //                       </div>)
+        //                     ))}
+        //                   </div>
+        //                 </div>)
                               
                             
-                      }
+        //               }
 
                         
-                      </div>
-                    </div></>
-                  ))}
+        //               </div>
+        //             </div></>
+        //           ))}
 
-                  {botThinking && (
-                    <div className="text-left mb-2 p-3 space-x-1 flex items-center max-w-[80%] ">
-        <div className="rounded-full h-3 w-3 bg-black animate-pulse"></div>
+        //           {botThinking && (
+        //             <div className="text-left mb-2 p-3 space-x-1 flex items-center max-w-[80%] ">
+        // <div className="rounded-full h-3 w-3 bg-black animate-pulse"></div>
                     
-                    <p className="animate-pulse text-[16px] font-light">
+        //             <p className="animate-pulse text-[16px] font-light">
                     
-                      Getting the information for you
-                    </p>
+        //               Getting the information for you
+        //             </p>
                     
-                  </div>
-                  )}
-                  <div ref={messagesEndRef} />
-                </div>
+        //           </div>
+        //           )}
+        //           <div ref={messagesEndRef} />
+        //         </div>
                 
-              </>
+        //       </>
+        //     )
+        //     )
+        (<>
+          <div
+            id="msg"
+            ref={messagesContainerRef}
+            className="enhanced-textarea overflow-y-auto pl-0 pb-32 "
+          >
+            {messages.map((message, index) => (
+              <>
+              
+              <div
+                key={index}
+                className={`mb-4 ${
+                  message.role === "system" ? "text-left" : "text-right"
+                }`}
+                
+              >
+                
+                <span
+                  className={`inline-block rounded-lg max-w-[80%] p-3 ${
+                    message.role === "system"
+                      ? "bg-white rounded-br-none"
+                      : "text-start bg-gray-200 rounded-bl-none mr-2"
+                  }
+               
+                
+                `}
+                ref={
+                    message.role === "system" && index === messages.length - 1
+                      ? botResponseRef
+                      : null
+                  }
+                
+                >
+                  
+                  <p className="text-[16px] font-light"
+                  
+                  >
+                    
+                    {message.content}</p>
+                </span>
+                
+                <div>
+                  {message.properties &&
+                    message.properties.length > 0 && (
+                      <div className="mt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                      {message.properties.map((property, index) => (
+                        message.isLoading ? (                            
+                        <ContentLoader viewBox="0 0 500 280" height={280} width={500} className="ml-2">
+                          <rect x="3" y="3" rx="10" ry="10" width="400" height="180" />
+                          <rect x="6" y="190" rx="0" ry="0" width="292" height="15" />
+                          <rect x="4" y="215" rx="0" ry="0" width="239" height="15" />
+                          <rect x="4" y="242" rx="0" ry="0" width="274" height="15" />
+                        </ContentLoader>):(<div
+                          key={index}
+                          className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
+                          onClick={() => {
+                            router.push(
+                              `/property/${property?.id}/media/images`
+                            );
+                          }}
+                        >
+                          {property?.media &&
+                            Array.isArray(property?.media) && (
+                              <EmblaCarousel
+                                slides={property?.media}
+                              />
+                            )}
+                          <div className="ml-4">
+                            <div className="mt-4 flex flex-col space-y-2">
+                              <h5 className="tracking-wide">
+                                {property?.priceDetails.displayPrice}
+                              </h5>
+
+                              <h5 className="text-black font-light">
+                                {
+                                  property?.addressParts
+                                    .displayAddress
+                                }
+                              </h5>
+                            </div>
+
+                            <div className="mb-6 text-sm">
+                              <h4 className="text-black mb-0">
+                                {/* 4B 4B 2C | House */}
+                                {
+                                  property?.bedrooms
+                                }B {property?.bathrooms}B{" "}
+                                {property?.carspaces}C |{" "}
+                                {property?.propertyTypes?.length > 0
+                                  ? property?.propertyTypes?.join(",")
+                                  : "N/A"}
+                              </h4>
+                              <p className="leading-7">
+                                Inspection{" "}
+                                {dayjs(
+                                  property?.dateAvailable
+                                )?.format("DD/MM/YYYY")}
+                              </p>
+                            </div>
+                          </div>
+                        </div>)
+                      ))}
+                    </div>
+                  </div>)
+                        
+                      
+                }
+
+                  
+                </div>
+              </div></>
             ))}
+
+            {botThinking && (
+              <div className="text-left mb-2 p-3 space-x-1 flex items-center max-w-[80%] ">
+  <div className="rounded-full h-3 w-3 bg-black animate-pulse"></div>
+              
+              <p className="animate-pulse text-[16px] font-light">
+              
+                Getting the information for you
+              </p>
+              
+            </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+          
+        </>)
+            }
           {title === "INSIDE AUSREALTY" && (
             <ImageGrid data={INSIDE_AUSREALTY} isInsideAusrealty={true} />
           )}

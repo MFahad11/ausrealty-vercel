@@ -473,6 +473,11 @@ const ChatBot = ({
   
         }
       }
+      if(indexPage){
+        setIntentExtracting(false);
+        setBotThinking(false);
+      }
+
   };
 
   const handleInputChange = (e: any) => {

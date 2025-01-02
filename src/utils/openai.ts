@@ -588,6 +588,7 @@ Floor Plan Inquiry: If the user wants to see the floor plan of the property:
 
 Impotant Notes:
 - You must provide only the structured JSON data in your response. nothing in addition. None of these symbol
+- For those where prompt is not provided you should not include the prompt in the response.
 `;
     const messages = [
       { role: "system", content: systemPrompt },

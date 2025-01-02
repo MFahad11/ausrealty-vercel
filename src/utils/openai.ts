@@ -6,14 +6,27 @@ type ProcessedResponse = {
 };
 
 const extractDisplayText = (text: string): string => {
-  const [displayPart] = text.split("%%");
+  if(!text.includes("%%")){
+    const [displayPart] = text.split("[");
+    return displayPart.trim();
+  }
+  else{
+    const [displayPart] = text.split("%%");
   return displayPart.trim();
+  }
+  
 };
 
 const extractJsonContent = (text: string): any => {
   try {
-    const [_, jsonMatch] = text.split("%%");
-    const parseJson = JSON.parse(jsonMatch);
+    let parseJson;
+    if(!text.includes("%%")){
+      const [_, jsonMatch] = text.split("[");
+      parseJson = JSON.parse('['+jsonMatch);
+    }else{
+      const [_, jsonMatch] = text.split("%%");
+      parseJson = JSON.parse(jsonMatch);
+    }
     const hasValidValue = Object.keys(parseJson).some((key) => {
       const value = parseJson[key];
       return (
@@ -138,7 +151,7 @@ export async function handleBuyingChat(
       For Property Searches:
         A summarise 2 lines concise, professional, coversational and warm text response. Do not include any technical details or raw JSON data in this section. ** Most Important and Always Remember: ** Dont include the details of the properties in the response text. Dont overwelm the user with the details.
         A filtered array of properties in JSON format, with only the id and propertyId fields.
-        Format:
+        Format: Must be in this format
         [text response]%%[{"id": "1", "propertyId": "prop-123"}, {"id": "2", "propertyId": "prop-456"}]
 
 
@@ -247,7 +260,6 @@ For specific property-related queries, provide detailed explanations with all re
 
   
     const responseText = completion.choices[0].message?.content || "";
- 
     const data = processResponse(responseText);
 
     return {
@@ -355,7 +367,7 @@ User Query:
       For Property Searches:
         A summarise 2 lines concise, professional, coversational and warm text response. Do not include any technical details or raw JSON data in this section. ** Most Important and Always Remember: ** Dont include the details of the properties in the response text. Dont overwelm the user with the details.
         A filtered array of properties in JSON format, with only the id and propertyId fields.
-        Format:
+        Format: Format: Must be in this format
         [text response]%%[{"id": "1", "propertyId": "prop-123"}, {"id": "2", "propertyId": "prop-456"}]
 
 

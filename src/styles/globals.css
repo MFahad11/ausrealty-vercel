@@ -21,11 +21,11 @@
   src: url("../pages/fonts/abchanel.ttf") format("truetype");
   font-style: normal;
 }
-@font-face {
+/* @font-face {
   font-family: "Lato";
   src: url("../pages/fonts/Lato.ttf") format("truetype");
   font-style: normal;
-}
+} */
 body {
   margin: 0;
   font-family: "Lato",
@@ -155,7 +155,7 @@ code {
   p {
     margin: 0;
     /* font-size: 13px  !important; */
-    font-weight: 300 !important;
+    /* font-weight: 300 !important; */
   }
 
 }
@@ -559,4 +559,3 @@ input[type="radio"] {
 .my-scroll-container::-webkit-scrollbar-thumb:hover {
   background: #a0a0a0;
 }
-

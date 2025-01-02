@@ -444,6 +444,7 @@ For specific property-related queries, provide detailed explanations with all re
       // @ts-ignore
       messages: messages,
       model: "gpt-4o",
+
     };
 
     // Call the OpenAI API with the conversation messages
@@ -599,6 +600,10 @@ Impotant Notes:
       // @ts-ignore
       messages: messages,
       model: "gpt-4o",
+      response_format: {
+      type:"json_object",
+      }
+      
     };
 
     // Call the OpenAI API with the conversation messages
@@ -608,7 +613,7 @@ Impotant Notes:
 
     // Extract the response text
     const responseText = completion.choices[0].message?.content || "";
-
+    console.log(responseText);
     return { response: responseText };
   } catch (error) {
     console.error("Error interacting with OpenAI API:", error);

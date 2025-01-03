@@ -22,6 +22,7 @@ import {
 } from "@/utils/openai";
 import { LuChevronDown, LuLoader2, LuRotateCcw } from "react-icons/lu";
 import EmblaCarousel from "../ui/carousel";
+import PageLoader from "../ui/PageLoader";
 const ChatBot = ({
   title,
   firstMessage,
@@ -607,14 +608,9 @@ const ChatBot = ({
     <div className="w-full h-full flex flex-col justify-between">
       <ToastContainer />
       {
-        (indexPage && intentExtracting) && (<div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white px-8 py-6 rounded-lg shadow-lg flex flex-col items-center gap-4">
-            <LuLoader2 className="h-6 w-6 animate-spin text-black" />
-            <p className="text-black ">
-              Just a moment, we&apos;re working on your request
-            </p>
-          </div>
-        </div>)
+        (indexPage && intentExtracting) && (
+          <PageLoader />
+        )
       }
       
       <div className="max-w-4xl w-full mx-auto flex flex-col flex-grow pb-14 overflow-y-auto">

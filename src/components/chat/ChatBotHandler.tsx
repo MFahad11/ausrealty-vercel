@@ -46,15 +46,6 @@ const ChatBotHandler = (
       index: 0,
     },
     {
-      title: "LEASE MY PROPERTY",
-      description: "See what your home is worth",
-      prompt:"LEASE_MY_PROPERTY_PROMPT",
-      firstMessage: "Would you like a price assessment or information regarding the lease of your property?",
-      placeholder: "Type your address or location and/or specific features",
-      route: "lease-my-property",
-      index: 1,
-    },
-    {
       title: "LOOKING TO BUY",
       description: "See what properties we have available",
       prompt:'LOOKING_TO_BUY_PROMPT',
@@ -62,6 +53,15 @@ const ChatBotHandler = (
         placeholder : "Search for a property e.g. suburb, special features, location",
         route: "looking-to-buy",
         index: 2,
+    },
+    {
+      title: "LEASE MY PROPERTY",
+      description: "See what your home is worth",
+      prompt:"LEASE_MY_PROPERTY_PROMPT",
+      firstMessage: "Would you like a price assessment or information regarding the lease of your property?",
+      placeholder: "Type your address or location and/or specific features",
+      route: "lease-my-property",
+      index: 1,
     },
     {
       title:"LOOKING TO RENT",

@@ -37,15 +37,23 @@ const ChatBotHandler = (
     index?: number;
   }[]>([
     {
-      title: "SELL OR LEASE MY PROPERTY",
+      title: "SELL MY PROPERTY",
       description: "See what your home is worth",
       prompt:"SELL_MY_PROPERTY_PROMPT",
-      firstMessage: "Would you like a price assessment or information regarding the sale or rental of your property?",
+      firstMessage: "Would you like a price assessment or information regarding the sale of your property?",
       placeholder: "Type your address or location and/or specific features",
-      route: "sell-or-lease-my-property",
+      route: "sell-my-property",
       index: 0,
     },
-
+    {
+      title: "LEASE MY PROPERTY",
+      description: "See what your home is worth",
+      prompt:"LEASE_MY_PROPERTY_PROMPT",
+      firstMessage: "Would you like a price assessment or information regarding the lease of your property?",
+      placeholder: "Type your address or location and/or specific features",
+      route: "lease-my-property",
+      index: 1,
+    },
     {
       title: "LOOKING TO BUY",
       description: "See what properties we have available",
@@ -53,7 +61,7 @@ const ChatBotHandler = (
         firstMessage: "Hi, let us know how we can help you. Any particular suburb or features you're looking for?",
         placeholder : "Search for a property e.g. suburb, special features, location",
         route: "looking-to-buy",
-        index: 1,
+        index: 2,
     },
     {
       title:"LOOKING TO RENT",
@@ -62,7 +70,7 @@ const ChatBotHandler = (
       firstMessage: "Hi, let us know how we can help you. Any particular suburb or features you're looking for?",
       placeholder : "type the suburb or area & any property features you're looking for",
       route: "looking-to-rent",
-      index: 2,
+      index: 3,
       
     },
     {
@@ -70,7 +78,7 @@ const ChatBotHandler = (
       description: "Find a property in your desired location",
       prompt:'LOCATION_PROMPT',
       route: "location",
-      index:3,
+      index:4,
 
     },
     {
@@ -78,21 +86,21 @@ const ChatBotHandler = (
       description: "Stories from people just like you",
       prompt:'MOMENTS_FROM_HOME_PROMPT',
       route: "moments-from-home",
-      index: 4,
+      index: 5,
     },
     {
       title: "INSIDE AUSREALTY",
       description: "Learn more about us",
       prompt:'INSIDE_AUSREALTY_PROMPT',
       route: "inside-ausrealty",
-      index: 5,
+      index: 6,
     },
     {
       title: "OUR PEOPLE",
       description: "Meet our team",
       prompt:'OUR_PEOPLE_PROMPT',
       route: "our-people",
-      index: 6,
+      index: 7,
       placeholder:"Search here by name, location or office"
     },
 

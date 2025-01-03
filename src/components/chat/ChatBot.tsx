@@ -589,7 +589,7 @@ const ChatBot = ({
       <div className="max-w-4xl w-full mx-auto flex flex-col flex-grow pb-14 overflow-y-auto">
         <div className=" m-0 w-full rounded-lg mt-4">
           {title === "MOMENTS FROM HOME" && <InstaGrid data={instaData} />}
-          {(title === "SELL OR LEASE MY PROPERTY" ||
+          {(title === "SELL MY PROPERTY" || title === "LEASE MY PROPERTY" ||
             title === "LOOKING TO BUY" ||
             title === "LOOKING TO RENT") &&
         //     (title === "SELL OR LEASE MY PROPERTY" && messages?.length === 0 ? (

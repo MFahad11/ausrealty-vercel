@@ -214,14 +214,17 @@ For specific property-related queries, provide detailed explanations with all re
 
     // Combine the system prompt with the conversation history
     const messages = [
-      { role: "system", content: systemPrompt },
-      ...conversationHistory,
-      {
-        role: "user",
-        content: `Here is the property array to filter from: ${JSON.stringify(
-          properties
-        )}`,
+      { 
+        role: "system", 
+        content: systemPrompt + `Here is your knowledge base: ${JSON.stringify(properties)}` 
       },
+      ...conversationHistory,
+      // {
+      //   role: "system",
+      //   content: `Here is the property array to filter from: ${JSON.stringify(
+      //     properties
+      //   )}`,
+      // },
     ];
 
     const params: OpenAI.Chat.ChatCompletionCreateParams = {
@@ -430,14 +433,17 @@ For specific property-related queries, provide detailed explanations with all re
 `;
     // Combine the system prompt with the conversation history
     const messages = [
-      { role: "system", content: systemPrompt },
-      ...conversationHistory,
-      {
-        role: "user",
-        content: `Here is the property array to filter from: ${JSON.stringify(
-          properties
-        )}`,
+      { 
+        role: "system", 
+        content: systemPrompt + `Here is your knowledge base: ${JSON.stringify(properties)}` 
       },
+      ...conversationHistory,
+      // {
+      //   role: "system",
+      //   content: `Here is your knowledge base: ${JSON.stringify(
+      //     properties
+      //   )}`,
+      // },
     ];
 
     const params: OpenAI.Chat.ChatCompletionCreateParams = {

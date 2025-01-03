@@ -16,7 +16,9 @@ import ContentLoader from 'react-content-loader'
 import {
   handleBuyingChat,
   handleIdentifyIntent,
+  handleLeasingChat,
   handleRenChat,
+  handleSellingChat,
 } from "@/utils/openai";
 import { LuChevronDown, LuRotateCcw } from "react-icons/lu";
 import EmblaCarousel from "../ui/carousel";
@@ -441,6 +443,24 @@ const ChatBot = ({
                 agents:"auseralty.com.au"
               }))
             );
+          }
+          else if (title === "SELL MY PROPERTY" || title === "LEASE MY PROPERTY") {
+            data = await handleSellingChat(
+              userInput,
+              messages.map(({ content, role }) => ({
+                content,
+                role,
+              }))
+            )
+          }
+          else if (title === "LEASE MY PROPERTY") {
+            data = await handleLeasingChat(
+              userInput,
+              messages.map(({ content, role }) => ({
+                content,
+                role,
+              }))
+            )
           }
           if (data?.extractedInfo) {
             if (data?.extractedInfo?.intent) {

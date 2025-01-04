@@ -12,7 +12,8 @@ import { LOOKING_TO_RENT } from "@/constants/looking-to-rent";
 import Link from "next/link";
 import dayjs from "dayjs";
 import axiosInstance from "@/utils/axios-instance";
-import ContentLoader from 'react-content-loader'
+import ContentLoader from 'react-content-loader';
+import { RiVoiceprintFill } from "react-icons/ri";
 import {
   handleBuyingChat,
   handleIdentifyIntent,
@@ -79,11 +80,14 @@ const ChatBot = ({
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [botThinking, setBotThinking] = useState(false);
+  const [transcription, setTranscription] = useState("");
+  const [isListening, setIsListening] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const [showScrollButton, setShowScrollButton] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const messagesEndRef = useRef(null);
   const botResponseRef = useRef(null);
+  const recognitionRef = useRef(null);
   useEffect(() => {
     setMessages([]);
     setFetchedProperties([]);
@@ -111,22 +115,7 @@ const ChatBot = ({
     }
     
   }, [messages]);
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const windowHeight = window.innerHeight
-  //     const documentHeight = document.documentElement.scrollHeight
-  //     const scrollTop = window.pageYOffset || document.documentElement.scrollTop
 
-  //     // Show button when not at the bottom of the page
-  //     const notAtBottom = scrollTop + windowHeight < documentHeight - 50 // 20px threshold
-  //     setShowScrollButton(notAtBottom)
-  //   }
-
-  //   window.addEventListener('scroll', handleScroll)
-  //   handleScroll() // Check initial state
-
-  //   return () => window.removeEventListener('scroll', handleScroll)
-  // }, [messages])
 
   useEffect(() => {
     resizeTextarea();
@@ -141,28 +130,44 @@ const ChatBot = ({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
   };
-  //   const chatgptAPICall = async (message, previousMessages) => {
-  //     try {
-  //       const response = await axios.post(
-  //         `${process.env.REACT_APP_BACKEND_URL}/api/chat`,
-  //         {
-  //           userMessage: message,
-  //           chatHistory: previousMessages,
-  //           prompt: prompt,
-  //         }
-  //       );
+  const startListening = () => {
+    // @ts-ignore
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
 
-  //       if (response.data.success) {
-  //         return response.data.message;
-  //       }
-  //     } catch (error) {
-  //       const errorMessage =
-  //       error.response?.data?.message ||
-  //         error.message ||
-  //         "An unexpected error occurred";
-  //       toast.error(errorMessage);
-  //     }
-  //   };
+    recognition.start();
+    setIsListening(true);
+
+    recognition.onresult = (event:any) => {
+      const transcript = event.results[0][0].transcript;
+      setTranscription(transcript);
+      setIsListening(false);
+     
+      
+      recognition.stop();
+      handleSend(
+        transcript
+      );
+    };
+
+    recognition.onerror = (event:any) => {
+      console.error("Speech recognition error:", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+  };
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      // @ts-ignore
+      recognitionRef.current.stop(); // Stop the SpeechRecognition instance
+      setIsListening(false);
+    }
+  };
   const initializeChat = async () => {
     // if (title !== "SELL OR LEASE MY PROPERTY") {
     //   if (firstMessage) {
@@ -260,7 +265,8 @@ const ChatBot = ({
     
   }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = async (inputValue:string) => {
+    console.log(inputValue?.trim());
     if (!inputValue.trim()) {
       toast.error("Please type something");
       return;
@@ -533,7 +539,9 @@ const ChatBot = ({
   const handleKeyPress = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      handleSend();
+      handleSend(
+        inputValue
+      );
     }
   };
 
@@ -922,13 +930,32 @@ const ChatBot = ({
               autoCapitalize="on"
               className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden font-lato text-[16px] font-light"
             />
-            <button
-              onClick={handleSend}
+            {
+              inputValue.length > 0 ? (<button
+              onClick={
+                () => {
+                  handleSend(
+                    inputValue
+                  );
+                }
+              }
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
               disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}
             >
               <IoSend title="Send" className="w-5 h-5" />
             </button>
+              ):(
+
+                <button
+              onClick={startListening}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
+              disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}
+            >
+              <RiVoiceprintFill title="Send" className="w-5 h-5" />
+            </button>
+              )
+            }
+            
             {!indexPage && (
               <button
                 onClick={handleStartAgain}

@@ -21,7 +21,7 @@ import {
   handleRenChat,
   handleSellingChat,
 } from "@/utils/openai";
-import { LuChevronDown, LuLoader2, LuRotateCcw } from "react-icons/lu";
+import { LuChevronDown, LuLoader2, LuMic, LuMicOff, LuRotateCcw } from "react-icons/lu";
 import EmblaCarousel from "../ui/carousel";
 import PageLoader from "../ui/PageLoader";
 const ChatBot = ({
@@ -555,10 +555,10 @@ const ChatBot = ({
       setMessages(prevMessages => {
         const updatedMessages = [...prevMessages];
         // Only update if we haven't reached the end of the text
-        if (charIndex < text.length) {
+        if (charIndex < text?.length) {
           updatedMessages[index] = {
             ...updatedMessages[index],
-            content: text.slice(0, charIndex + 1)  // Use slice instead of charAt
+            content: text?.slice(0, charIndex + 1)  // Use slice instead of charAt
           };
           return updatedMessages;
         }
@@ -566,7 +566,7 @@ const ChatBot = ({
       });
       // scrollToElement(botResponseRef);
       charIndex++;
-      if (charIndex > text.length) {
+      if (charIndex > text?.length) {
         // update the isLoading property to false
         setMessages(prevMessages => {
           const updatedMessages = [...prevMessages];
@@ -951,16 +951,47 @@ const ChatBot = ({
             >
               <IoSend title="Send" className="w-5 h-5" />
             </button>
-              ):(
+              ):
+              // (
 
+              //   isListening?(<button
+              //     onClick={startListening}
+              //     className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
+              //     disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}
+              //   >
+              //     <RiVoiceprintFill title="Send" className="w-5 h-5" />
+              //   </button>):(
+              //     <button
+              //     onClick={startListening}
+              //     className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
+              //     disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}
+              //   >
+              //     <RiVoiceprintFill title="Send" className="w-5 h-5" />
+              //   </button>
+              //   )
+              // )
+              (isListening ? (
+                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
+                disabled={true}
+                >
+                  <RiVoiceprintFill className="w-5 h-5 text-black" />
+                  {[...Array(3)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute inset-0 rounded-full border-2 border-black animate-ping"
+                      style={{ animationDelay: `${i * 300}ms` }}
+                    />
+                  ))}
+                </button>
+              ) : (
                 <button
-              onClick={startListening}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
-              disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}
-            >
-              <RiVoiceprintFill title="Send" className="w-5 h-5" />
-            </button>
-              )
+                  onClick={startListening}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
+                  disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}>
+                <RiVoiceprintFill title="voice command" className="w-5 h-5" />
+                </button>
+              ))
+              
             }
             
             {!indexPage && (

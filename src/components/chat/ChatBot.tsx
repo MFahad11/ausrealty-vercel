@@ -352,6 +352,10 @@ const ChatBot = ({
           
           // searchData(userInput);
         }
+        // else{
+        //   setIntentExtracting(false);
+        //   setBotThinking(false);
+        // }
       }
       }
       if(!indexPage && !redirecting){

@@ -267,9 +267,8 @@ const ChatBot = ({
   }, [messages]);
 
   const handleSend = async (inputValue:string) => {
-    console.log(inputValue?.trim());
     if (!inputValue.trim()) {
-      toast.error("Please type something");
+      // toast.error("Please type something");
       return;
     }
     const userMessage = { role: "user", content: inputValue };

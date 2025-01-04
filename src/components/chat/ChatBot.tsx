@@ -21,8 +21,9 @@ import {
   handleRenChat,
   handleSellingChat,
 } from "@/utils/openai";
-import { LuChevronDown, LuRotateCcw } from "react-icons/lu";
+import { LuChevronDown, LuLoader2, LuRotateCcw } from "react-icons/lu";
 import EmblaCarousel from "../ui/carousel";
+import PageLoader from "../ui/PageLoader";
 const ChatBot = ({
   title,
   firstMessage,
@@ -614,6 +615,12 @@ const ChatBot = ({
   return (
     <div className="w-full h-full flex flex-col justify-between">
       <ToastContainer />
+      {
+        (indexPage && intentExtracting) && (
+          <PageLoader />
+        )
+      }
+      
       <div className="max-w-4xl w-full mx-auto flex flex-col flex-grow pb-14 overflow-y-auto">
         <div className=" m-0 w-full rounded-lg mt-4">
           {title === "MOMENTS FROM HOME" && <InstaGrid data={instaData} />}

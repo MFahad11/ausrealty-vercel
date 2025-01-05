@@ -187,7 +187,20 @@ const [audioError, setAudioError] = useState('');
       )}
 
       {audioError && (
-        <div className="text-center text-red-500">{audioError}</div>
+        <><div className="text-center text-red-500">{audioError}</div>
+        <button
+          onClick={() => {
+            const audio = new Audio(audioUrl);
+            audio.play().catch((error) => {
+              console.error('Failed to play audio:', error);
+            });
+          }}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mt-2"
+        >
+          Play Audio
+        </button>
+        </>
+        
       )}
       </div>
     </div>

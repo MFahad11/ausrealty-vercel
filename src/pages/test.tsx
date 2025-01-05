@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import OpenAI from 'openai';
-
+import OpenAI from 'openai'
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 const AudioChat = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -47,6 +47,7 @@ const AudioChat = () => {
         });
         
         // Keep the stream active
+        // @ts-ignore
         streamRef.current = stream;
         setPermissionGranted(true);
         console.log('Permissions granted successfully');
@@ -54,6 +55,8 @@ const AudioChat = () => {
         // Clean up the stream when component unmounts
         return () => {
           if (streamRef.current) {
+        // @ts-ignore
+
             streamRef.current.getTracks().forEach(track => track.stop());
           }
         };
@@ -71,6 +74,8 @@ const AudioChat = () => {
     try {
       // If we already have a stream, stop its tracks
       if (streamRef.current) {
+        // @ts-ignore
+
         streamRef.current.getTracks().forEach(track => track.stop());
       }
 
@@ -84,6 +89,7 @@ const AudioChat = () => {
         }
       });
       
+        // @ts-ignore
       streamRef.current = stream;
 
       // For debugging
@@ -92,6 +98,8 @@ const AudioChat = () => {
 
       // Create MediaRecorder with appropriate MIME type
       const mimeType = isIOS() ? 'audio/mp4' : 'audio/webm';
+        // @ts-ignore
+
       mediaRecorderRef.current = new MediaRecorder(stream, {
         mimeType: mimeType,
         audioBitsPerSecond: 128000
@@ -102,6 +110,8 @@ const AudioChat = () => {
       return true;
     } catch (err) {
       console.error('Recorder initialization error:', err);
+        // @ts-ignore
+
       setError(`Could not initialize recorder: ${err.message}`);
       return false;
     }
@@ -117,13 +127,17 @@ const AudioChat = () => {
       }
 
       audioChunksRef.current = [];
+        // @ts-ignore
 
       mediaRecorderRef.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
+        // @ts-ignore
+
           audioChunksRef.current.push(event.data);
           console.log('Audio chunk received:', event.data.size, 'bytes');
         }
       };
+        // @ts-ignore
 
       mediaRecorderRef.current.onstop = async () => {
         console.log('Recording stopped, processing audio...');
@@ -134,6 +148,8 @@ const AudioChat = () => {
       };
 
       console.log('Starting recording...');
+        // @ts-ignore
+
       mediaRecorderRef.current.start(100);
       setIsRecording(true);
       
@@ -147,77 +163,111 @@ const AudioChat = () => {
   const stopRecording = () => {
     console.log('Stopping recording...');
     if (mediaRecorderRef.current && isRecording) {
+        // @ts-ignore
+
       mediaRecorderRef.current.stop();
       setIsRecording(false);
       
       if (streamRef.current) {
+        // @ts-ignore
+
         streamRef.current.getTracks().forEach(track => track.stop());
       }
     }
   };
+        // @ts-ignore
 
   const processAudio = async (audioBlob) => {
     setIsProcessing(true);
+    const ffmpeg = createFFmpeg({ 
+      log: true,
+      corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
+     });
+  
     try {
       console.log('Processing audio blob:', audioBlob.size, 'bytes');
       
-      // Create file with appropriate extension for iOS
-      const extension = isIOS() ? 'm4a' : 'webm';
-      const audioFile = new File([audioBlob], `recording.${extension}`, {
-        type: isIOS() ? 'audio/mp4' : 'audio/webm',
-        lastModified: new Date().getTime()
-      });
+      // Load FFmpeg
+      if (!ffmpeg.isLoaded()) {
+        await ffmpeg.load();
+      }
+  
+      // Convert the Blob to ArrayBuffer
+      const audioBuffer = await audioBlob.arrayBuffer();
+      const inputFileName = isIOS() ? 'input.m4a' : 'input.webm';
+      const outputFileName = 'output.wav';
+  
+      // Write the audio file to FFmpeg FS
+      ffmpeg.FS('writeFile', inputFileName, new Uint8Array(audioBuffer));
+  
+      // Convert to WAV format
+      await ffmpeg.run('-i', inputFileName, '-ar', '16000', '-ac', '1', outputFileName);
+  
+      // Read the converted file
+      const wavData = ffmpeg.FS('readFile', outputFileName);
+  
+      // Create a new Blob from the converted file
+        // @ts-ignore
 
-      console.log('Created audio file:', audioFile);
-
+      const wavBlob = new Blob([wavData.buffer], { type: 'audio/wav' });
+  
+      // Create a File object for Whisper
+      const wavFile = new File([wavBlob], 'recording.wav', { type: 'audio/wav' });
+  
+      console.log('Converted audio file:', wavFile);
+  
       // Step 1: Transcribe audio
-      const formData = new FormData();
-      formData.append('file', audioFile);
-      
       const transcriptionResponse = await openai.audio.transcriptions.create({
-        file: audioFile,
+        file: wavFile,
         model: 'whisper-1',
       });
-
+      console.log('Transcription response:', transcriptionResponse);
+  
       const transcribedText = transcriptionResponse.text;
       console.log('Transcribed text:', transcribedText);
       setTranscription(transcribedText);
-
+  
       // Step 2: Get GPT response
       const chatResponse = await openai.chat.completions.create({
         model: 'gpt-4-turbo-preview',
         messages: [{ role: 'user', content: transcribedText }],
       });
-
+  
       const gptResponse = chatResponse.choices[0].message.content;
-      setResponse(gptResponse);
+        // @ts-ignore
 
+      setResponse(gptResponse);
+  
       // Step 3: Convert response to speech
       const speechResponse = await openai.audio.speech.create({
         model: 'tts-1',
         voice: 'alloy',
+        // @ts-ignore
+
         input: gptResponse,
       });
-
+  
       const responseBlob = new Blob([await speechResponse.arrayBuffer()], { 
         type: 'audio/mpeg' 
       });
       const audioUrl = URL.createObjectURL(responseBlob);
       const audio = new Audio(audioUrl);
-      
+  
       audio.onended = () => {
         URL.revokeObjectURL(audioUrl);
       };
-
+  
       try {
         await audio.play();
       } catch (playError) {
         console.error('Playback error:', playError);
         setError('Tap the screen to play the response audio (iOS requirement)');
       }
-
+  
     } catch (error) {
       console.error('Processing error:', error);
+        // @ts-ignore
+
       setError(`Error processing audio: ${error.message}`);
     } finally {
       setIsProcessing(false);

@@ -1,6 +1,14 @@
-import React, { useState, useRef } from 'react';
+'use client';
+
+import React, { useState, useRef, useEffect } from 'react';
 import OpenAI from 'openai';
 
+import dynamic from 'next/dynamic';
+
+// Dynamically import audio recorder with no SSR
+const AudioRecorder = dynamic(() => import('audio-recorder-polyfill'), {
+  ssr: false
+});
 
 const AudioChat = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -10,6 +18,8 @@ const AudioChat = () => {
   const [error, setError] = useState('');
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const audioContextRef = useRef(null);
+  const [isClient, setIsClient] = useState(false);
 
   // Initialize OpenAI client
   const openai = new OpenAI({
@@ -17,38 +27,123 @@ const AudioChat = () => {
     dangerouslyAllowBrowser: true
   });
 
-  // Function to get suitable mime type for the browser
-  const getMimeType = () => {
-    const types = [
-      'audio/webm',
-      'audio/mp4',
-      'audio/mpeg',
-      'audio/m4a',
-      'audio/wav'
-    ];
+  // Set up client-side only code
+  useEffect(() => {
+    setIsClient(true);
     
-    for (const type of types) {
-      if (MediaRecorder.isTypeSupported(type)) {
-        return type;
+    // Initialize AudioRecorder polyfill
+    if (typeof window !== 'undefined' && !window.MediaRecorder) {
+    //   @ts-ignore
+
+      import('audio-recorder-polyfill/mpeg-encoder').then((mpegEncoder) => {
+    //   @ts-ignore
+
+        AudioRecorder.encoder = mpegEncoder.default;
+        AudioRecorder.prototype.mimeType = 'audio/mpeg';
+    //   @ts-ignore
+
+        window.MediaRecorder = AudioRecorder;
+      });
+    }
+
+    // Initialize AudioContext
+    //   @ts-ignore
+
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) {
+    //   @ts-ignore
+
+      audioContextRef.current = new AudioContext();
+    }
+
+    return () => {
+      if (audioContextRef.current) {
+    //   @ts-ignore
+
+        audioContextRef.current.close();
+
+      }
+    };
+  }, []);
+
+  // Convert blob to WAV format
+    //   @ts-ignore
+
+  const convertToWav = async (audioBlob) => {
+    const arrayBuffer = await audioBlob.arrayBuffer();
+    //   @ts-ignore
+
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    
+    const numberOfChannels = audioBuffer.numberOfChannels;
+    const length = audioBuffer.length * numberOfChannels;
+    const wavBuffer = audioContext.createBuffer(numberOfChannels, length, audioBuffer.sampleRate);
+    
+    for (let channel = 0; channel < numberOfChannels; channel++) {
+      const channelData = audioBuffer.getChannelData(channel);
+      wavBuffer.copyToChannel(channelData, channel);
+    }
+
+    // Convert to WAV using a blob URL instead of a Web Worker
+    const wavData = new Float32Array(length);
+    for (let channel = 0; channel < numberOfChannels; channel++) {
+      const channelData = wavBuffer.getChannelData(channel);
+      for (let i = 0; i < length; i++) {
+        wavData[i] += channelData[i];
       }
     }
-    return 'audio/webm'; // Fallback
+
+    const buffer = new ArrayBuffer(44 + wavData.length * 2);
+    const view = new DataView(buffer);
+
+    // Write WAV header
+    //   @ts-ignore
+
+    const writeString = (view, offset, string) => {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+      }
+    };
+
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, 36 + wavData.length * 2, true);
+    writeString(view, 8, 'WAVE');
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, numberOfChannels, true);
+    view.setUint32(24, audioBuffer.sampleRate, true);
+    view.setUint32(28, audioBuffer.sampleRate * 2 * numberOfChannels, true);
+    view.setUint16(32, numberOfChannels * 2, true);
+    view.setUint16(34, 16, true);
+    writeString(view, 36, 'data');
+    view.setUint32(40, wavData.length * 2, true);
+
+    // Write audio data
+    for (let i = 0; i < wavData.length; i++) {
+      const sample = Math.max(-1, Math.min(1, wavData[i]));
+      view.setInt16(44 + i * 2, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+    }
+
+    return new File([buffer], 'audio.wav', { type: 'audio/wav' });
   };
 
   const startRecording = async () => {
     try {
       setError('');
       const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: true,
-        video: false
+        audio: {
+          sampleRate: 44100,
+          channelCount: 1,
+          echoCancellation: true,
+          noiseSuppression: true
+        }
       });
-      
-      const mimeType = getMimeType();
-      console.log('Using MIME type:', mimeType);
     //   @ts-ignore
+      
       mediaRecorderRef.current = new MediaRecorder(stream, {
-        mimeType: mimeType,
-        audioBitsPerSecond: 128000
+        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mpeg'
       });
       
       audioChunksRef.current = [];
@@ -64,18 +159,20 @@ const AudioChat = () => {
     //   @ts-ignore
 
       mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+        const audioBlob = new Blob(audioChunksRef.current, { 
+    //   @ts-ignore
+
+          type: mediaRecorderRef.current.mimeType 
+        });
         await processAudio(audioBlob);
       };
-
-      // Set a time slice to get data more frequently (every 250ms)
     //   @ts-ignore
 
       mediaRecorderRef.current.start(250);
       setIsRecording(true);
     } catch (error) {
       console.error('Error starting recording:', error);
-      setError(`Failed to start recording. Please make sure you have granted microphone permissions. ${JSON.stringify(error)}`);
+      setError(`Failed to start recording. Please make sure you have granted microphone permissions.${JSON.stringify(error)}`);
     }
   };
 
@@ -90,24 +187,21 @@ const AudioChat = () => {
       mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
     }
   };
+    //   @ts-ignore
 
-  const processAudio = async (audioBlob:any) => {
+  const processAudio = async (audioBlob) => {
     setIsProcessing(true);
     try {
-      // Create a FormData object to send the audio file
-      const formData = new FormData();
-      formData.append('file', audioBlob, 'audio.m4a');
+      const wavFile = await convertToWav(audioBlob);
       
-      // Step 1: Transcribe audio
       const transcriptionResponse = await openai.audio.transcriptions.create({
-        file: new File([audioBlob], 'audio.m4a', { type: audioBlob.type }),
+        file: wavFile,
         model: 'whisper-1',
       });
 
       const transcribedText = transcriptionResponse.text;
       setTranscription(transcribedText);
 
-      // Step 2: Get GPT response
       const chatResponse = await openai.chat.completions.create({
         model: 'gpt-4-turbo-preview',
         messages: [{ role: 'user', content: transcribedText }],
@@ -115,10 +209,8 @@ const AudioChat = () => {
 
       const gptResponse = chatResponse.choices[0].message.content;
     //   @ts-ignore
-
       setResponse(gptResponse);
 
-      // Step 3: Convert response to speech
       const speechResponse = await openai.audio.speech.create({
         model: 'tts-1',
         voice: 'alloy',
@@ -127,34 +219,27 @@ const AudioChat = () => {
         input: gptResponse,
       });
 
-      // Convert the speech response to audio URL and play it
       const blob = new Blob([await speechResponse.arrayBuffer()], { type: 'audio/mpeg' });
       const audioUrl = URL.createObjectURL(blob);
       const audio = new Audio(audioUrl);
       
-      // Clean up the URL after playing
       audio.onended = () => {
         URL.revokeObjectURL(audioUrl);
       };
       
-      // Play the audio
-      const playAudio = async () => {
-        try {
-          await audio.play();
-        } catch (error) {
-          console.error('Error playing audio:', error);
-          setError(`Failed to play audio. Please check your device settings. ${JSON.stringify(error)}`);
-        }
-      };
-      playAudio();
+      await audio.play();
 
     } catch (error) {
       console.error('Error processing audio:', error);
-      setError(`An error occurred while processing your audio. Please try again. ${JSON.stringify(error)}`);
+      setError(`An error occurred while processing your audio. Please try again.${JSON.stringify(error)}`);
     } finally {
       setIsProcessing(false);
     }
   };
+
+  if (!isClient) {
+    return null; // or a loading spinner
+  }
 
   return (
     <div className="w-full max-w-xl mx-auto">

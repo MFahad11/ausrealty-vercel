@@ -183,13 +183,7 @@ const ChatBot = ({
       }
     };
   };
-  const stopListening = () => {
-    if (recognitionRef.current) {
-      // @ts-ignore
-      recognitionRef.current.stop(); // Stop the SpeechRecognition instance
-      setIsListening(false);
-    }
-  };
+
   const initializeChat = async () => {
     // if (title !== "SELL OR LEASE MY PROPERTY") {
     //   if (firstMessage) {

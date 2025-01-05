@@ -8,6 +8,7 @@ const AudioChat = () => {
   const [response, setResponse] = useState('');
   const mediaRecorderRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState('');
+const [audioError, setAudioError] = useState('');
   const audioChunksRef = useRef([]);
 
   const openai = new OpenAI({
@@ -137,6 +138,7 @@ const AudioChat = () => {
         const audio = new Audio(audioUrl);
         audio.play().catch((error) => {
           console.error('Autoplay failed, attempting to play audio after user interaction:', error);
+          setAudioError('Tap the screen to play the response audio. iOS requirement.');
         });
       }, 100);  // Slight delay to ensure the browser registers the interaction
   
@@ -178,6 +180,15 @@ const AudioChat = () => {
             <p>{response}</p>
           </div>
         )}
+        {audioUrl && !audioError && (
+        <div>
+          <div className="text-center text-gray-500">Audio is ready, playing...</div>
+        </div>
+      )}
+
+      {audioError && (
+        <div className="text-center text-red-500">{audioError}</div>
+      )}
       </div>
     </div>
   );

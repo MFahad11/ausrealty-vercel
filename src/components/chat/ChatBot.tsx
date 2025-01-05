@@ -135,24 +135,42 @@ const ChatBot = ({
     // @ts-ignore
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = "en-US";
-    recognition.interimResults = false;
+    recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
+    let finalTranscript = "";
     recognition.start();
     setIsListening(true);
 
-    recognition.onresult = (event:any) => {
-      const transcript = event.results[0][0].transcript;
-      setTranscription(transcript);
-      setIsListening(false);
+    // recognition.onresult = (event:any) => {
+    //   const transcript = event.results[0][0].transcript;
+    //   setTranscription(transcript);
+    //   setIsListening(false);
      
       
-      recognition.stop();
-      handleSend(
-        transcript
-      );
-    };
+    //   recognition.stop();
+    //   handleSend(
+    //     transcript
+    //   );
+    // };
 
+    recognition.onresult = (event:any) => {
+      let interimTranscript = "";
+  
+      // Combine interim and final results
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + " ";
+        } else {
+          interimTranscript += transcript + " ";
+        }
+      }
+  
+      // Update the transcription state
+      setTranscription(finalTranscript + interimTranscript);
+    };
+   
     recognition.onerror = (event:any) => {
       console.error("Speech recognition error:", event.error);
       setIsListening(false);
@@ -160,6 +178,9 @@ const ChatBot = ({
 
     recognition.onend = () => {
       setIsListening(false);
+      if (finalTranscript) {
+        handleSend(finalTranscript.trim()); // Send final transcription to GPT
+      }
     };
   };
   const stopListening = () => {

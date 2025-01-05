@@ -94,6 +94,7 @@ const AudioChat = () => {
       const processedBlob = await base64Response.blob();
 
       // Step 1: Transcribe audio using base64
+      
       const formData = new FormData();
       formData.append('file', processedBlob, 'audio.mp4');
       formData.append('model', 'whisper-1');

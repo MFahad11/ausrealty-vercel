@@ -7,6 +7,7 @@ const AudioChat = () => {
   const [transcription, setTranscription] = useState('');
   const [response, setResponse] = useState('');
   const mediaRecorderRef = useRef(null);
+  const [audioUrl, setAudioUrl] = useState('');
   const audioChunksRef = useRef([]);
 
   const openai = new OpenAI({
@@ -88,52 +89,57 @@ const AudioChat = () => {
     try {
       // Convert the audio blob to base64
       const base64Audio = await convertBlobToBase64(audioBlob);
-
+  
       // Create a new Blob from the base64 data
       const base64Response = await fetch(`data:audio/mp4;base64,${base64Audio}`);
       const processedBlob = await base64Response.blob();
-
+  
       // Step 1: Transcribe audio using base64
-      
       const formData = new FormData();
       formData.append('file', processedBlob, 'audio.mp4');
       formData.append('model', 'whisper-1');
-
+  
       const transcriptionResponse = await openai.audio.transcriptions.create({
         file: new File([processedBlob], 'audio.mp4', { 
           type: 'audio/mp4' 
         }),
         model: 'whisper-1',
       });
-
+  
       const transcribedText = transcriptionResponse.text;
       setTranscription(transcribedText);
-
+  
       // Step 2: Get GPT response
       const chatResponse = await openai.chat.completions.create({
         model: 'gpt-4-turbo-preview',
         messages: [{ role: 'user', content: transcribedText }],
       });
-
+  
       const gptResponse = chatResponse.choices[0].message.content;
-  // @ts-ignore
-
+      // @ts-ignore
       setResponse(gptResponse);
-
+  
       // Step 3: Convert response to speech
       const speechResponse = await openai.audio.speech.create({
         model: 'tts-1',
         voice: 'alloy',
-  // @ts-ignore
-
+        // @ts-ignore
         input: gptResponse,
       });
-
-      // Convert the speech response to audio URL and play it
+  
+      // Convert the speech response to audio URL
       const blob = new Blob([await speechResponse.arrayBuffer()], { type: 'audio/mpeg' });
       const audioUrl = URL.createObjectURL(blob);
-      const audio = new Audio(audioUrl);
-      audio.play();
+      setAudioUrl(audioUrl);  // Store audio URL in state for playback
+  
+      // Attempt to autoplay the audio after a slight delay
+      setTimeout(() => {
+        const audio = new Audio(audioUrl);
+        audio.play().catch((error) => {
+          console.error('Autoplay failed, attempting to play audio after user interaction:', error);
+        });
+      }, 100);  // Slight delay to ensure the browser registers the interaction
+  
     } catch (error) {
       console.error('Error processing audio:', error);
     } finally {

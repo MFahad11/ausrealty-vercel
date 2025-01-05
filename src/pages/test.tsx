@@ -3,243 +3,226 @@
 import React, { useState, useRef, useEffect } from 'react';
 import OpenAI from 'openai';
 
-import dynamic from 'next/dynamic';
-
-// Dynamically import audio recorder with no SSR
-const AudioRecorder = dynamic(() => import('audio-recorder-polyfill'), {
-  ssr: false
-});
-
 const AudioChat = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [transcription, setTranscription] = useState('');
   const [response, setResponse] = useState('');
   const [error, setError] = useState('');
+  const [permissionGranted, setPermissionGranted] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
-  const audioContextRef = useRef(null);
-  const [isClient, setIsClient] = useState(false);
+  const streamRef = useRef(null);
 
-  // Initialize OpenAI client
   const openai = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPEN_API_KEY,
     dangerouslyAllowBrowser: true
   });
 
-  // Set up client-side only code
+  // Check if running on iOS
+  const isIOS = () => {
+    return [
+      'iPad Simulator',
+      'iPhone Simulator',
+      'iPod Simulator',
+      'iPad',
+      'iPhone',
+      'iPod'
+    ].includes(navigator.platform)
+    // iPad on iOS 13 detection
+    || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+  };
+
   useEffect(() => {
-    setIsClient(true);
-    
-    // Initialize AudioRecorder polyfill
-    if (typeof window !== 'undefined' && !window.MediaRecorder) {
-    //   @ts-ignore
-
-      import('audio-recorder-polyfill/mpeg-encoder').then((mpegEncoder) => {
-    //   @ts-ignore
-
-        AudioRecorder.encoder = mpegEncoder.default;
-        AudioRecorder.prototype.mimeType = 'audio/mpeg';
-    //   @ts-ignore
-
-        window.MediaRecorder = AudioRecorder;
-      });
-    }
-
-    // Initialize AudioContext
-    //   @ts-ignore
-
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (AudioContext) {
-    //   @ts-ignore
-
-      audioContextRef.current = new AudioContext();
-    }
-
-    return () => {
-      if (audioContextRef.current) {
-    //   @ts-ignore
-
-        audioContextRef.current.close();
-
+    // Request permissions on component mount
+    const requestPermissions = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: {
+            channelCount: 1,
+            echoCancellation: true,
+            noiseSuppression: true,
+            sampleRate: 16000
+          }
+        });
+        
+        // Keep the stream active
+        streamRef.current = stream;
+        setPermissionGranted(true);
+        console.log('Permissions granted successfully');
+        
+        // Clean up the stream when component unmounts
+        return () => {
+          if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+          }
+        };
+      } catch (err) {
+        console.error('Permission request error:', err);
+        setError('Microphone permission is required. Please allow access in your browser settings.');
+        setPermissionGranted(false);
       }
     };
+
+    requestPermissions();
   }, []);
 
-  // Convert blob to WAV format
-    //   @ts-ignore
-
-  const convertToWav = async (audioBlob) => {
-    const arrayBuffer = await audioBlob.arrayBuffer();
-    //   @ts-ignore
-
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-    
-    const numberOfChannels = audioBuffer.numberOfChannels;
-    const length = audioBuffer.length * numberOfChannels;
-    const wavBuffer = audioContext.createBuffer(numberOfChannels, length, audioBuffer.sampleRate);
-    
-    for (let channel = 0; channel < numberOfChannels; channel++) {
-      const channelData = audioBuffer.getChannelData(channel);
-      wavBuffer.copyToChannel(channelData, channel);
-    }
-
-    // Convert to WAV using a blob URL instead of a Web Worker
-    const wavData = new Float32Array(length);
-    for (let channel = 0; channel < numberOfChannels; channel++) {
-      const channelData = wavBuffer.getChannelData(channel);
-      for (let i = 0; i < length; i++) {
-        wavData[i] += channelData[i];
+  const initializeRecorder = async () => {
+    try {
+      // If we already have a stream, stop its tracks
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
       }
+
+      // Get fresh stream
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          channelCount: 1,
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 16000
+        }
+      });
+      
+      streamRef.current = stream;
+
+      // For debugging
+      console.log('Stream created:', stream);
+      console.log('Audio tracks:', stream.getAudioTracks());
+
+      // Create MediaRecorder with appropriate MIME type
+      const mimeType = isIOS() ? 'audio/mp4' : 'audio/webm';
+      mediaRecorderRef.current = new MediaRecorder(stream, {
+        mimeType: mimeType,
+        audioBitsPerSecond: 128000
+      });
+
+      console.log('MediaRecorder created:', mediaRecorderRef.current);
+
+      return true;
+    } catch (err) {
+      console.error('Recorder initialization error:', err);
+      setError(`Could not initialize recorder: ${err.message}`);
+      return false;
     }
-
-    const buffer = new ArrayBuffer(44 + wavData.length * 2);
-    const view = new DataView(buffer);
-
-    // Write WAV header
-    //   @ts-ignore
-
-    const writeString = (view, offset, string) => {
-      for (let i = 0; i < string.length; i++) {
-        view.setUint8(offset + i, string.charCodeAt(i));
-      }
-    };
-
-    writeString(view, 0, 'RIFF');
-    view.setUint32(4, 36 + wavData.length * 2, true);
-    writeString(view, 8, 'WAVE');
-    writeString(view, 12, 'fmt ');
-    view.setUint32(16, 16, true);
-    view.setUint16(20, 1, true);
-    view.setUint16(22, numberOfChannels, true);
-    view.setUint32(24, audioBuffer.sampleRate, true);
-    view.setUint32(28, audioBuffer.sampleRate * 2 * numberOfChannels, true);
-    view.setUint16(32, numberOfChannels * 2, true);
-    view.setUint16(34, 16, true);
-    writeString(view, 36, 'data');
-    view.setUint32(40, wavData.length * 2, true);
-
-    // Write audio data
-    for (let i = 0; i < wavData.length; i++) {
-      const sample = Math.max(-1, Math.min(1, wavData[i]));
-      view.setInt16(44 + i * 2, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
-    }
-
-    return new File([buffer], 'audio.wav', { type: 'audio/wav' });
   };
 
   const startRecording = async () => {
     try {
       setError('');
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          sampleRate: 44100,
-          channelCount: 1,
-          echoCancellation: true,
-          noiseSuppression: true
-        }
-      });
-    //   @ts-ignore
       
-      mediaRecorderRef.current = new MediaRecorder(stream, {
-        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mpeg'
-      });
-      
+      const initialized = await initializeRecorder();
+      if (!initialized) {
+        throw new Error('Failed to initialize recorder');
+      }
+
       audioChunksRef.current = [];
-    //   @ts-ignore
 
       mediaRecorderRef.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
-    //   @ts-ignore
-
           audioChunksRef.current.push(event.data);
+          console.log('Audio chunk received:', event.data.size, 'bytes');
         }
       };
-    //   @ts-ignore
 
       mediaRecorderRef.current.onstop = async () => {
+        console.log('Recording stopped, processing audio...');
         const audioBlob = new Blob(audioChunksRef.current, { 
-    //   @ts-ignore
-
-          type: mediaRecorderRef.current.mimeType 
+          type: isIOS() ? 'audio/mp4' : 'audio/webm'
         });
         await processAudio(audioBlob);
       };
-    //   @ts-ignore
 
-      mediaRecorderRef.current.start(250);
+      console.log('Starting recording...');
+      mediaRecorderRef.current.start(100);
       setIsRecording(true);
+      
     } catch (error) {
-      console.error('Error starting recording:', error);
-      setError(`Failed to start recording. Please make sure you have granted microphone permissions.${JSON.stringify(error)}`);
+      console.error('Start recording error:', error);
+      setError('Could not start recording. Please refresh the page and try again.');
+      setIsRecording(false);
     }
   };
 
   const stopRecording = () => {
+    console.log('Stopping recording...');
     if (mediaRecorderRef.current && isRecording) {
-    //   @ts-ignore
-
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-    //   @ts-ignore
-
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
     }
   };
-    //   @ts-ignore
 
   const processAudio = async (audioBlob) => {
     setIsProcessing(true);
     try {
-      const wavFile = await convertToWav(audioBlob);
+      console.log('Processing audio blob:', audioBlob.size, 'bytes');
+      
+      // Create file with appropriate extension for iOS
+      const extension = isIOS() ? 'm4a' : 'webm';
+      const audioFile = new File([audioBlob], `recording.${extension}`, {
+        type: isIOS() ? 'audio/mp4' : 'audio/webm',
+        lastModified: new Date().getTime()
+      });
+
+      console.log('Created audio file:', audioFile);
+
+      // Step 1: Transcribe audio
+      const formData = new FormData();
+      formData.append('file', audioFile);
       
       const transcriptionResponse = await openai.audio.transcriptions.create({
-        file: wavFile,
+        file: audioFile,
         model: 'whisper-1',
       });
 
       const transcribedText = transcriptionResponse.text;
+      console.log('Transcribed text:', transcribedText);
       setTranscription(transcribedText);
 
+      // Step 2: Get GPT response
       const chatResponse = await openai.chat.completions.create({
         model: 'gpt-4-turbo-preview',
         messages: [{ role: 'user', content: transcribedText }],
       });
 
       const gptResponse = chatResponse.choices[0].message.content;
-    //   @ts-ignore
       setResponse(gptResponse);
 
+      // Step 3: Convert response to speech
       const speechResponse = await openai.audio.speech.create({
         model: 'tts-1',
         voice: 'alloy',
-    //   @ts-ignore
-
         input: gptResponse,
       });
 
-      const blob = new Blob([await speechResponse.arrayBuffer()], { type: 'audio/mpeg' });
-      const audioUrl = URL.createObjectURL(blob);
+      const responseBlob = new Blob([await speechResponse.arrayBuffer()], { 
+        type: 'audio/mpeg' 
+      });
+      const audioUrl = URL.createObjectURL(responseBlob);
       const audio = new Audio(audioUrl);
       
       audio.onended = () => {
         URL.revokeObjectURL(audioUrl);
       };
-      
-      await audio.play();
+
+      try {
+        await audio.play();
+      } catch (playError) {
+        console.error('Playback error:', playError);
+        setError('Tap the screen to play the response audio (iOS requirement)');
+      }
 
     } catch (error) {
-      console.error('Error processing audio:', error);
-      setError(`An error occurred while processing your audio. Please try again.${JSON.stringify(error)}`);
+      console.error('Processing error:', error);
+      setError(`Error processing audio: ${error.message}`);
     } finally {
       setIsProcessing(false);
     }
   };
-
-  if (!isClient) {
-    return null; // or a loading spinner
-  }
 
   return (
     <div className="w-full max-w-xl mx-auto">
@@ -247,16 +230,26 @@ const AudioChat = () => {
         <div>Voice Chat Assistant</div>
       </div>
       <div className="space-y-4">
+        <div className="text-center mb-4">
+          {permissionGranted ? (
+            <span className="text-green-600">✓ Microphone access granted</span>
+          ) : (
+            <span className="text-red-600">⚠ Microphone access needed</span>
+          )}
+        </div>
+
         <button 
           onClick={isRecording ? stopRecording : startRecording}
-          disabled={isProcessing}
-          className={isRecording ? 'bg-red-500 hover:bg-red-600' : ''}
+          disabled={isProcessing || !permissionGranted}
+          className={`w-full ${isRecording ? 'bg-red-500 hover:bg-red-600' : ''}`}
         >
           {isRecording ? 'Stop Recording' : 'Start Recording'}
         </button>
         
         {isProcessing && (
-          <div className="text-center text-gray-500">Processing your audio...</div>
+          <div className="text-center text-gray-500 p-4">
+            Processing your audio...
+          </div>
         )}
         
         {error && (

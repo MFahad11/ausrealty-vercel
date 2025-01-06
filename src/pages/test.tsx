@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import OpenAI from 'openai';
 
 const AudioChat = () => {
@@ -15,14 +15,27 @@ const [audioError, setAudioError] = useState('');
     apiKey: process.env.NEXT_PUBLIC_OPEN_API_KEY,
     dangerouslyAllowBrowser: true
   });
+  useEffect(() => {
+    if (!window.MediaRecorder) {
+        alert('MediaRecorder is not supported in this browser.');
+    }
+}, []);
+const getSupportedMimeType = () => {
+    const types = ['audio/mp4', 'audio/webm', 'audio/ogg'];
+    return types.find(type => MediaRecorder.isTypeSupported(type)) || 'mp4';
+};
+
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+            echoCancellation: true, // Helps with noise reduction
+            sampleRate: 44100,      // Standard audio sample rate
+        },
+    });
       // For iOS compatibility, we'll use audio/mp4 as the preferred format
-      const options = {
-        mimeType: 'audio/mp4'
-      };
+      const options = { mimeType: getSupportedMimeType() };
 
       // If audio/mp4 is not supported, fall back to audio/webm
       if (!MediaRecorder.isTypeSupported('audio/mp4')) {
@@ -65,6 +78,7 @@ const [audioError, setAudioError] = useState('');
   // @ts-ignore
 
       mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current = null;
     }
   };
   // @ts-ignore
@@ -148,7 +162,7 @@ const [audioError, setAudioError] = useState('');
       setIsProcessing(false);
     }
   };
-
+ 
   return (
     <div className="w-full max-w-xl mx-auto">
       <div>

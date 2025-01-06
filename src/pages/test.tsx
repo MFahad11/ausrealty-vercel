@@ -254,17 +254,17 @@ const detectSilence = (analyser: AnalyserNode, dataArray: Float32Array) => {
       setResponse(gptResponse);
   
       // Step 3: Convert response to speech
-      const speechResponse = await openai.audio.speech.create({
-        model: 'tts-1',
-        voice: 'alloy',
-        // @ts-ignore
-        input: gptResponse,
-      });
+      // const speechResponse = await openai.audio.speech.create({
+      //   model: 'tts-1',
+      //   voice: 'alloy',
+      //   // @ts-ignore
+      //   input: gptResponse,
+      // });
   
       // Convert the speech response to audio URL
-      const blob = new Blob([await speechResponse.arrayBuffer()], { type: 'audio/mpeg' });
-      const audioUrl = URL.createObjectURL(blob);
-      setAudioUrl(audioUrl);  // Store audio URL in state for playback
+      // const blob = new Blob([await speechResponse.arrayBuffer()], { type: 'audio/mpeg' });
+      // const audioUrl = URL.createObjectURL(blob);
+      setAudioUrl('audioUrl');  // Store audio URL in state for playback
   
       // Attempt to autoplay the audio after a slight delay
       setTimeout(() => {

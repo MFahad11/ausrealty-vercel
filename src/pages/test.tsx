@@ -4,6 +4,7 @@ import OpenAI from 'openai';
 const AudioChat = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  
   const [transcription, setTranscription] = useState('');
   const [response, setResponse] = useState('');
   const mediaRecorderRef = useRef(null);

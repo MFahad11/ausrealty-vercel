@@ -9,9 +9,12 @@ const AudioChat = () => {
   const mediaRecorderRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState('');
   const [logs, setLogs] = useState<string[]>([]);
-const [audioError, setAudioError] = useState('');
+  const [audioError, setAudioError] = useState('');
   const audioChunksRef = useRef([]);
-
+  const silenceTimeoutRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const checkSilenceRef = useRef<boolean>(false);
   const openai = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPEN_API_KEY,
     dangerouslyAllowBrowser: true
@@ -27,62 +30,176 @@ const getSupportedMimeType = () => {
     return types.find(type => MediaRecorder.isTypeSupported(type)) || '';
 };
 
-
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-            echoCancellation: false, // Disable to avoid cutting out parts of speech
-            noiseSuppression: true, // Enable noise suppression
-            sampleRate: 48000,      // Use a higher sample rate for better quality
-        },
+const startRecording = async () => {
+  try {
+    setLogs(prevLogs => [...prevLogs, 'Starting recording setup...']);
+    
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: true,
+        sampleRate: 48000,
+      },
     });
-      // For iOS compatibility, we'll use audio/mp4 as the preferred format
-      const options = { mimeType: getSupportedMimeType() };
+
+    setLogs(prevLogs => [...prevLogs, 'Got media stream, setting up audio context...']);
+    // @ts-ignore
+
+    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    // @ts-ignore
+
+    const source = audioContextRef.current.createMediaStreamSource(stream);
+    // @ts-ignore
+
+    analyserRef.current = audioContextRef.current.createAnalyser();
+    // @ts-ignore
+
+    analyserRef.current.fftSize = 2048;
+    source.connect(analyserRef.current);
+
+    setLogs(prevLogs => [...prevLogs, 'Audio context setup complete']);
+
+    const options = { mimeType: getSupportedMimeType() };
     setLogs((prevLogs) => [...prevLogs, `Using ${options.mimeType} as the recording format.`]);
-      // If audio/mp4 is not supported, fall back to audio/webm
-     
-  // @ts-ignore
+    // @ts-ignore
 
-      mediaRecorderRef.current = new MediaRecorder(stream, options);
-      audioChunksRef.current = [];
-  // @ts-ignore
+    mediaRecorderRef.current = new MediaRecorder(stream, options);
+    audioChunksRef.current = [];
+    // @ts-ignore
 
-      mediaRecorderRef.current.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-  // @ts-ignore
+    mediaRecorderRef.current.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+    // @ts-ignore
 
-          audioChunksRef.current.push(event.data);
+        audioChunksRef.current.push(event.data);
+      }
+    };
+    // @ts-ignore
+
+    mediaRecorderRef.current.onstop = async () => {
+      const audioBlob = new Blob(audioChunksRef.current, { type: options.mimeType });
+      await processAudio(audioBlob);
+    };
+
+    // Set up silence detection
+    // @ts-ignore
+
+    const dataArray = new Float32Array(analyserRef.current.fftSize);
+    // @ts-ignore
+
+    let silenceStart = null;
+    const SILENCE_DURATION = 2000; // 2 seconds
+
+    const checkSilence = () => {
+      if (!checkSilenceRef.current || !analyserRef.current) {
+        setLogs(prevLogs => [...prevLogs, 'Silence detection stopped']);
+        return;
+      }
+
+      try {
+        const isSilent = detectSilence(analyserRef.current, dataArray);
+        
+        if (isSilent) {
+    // @ts-ignore
+
+          if (!silenceStart) {
+            silenceStart = Date.now();
+            setLogs(prevLogs => [...prevLogs, 'Starting silence timer']);
+          } else {
+            const silenceDuration = Date.now() - silenceStart;
+            setLogs(prevLogs => [...prevLogs, `Silence duration: ${silenceDuration}ms`]);
+            
+            if (silenceDuration > SILENCE_DURATION) {
+              setLogs(prevLogs => [...prevLogs, 'Silence duration exceeded, stopping recording']);
+              stopRecording();
+              return;
+            }
+          }
+        } else {
+    // @ts-ignore
+
+          if (silenceStart) {
+            setLogs(prevLogs => [...prevLogs, 'Reset silence timer - sound detected']);
+          }
+          silenceStart = null;
         }
-      };
-  // @ts-ignore
+    // @ts-ignore
 
-      mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: options.mimeType });
-        await processAudio(audioBlob);
-      };
-  // @ts-ignore
+        silenceTimeoutRef.current = setTimeout(checkSilence, 100);
+      } catch (error) {
+        setLogs(prevLogs => [...prevLogs, `Error in checkSilence: ${error}`]);
+      }
+    };
 
-  mediaRecorderRef.current.start(1000);
-      setIsRecording(true);
-    } catch (error) {
-      setLogs ((prevLogs) => [...prevLogs, `Error starting recording: ${error}`]);
-      console.error('Error starting recording:', error);
+    // Start the recording
+    // @ts-ignore
+
+    mediaRecorderRef.current.start(1000);
+    
+    setIsRecording(true);
+    console.log(isRecording)
+    checkSilenceRef.current = true; // Start silence detection
+    setLogs(prevLogs => [...prevLogs, 'Started recording and silence detection']);
+    checkSilence(); // Start the silence detection loop
+
+  } catch (error) {
+    setLogs((prevLogs) => [...prevLogs, `Error starting recording: ${error}`]);
+    console.error('Error starting recording:', error);
+  }
+};
+
+const stopRecording = () => {
+  setLogs(prevLogs => [...prevLogs, 'Stopping recording...']);
+  
+  checkSilenceRef.current = false; // Stop silence detection
+  console.log(mediaRecorderRef.current , isRecording);
+  if (mediaRecorderRef.current) {
+    if (silenceTimeoutRef.current) {
+      clearTimeout(silenceTimeoutRef.current);
+      setLogs(prevLogs => [...prevLogs, 'Cleared silence detection timeout']);
     }
-  };
+    // @ts-ignore
+    mediaRecorderRef.current.stop();
+    setIsRecording(false);
+    // @ts-ignore
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-  // @ts-ignore
+    mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+    
+    if (audioContextRef.current) {
+    // @ts-ignore
 
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-  // @ts-ignore
-
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
-      mediaRecorderRef.current = null;
+      audioContextRef.current.close().catch(error => {
+        setLogs(prevLogs => [...prevLogs, `Error closing audio context: ${error}`]);
+      });
     }
-  };
+    
+    mediaRecorderRef.current = null;
+    setLogs(prevLogs => [...prevLogs, 'Recording stopped completely']);
+  }
+};
+
+const detectSilence = (analyser: AnalyserNode, dataArray: Float32Array) => {
+  try {
+    analyser.getFloatTimeDomainData(dataArray);
+    
+    let sum = 0;
+    for (let i = 0; i < dataArray.length; i++) {
+      sum += dataArray[i] * dataArray[i];
+    }
+    const rms = Math.sqrt(sum / dataArray.length);
+    const db = 20 * Math.log10(rms);
+    
+    // Only log every few iterations to avoid flooding
+    if (Math.random() < 0.1) { // Log roughly 10% of the readings
+      setLogs(prevLogs => [...prevLogs, `Current dB level: ${db.toFixed(2)}`]);
+    }
+    
+    return db < -45;
+  } catch (error) {
+    setLogs(prevLogs => [...prevLogs, `Error in detectSilence: ${error}`]);
+    return false;
+  }
+};
   // @ts-ignore
 
   const convertBlobToBase64 = (blob) => {

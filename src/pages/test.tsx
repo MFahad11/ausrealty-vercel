@@ -38,9 +38,7 @@ const getSupportedMimeType = () => {
       const options = { mimeType: getSupportedMimeType() };
 
       // If audio/mp4 is not supported, fall back to audio/webm
-      if (!MediaRecorder.isTypeSupported('audio/mp4')) {
-        options.mimeType = 'audio/webm';
-      }
+     
   // @ts-ignore
 
       mediaRecorderRef.current = new MediaRecorder(stream, options);

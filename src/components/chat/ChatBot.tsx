@@ -1181,45 +1181,56 @@ const ChatBot = ({
               <IoSend title="Send" className="w-5 h-5" />
             </button>
               ):
-              // (
-
-              //   isListening?(<button
-              //     onClick={startListening}
-              //     className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
-              //     disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}
-              //   >
-              //     <RiVoiceprintFill title="Send" className="w-5 h-5" />
-              //   </button>):(
-              //     <button
-              //     onClick={startListening}
-              //     className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
-              //     disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}
-              //   >
-              //     <RiVoiceprintFill title="Send" className="w-5 h-5" />
-              //   </button>
-              //   )
-              // )
-              (isListening ? (
-                <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
-                disabled={true}
-                >
-                  <RiVoiceprintFill className="w-5 h-5 text-black" />
-                  {[...Array(3)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="absolute inset-0 rounded-full border-2 border-black animate-ping"
-                      style={{ animationDelay: `${i * 300}ms` }}
-                    />
-                  ))}
-                </button>
-              ) : (
-                <button
-                  onClick={startRecording}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
-                  disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}>
-                <RiVoiceprintFill title="voice command" className="w-5 h-5" />
-                </button>
-              ))
+              (<button
+                onClick={startListening}
+                className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200  p-2 rounded-full ${
+          isListening ? 'bg-black text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+        }`}
+                disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}>
+              <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-current">
+      <rect x="11" y="1" width="2" height="22" rx="1" fill="currentColor" />
+      <rect 
+        x="7" 
+        y="6" 
+        width="2" 
+        height="12" 
+        rx="1" 
+        fill="currentColor" 
+        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave1' : ''}`}
+        style={{ transformOrigin: 'center' }}
+      />
+      <rect 
+        x="15" 
+        y="6" 
+        width="2" 
+        height="12" 
+        rx="1" 
+        fill="currentColor"
+        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave2' : ''}`}
+        style={{ transformOrigin: 'center' }}
+      />
+      <rect 
+        x="3" 
+        y="8" 
+        width="2" 
+        height="8" 
+        rx="1" 
+        fill="currentColor"
+        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave3' : ''}`}
+        style={{ transformOrigin: 'center' }}
+      />
+      <rect 
+        x="19" 
+        y="8" 
+        width="2" 
+        height="8" 
+        rx="1" 
+        fill="currentColor"
+        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave4' : ''}`}
+        style={{ transformOrigin: 'center' }}
+      />
+    </svg>
+              </button>)
               
             }
             

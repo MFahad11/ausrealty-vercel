@@ -1183,6 +1183,26 @@ Responses should focus on guiding the user to provide information while maintain
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
+
+export async function handleTranscription(processedBlob: Blob
+
+){
+  try {
+    const transcriptionResponse = await openai.audio.transcriptions.create({
+      file: new File([processedBlob], 'audio.mp4', { 
+        type: 'audio/mp4' 
+      }),
+      model: 'whisper-1',
+    });
+
+    const transcribedText = transcriptionResponse.text;
+    return transcribedText;
+  } catch (error) {
+    console.error("Error transcribing audio:", error);
+    throw new Error("Failed to transcribe the audio. Please try again later.");
+  }
+}
+
 export async function handleIdentifyIntent(
   userInput: string
 ): Promise<{ response: string }> {

@@ -8,6 +8,7 @@ const AudioChat = () => {
   const [response, setResponse] = useState('');
   const mediaRecorderRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState('');
+  const [logs, setLogs] = useState<string[]>([]);
 const [audioError, setAudioError] = useState('');
   const audioChunksRef = useRef([]);
 
@@ -17,12 +18,13 @@ const [audioError, setAudioError] = useState('');
   });
   useEffect(() => {
     if (!window.MediaRecorder) {
-        alert('MediaRecorder is not supported in this browser.');
+        // alert('MediaRecorder is not supported in this browser.');
+        setLogs((prevLogs) => [...prevLogs, 'MediaRecorder is not supported in this browser.']);
     }
 }, []);
 const getSupportedMimeType = () => {
     const types = ['audio/mp4', 'audio/webm', 'audio/ogg'];
-    return types.find(type => MediaRecorder.isTypeSupported(type)) || 'mp4';
+    return types.find(type => MediaRecorder.isTypeSupported(type)) || '';
 };
 
 
@@ -30,13 +32,14 @@ const getSupportedMimeType = () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
-            echoCancellation: true, // Helps with noise reduction
-            sampleRate: 44100,      // Standard audio sample rate
+            echoCancellation: false, // Disable to avoid cutting out parts of speech
+            noiseSuppression: true, // Enable noise suppression
+            sampleRate: 48000,      // Use a higher sample rate for better quality
         },
     });
       // For iOS compatibility, we'll use audio/mp4 as the preferred format
       const options = { mimeType: getSupportedMimeType() };
-
+    setLogs((prevLogs) => [...prevLogs, `Using ${options.mimeType} as the recording format.`]);
       // If audio/mp4 is not supported, fall back to audio/webm
      
   // @ts-ignore
@@ -60,9 +63,10 @@ const getSupportedMimeType = () => {
       };
   // @ts-ignore
 
-      mediaRecorderRef.current.start();
+  mediaRecorderRef.current.start(1000);
       setIsRecording(true);
     } catch (error) {
+      setLogs ((prevLogs) => [...prevLogs, `Error starting recording: ${error}`]);
       console.error('Error starting recording:', error);
     }
   };
@@ -214,6 +218,21 @@ const getSupportedMimeType = () => {
         </>
         
       )}
+
+      {logs.length > 0 && (
+        <div className="p-4 bg-gray-100 rounded-lg">
+          <h3 className="font-semibold mb-2">Logs:</h3>
+          <ul>
+            {logs.map((log, index) => (
+              <li key={index}>{log}</li>
+            ))}
+          </ul>
+        </div>
+      )
+
+          
+          }
+
       </div>
     </div>
   );

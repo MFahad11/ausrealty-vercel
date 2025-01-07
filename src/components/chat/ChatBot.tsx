@@ -1166,8 +1166,7 @@ const ChatBot = ({
               autoCapitalize="on"
               className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden font-lato text-[16px] font-light"
             />
-            {
-              inputValue.length > 0 ? (<button
+            <button
               onClick={
                 () => {
                   handleSend(
@@ -1180,59 +1179,6 @@ const ChatBot = ({
             >
               <IoSend title="Send" className="w-5 h-5" />
             </button>
-              ):
-              (<button
-                onClick={startListening}
-                className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200  p-2 rounded-full ${
-          isListening ? 'bg-black text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-        }`}
-                disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}>
-              <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-current">
-      <rect x="11" y="1" width="2" height="22" rx="1" fill="currentColor" />
-      <rect 
-        x="7" 
-        y="6" 
-        width="2" 
-        height="12" 
-        rx="1" 
-        fill="currentColor" 
-        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave1' : ''}`}
-        style={{ transformOrigin: 'center' }}
-      />
-      <rect 
-        x="15" 
-        y="6" 
-        width="2" 
-        height="12" 
-        rx="1" 
-        fill="currentColor"
-        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave2' : ''}`}
-        style={{ transformOrigin: 'center' }}
-      />
-      <rect 
-        x="3" 
-        y="8" 
-        width="2" 
-        height="8" 
-        rx="1" 
-        fill="currentColor"
-        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave3' : ''}`}
-        style={{ transformOrigin: 'center' }}
-      />
-      <rect 
-        x="19" 
-        y="8" 
-        width="2" 
-        height="8" 
-        rx="1" 
-        fill="currentColor"
-        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave4' : ''}`}
-        style={{ transformOrigin: 'center' }}
-      />
-    </svg>
-              </button>)
-              
-            }
             
             {!indexPage && (
               <button

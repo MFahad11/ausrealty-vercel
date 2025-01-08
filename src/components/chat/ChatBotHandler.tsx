@@ -33,6 +33,7 @@ const ChatBotHandler = (
     prompt: string;
     firstMessage?: string;
     placeholder?: string;
+    videoUrl?: string;
     route?: string;
     index?: number;
   }[]>([
@@ -40,8 +41,9 @@ const ChatBotHandler = (
       title: "SELL MY PROPERTY",
       description: "See what your home is worth",
       prompt:"SELL_MY_PROPERTY_PROMPT",
-      firstMessage: "Would you like a price assessment or information regarding the sale of your property?",
+      firstMessage: "Absolutely, I can help with that. Could you please share the suburb or address of your property? This will enable us to provide a more accurate assessment and connect you with the right agent.",
       placeholder: "Type your address or location and/or specific features",
+      videoUrl: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/4f1d6dec-3f38-4762-b8b0-9b5bcdb4fcc5-sell-property.mp4",
       route: "sell-my-property",
       index: 0,
     },

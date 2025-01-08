@@ -26,6 +26,8 @@ import { LuChevronDown, LuLoader2, LuMic, LuMicOff, LuRotateCcw } from "react-ic
 import EmblaCarousel from "../ui/carousel";
 import PageLoader from "../ui/PageLoader";
 import { convertBlobToBase64, getSupportedMimeType } from "@/utils/helpers";
+import AgentCard from "../property/AgentCard";
+import AgentCarousel from "../ui/carousel/AgentCarousel";
 const ChatBot = ({
   title,
   firstMessage,
@@ -76,6 +78,7 @@ const ChatBot = ({
       properties?: any[];
       videoUrl?: string;
       isLoading?: boolean;
+      agents?: any[];
     }>
   >([]);
   const [intentExtracting, setIntentExtracting] = useState(false);
@@ -683,7 +686,7 @@ const ChatBot = ({
               }))
             );
           }
-          else if (title === "SELL MY PROPERTY" || title === "LEASE MY PROPERTY") {
+          else if (title === "SELL MY PROPERTY") {
             data = await handleSellingChat(
               userInput,
               messages.map(({ content, role }) => ({
@@ -702,11 +705,7 @@ const ChatBot = ({
             )
           }
           if (data?.extractedInfo) {
-            if (data?.extractedInfo?.intent) {
-              router.push(`/chat/${data?.extractedInfo?.redirect}`);
-              setBotThinking(false);
-              return;
-            }
+            
             setMessages((prevMessages) => {
               const newMessage = {
                 role: "system",
@@ -739,7 +738,23 @@ const ChatBot = ({
               typewriterEffect(data?.response, updatedMessages.length - 1);
               return updatedMessages;
             });
-          } else {
+          } 
+          else if(data?.extractedAgents){
+            setMessages((prevMessages) => {
+              const newMessage = {
+                role: "system",
+                content: data?.response,
+                agents:data?.extractedAgents || [],
+                isLoading: true,
+              };
+              const updatedMessages = [...prevMessages, newMessage];
+              typewriterEffect(data?.response, updatedMessages.length - 1);
+              return updatedMessages;
+            });
+
+          }
+          
+          else {
             setMessages((prevMessages) => {
               const newMessage = { role: "system", content: data?.response };
               const updatedMessages = [...prevMessages, newMessage];
@@ -1044,6 +1059,7 @@ const ChatBot = ({
                             className="w-full"
                             autoPlay
               muted
+              loop
               playsInline
               preload="metadata"
                             src={message?.videoUrl}
@@ -1055,7 +1071,7 @@ const ChatBot = ({
                 <span
                   className={`inline-block rounded-lg max-w-[80%] p-3 ${
                     message.role === "system"
-                      ? "bg-white rounded-br-none"
+                      ? "bg-white rounded-br-none ml-2"
                       : "text-start bg-gray-200 rounded-bl-none mr-2"
                   }
                
@@ -1069,7 +1085,7 @@ const ChatBot = ({
                 
                 >
                   
-                  <p className="text-[16px] font-light"
+                  <p className="text-[16px] font-light p-0 m-0"
                   
                   >
                     
@@ -1143,8 +1159,28 @@ const ChatBot = ({
                         
                       
                 }
-
-                  
+                {message.agents &&
+                    message.agents.length > 0 && (
+                      <div className="mt-4 ">
+                    
+                      {message.agents[0].isLoading ? (                            
+                        <ContentLoader viewBox="0 0 500 280" height={280} width={500} className="ml-2">
+                          <rect x="3" y="3" rx="10" ry="10" width="400" height="180" />
+                          <rect x="6" y="190" rx="0" ry="0" width="292" height="15" />
+                          <rect x="4" y="215" rx="0" ry="0" width="239" height="15" />
+                          <rect x="4" y="242" rx="0" ry="0" width="274" height="15" />
+                        </ContentLoader>):(
+                          <AgentCarousel
+                          agents={message.agents || []}
+                          />
+                          
+                        )}
+                    
+                  </div>)
+                        
+                      
+                }
+                
                 </div>
               </div></>
             ))}

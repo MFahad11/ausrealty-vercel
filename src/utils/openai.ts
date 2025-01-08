@@ -4,26 +4,256 @@ type ProcessedResponse = {
   displayText: string;
   internalProcessing: any;
 };
-
+interface Agent {
+  dateUpdated?: string
+  agencyId?: number
+  agentId?: number
+  email?: string
+  firstName?: string
+  mobile?: string
+  photo?: string
+  lastName?: string
+  isActiveProfilePage?: string
+  phone?: string
+  saleActive?: boolean
+  rentalActive?: boolean
+  secondaryEmail?: string
+  facebookUrl?: string
+  twitterUrl?: string
+  agentVideo?: string
+  profileText?: string
+  isHideSoldLeasedListings?: boolean
+  googlePlusUrl?: string
+  personalWebsiteUrl?: string
+  linkedInUrl?: string
+  fax?: string
+  mugShotURL?: string
+  mugShotNew?: string
+  contactTypeCode?: number
+  receivesRequests?: boolean
+  creAgentVideoURL?: string
+  receiveScheduledReportEmail?: boolean
+  profileUrl?: string
+  jobPosition?: string
+  suburbsCovered: string[]
+  
+}
+// Mock data - replace with your actual data fetching
+const agents: Agent[] = [
+  {
+      firstName: "John",
+      lastName: "Smith",
+      jobPosition: "Senior Sales Agent",
+      email: "john.smith@ausrealty.com",
+      phone: "0400 000 000",
+      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
+      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      facebookUrl: "https://facebook.com",
+      twitterUrl: "https://twitter.com",
+      linkedInUrl: "https://linkedin.com",
+      personalWebsiteUrl: "https://example.com",
+      saleActive: true,
+      rentalActive: true,
+      suburbsCovered: [
+        "Peakhurst",
+        "Bondi",
+        "Manly",
+        "Parramatta",
+        "Chatswood",
+        "Blacktown",
+        "Cronulla",
+        "Surry Hills",
+        "Mosman",
+        "Neutral Bay",
+        "Newtown",
+        "Paddington",
+        "Darlinghurst",
+        "North Sydney",
+        "Crows Nest",
+        "St Leonards",
+        "Ryde",
+        "Penrith",
+        "Liverpool",
+        "Campbelltown",
+        "Wollongong",
+        "Hornsby",]
+    },
+    {
+      firstName: "John",
+      lastName: "Smith",
+      jobPosition: "Senior Sales Agent",
+      email: "john.smith@ausrealty.com",
+      phone: "0400 000 000",
+      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
+      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      facebookUrl: "https://facebook.com",
+      twitterUrl: "https://twitter.com",
+      linkedInUrl: "https://linkedin.com",
+      personalWebsiteUrl: "https://example.com",
+      saleActive: true,
+      rentalActive: true,
+      suburbsCovered: [
+        "Peakhurst",
+        "Bondi",
+        "Manly",
+        "Parramatta",
+        "Chatswood",
+        "Blacktown",
+        "Cronulla",
+        "Surry Hills",
+        "Mosman",
+        "Neutral Bay",
+        "Newtown",
+        "Paddington",
+        "Darlinghurst",
+        "North Sydney",
+        "Crows Nest",
+        "St Leonards",
+        "Ryde",
+        "Penrith",
+        "Liverpool",
+        "Campbelltown",
+        "Wollongong",
+        "Hornsby",]
+    },
+    {
+      firstName: "John",
+      lastName: "Smith",
+      jobPosition: "Senior Sales Agent",
+      email: "john.smith@ausrealty.com",
+      phone: "0400 000 000",
+      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
+      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      facebookUrl: "https://facebook.com",
+      twitterUrl: "https://twitter.com",
+      linkedInUrl: "https://linkedin.com",
+      personalWebsiteUrl: "https://example.com",
+      saleActive: true,
+      rentalActive: true,
+      suburbsCovered: [
+        "Peakhurst",
+        "Bondi",
+        "Manly",
+        "Parramatta",
+        "Chatswood",
+        "Blacktown",
+        "Cronulla",
+        "Surry Hills",
+        "Mosman",
+        "Neutral Bay",
+        "Newtown",
+        "Paddington",
+        "Darlinghurst",
+        "North Sydney",
+        "Crows Nest",
+        "St Leonards",
+        "Ryde",
+        "Penrith",
+        "Liverpool",
+        "Campbelltown",
+        "Wollongong",
+        "Hornsby",]
+    },
+    {
+      firstName: "John",
+      lastName: "Smith",
+      jobPosition: "Senior Sales Agent",
+      email: "john.smith@ausrealty.com",
+      phone: "0400 000 000",
+      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
+      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      facebookUrl: "https://facebook.com",
+      twitterUrl: "https://twitter.com",
+      linkedInUrl: "https://linkedin.com",
+      personalWebsiteUrl: "https://example.com",
+      saleActive: true,
+      rentalActive: true,
+      suburbsCovered: [
+        "Peakhurst",
+        "Bondi",
+        "Manly",
+        "Parramatta",
+        "Chatswood",
+        "Blacktown",
+        "Cronulla",
+        "Surry Hills",
+        "Mosman",
+        "Neutral Bay",
+        "Newtown",
+        "Paddington",
+        "Darlinghurst",
+        "North Sydney",
+        "Crows Nest",
+        "St Leonards",
+        "Ryde",
+        "Penrith",
+        "Liverpool",
+        "Campbelltown",
+        "Wollongong",
+        "Hornsby",]
+    },
+    {
+      firstName: "John",
+      lastName: "Smith",
+      jobPosition: "Senior Sales Agent",
+      email: "john.smith@ausrealty.com",
+      phone: "0400 000 000",
+      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
+      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+      facebookUrl: "https://facebook.com",
+      twitterUrl: "https://twitter.com",
+      linkedInUrl: "https://linkedin.com",
+      personalWebsiteUrl: "https://example.com",
+      saleActive: true,
+      rentalActive: true,
+      suburbsCovered: [
+        "Peakhurst",
+        "Bondi",
+        "Manly",
+        "Parramatta",
+        "Chatswood",
+        "Blacktown",
+        "Cronulla",
+        "Surry Hills",
+        "Mosman",
+        "Neutral Bay",
+        "Newtown",
+        "Paddington",
+        "Darlinghurst",
+        "North Sydney",
+        "Crows Nest",
+        "St Leonards",
+        "Ryde",
+        "Penrith",
+        "Liverpool",
+        "Campbelltown",
+        "Wollongong",
+        "Hornsby",]
+    }
+// Add more agents as needed
+]
 const extractDisplayText = (text: string): string => {
-  if(!text.includes("%%")){
+  if (!text.includes("%%")) {
     const [displayPart] = text.split("[");
     return displayPart.trim();
-  }
-  else{
+  } else {
     const [displayPart] = text.split("%%");
-  return displayPart.trim();
+    return displayPart.trim();
   }
-  
 };
 
 const extractJsonContent = (text: string): any => {
   try {
     let parseJson;
-    if(!text.includes("%%")){
+    if (!text.includes("%%")) {
       const [_, jsonMatch] = text.split("[");
-      parseJson = JSON.parse('['+jsonMatch);
-    }else{
+      parseJson = JSON.parse("[" + jsonMatch);
+    } else {
       const [_, jsonMatch] = text.split("%%");
       parseJson = JSON.parse(jsonMatch);
     }
@@ -466,29 +696,26 @@ Return only primary suburb results when more options exist nearby
 
     // Combine the system prompt with the conversation history
     const messages = [
-      { 
-        role: "system", 
-        content: `${systemPrompt}\n\nAvailable Properties:\n${JSON.stringify(properties)}` 
+      {
+        role: "system",
+        content: `${systemPrompt}\n\nAvailable Properties:\n${JSON.stringify(properties)}`,
       },
       ...conversationHistory,
-      { role: "user", content: userInput }
-      
+      { role: "user", content: userInput },
     ];
 
     const params: OpenAI.Chat.ChatCompletionCreateParams = {
       // @ts-ignore
       messages,
       model: "gpt-4o",
-      temperature: 0.7,  // Add this for better consistency
-      presence_penalty: 0.0,  // Add this to maintain focus
-      frequency_penalty: 0.0  // Add this to prevent repetition
-      
+      temperature: 0.7, // Add this for better consistency
+      presence_penalty: 0.0, // Add this to maintain focus
+      frequency_penalty: 0.0, // Add this to prevent repetition
     };
 
     // @ts-ignore
     const completion: OpenAI.Chat.ChatCompletion =
       await openai.chat.completions.create(params);
-
 
     const responseText = completion.choices[0].message?.content || "";
     const data = processResponse(responseText);
@@ -918,23 +1145,21 @@ Return only primary suburb results when more options exist nearby
 `;
     // Combine the system prompt with the conversation history
     const messages = [
-      { 
-        role: "system", 
-        content: `${systemPrompt}\n\nAvailable Properties:\n${JSON.stringify(properties)}` 
+      {
+        role: "system",
+        content: `${systemPrompt}\n\nAvailable Properties:\n${JSON.stringify(properties)}`,
       },
       ...conversationHistory,
-      { role: "user", content: userInput }
-      
+      { role: "user", content: userInput },
     ];
 
     const params: OpenAI.Chat.ChatCompletionCreateParams = {
       // @ts-ignore
       messages,
       model: "gpt-4o",
-      temperature: 0.7,  // Add this for better consistency
-      presence_penalty: 0.0,  // Add this to maintain focus
-      frequency_penalty: 0.0  // Add this to prevent repetition
-      
+      temperature: 0.7, // Add this for better consistency
+      presence_penalty: 0.0, // Add this to maintain focus
+      frequency_penalty: 0.0, // Add this to prevent repetition
     };
 
     // Call the OpenAI API with the conversation messages
@@ -956,9 +1181,10 @@ Return only primary suburb results when more options exist nearby
   }
 }
 
-
-export async function handleSellingChat(userInput: string,
-  conversationHistory: { role: string; content: string }[],) {
+export async function handleSellingChat(
+  userInput: string,
+  conversationHistory: { role: string; content: string }[]
+) {
   try {
     // Add the user's input to the conversation history
     conversationHistory.push({
@@ -967,7 +1193,7 @@ export async function handleSellingChat(userInput: string,
     });
 
     // Define the system-level prompt for the "Renting" use case
-    const systemPrompt =`You Are:
+    const systemPrompt = `You Are:
 A professional real estate AI agent specializing in assisting Australian homeowners with selling their properties. Your primary focus is to gently guide users to provide the suburb or address of their property to connect them with the appropriate agent. Once the suburb is obtained, you offer tailored encouragement and insights about the selling potential, emphasizing the importance of achieving the maximum outcome.
 
 Input You Will Receive:
@@ -978,6 +1204,8 @@ Alternatively, the user may provide no specific details, requiring you to guide 
 Previous Chat History:
 
 Context from prior interactions to maintain a coherent and personalized experience.
+
+
 Responsibilities:
 1. Neutral and Empathetic Tone:
 When a user mentions selling a property, maintain a neutral and professional tone.
@@ -1015,12 +1243,20 @@ Responses should feel warm and encouraging, avoiding technical jargon or overwhe
 Expected Output:
 For Prompting Suburb or Address:
 A polite, conversational response focused on obtaining the suburb or address first.
+7. Function call:
+- If the suburb is mentioned, only include the suburb in the function call.
+- If no suburb is mentioned, don't include the suburb in the function call.
+- If the user asks irrelevant questions or provides unclear input, respond in a way that gently redirects them back to the relevant topic of selling their property. Do not trigger the agent-filtering function in such cases.
+    For example:
+    - If the user says: "I want to sell my property in Peakhurst," you should call the function with the all the arguments. 
+    - If the user asks a general question like: "What is the process of selling a house?", yu should call function without the suburb argument.
 
 Example Output:
 "Hi there! Could you share the suburb or address of your property? This will help us connect you with the right agent to assist you."
 
 For Suburb Insights and Encouragement:
 A conversational, professional, and encouraging text response after the suburb is obtained.
+
 
 Example Output:
 "SuburbName is a fantastic area with great potential for growth. Selling your home here is about achieving the maximum impact and making a life-changing decision, and we’re here to help you every step of the way."
@@ -1037,8 +1273,8 @@ Once the suburb is provided, transition smoothly into discussing its potential a
 Keep responses concise, professional, and conversational, avoiding list-like formatting or symbols.
 Replace any celebratory or assumptive language like "That's fantastic!" with neutral and supportive phrasing.
 Responses should focus on guiding the user to provide information while maintaining professionalism and empathy.
-`
-    
+`;
+
     // Combine the system prompt with the conversation history
     const messages = [
       { role: "system", content: systemPrompt },
@@ -1049,30 +1285,70 @@ Responses should focus on guiding the user to provide information while maintain
       // @ts-ignore
       messages: messages,
       model: "gpt-4o",
+      functions: [
+        {
+          "name": "reply_text_and_filter_agents",
+          "description": "Replies to the user and filters agents based on suburb",
+          "parameters": {
+              "type": "object",
+              "properties": {
+                  "reply_to_user": {
+                      "type": "string",
+                      "description": "What you want to say to the user",
+                  },
+                  "suburb": {
+                      "type": "string",
+                      "description": "Suburb to filter agents by",
+                  }
+              },
+              "required": ["reply_to_user"]
+          }
+        },
+      ],
+      function_call: "auto",
     };
 
     // Call the OpenAI API with the conversation messages
+    let filteredAgents: any[] = [];
+    let responseText = "";
     // @ts-ignore
-    const completion: OpenAI.Chat.ChatCompletion =
-      await openai.chat.completions.create(params);
 
-    // Extract the response text
-    const responseText = completion.choices[0].message?.content || "";
-    const data = processResponse(responseText);
+    const completion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params);
+    responseText = completion.choices[0].message?.content || "";
+      if (completion.choices[0].message?.function_call) {
+        // @ts-ignore
+        const toolCall = completion.choices[0].message.function_call;
+        const { name, arguments: functionArguments } = toolCall
+        console.log(name, functionArguments)
+        if (name === "reply_text_and_filter_agents") {
+          let { suburb,reply_to_user } = JSON.parse(functionArguments);
+          // convert suburb to camel case
+          suburb = suburb.replace(/\b\w/g, (char:string) => char.toUpperCase());
+          responseText = reply_to_user;
+          // Filter agents logic (replace this with your actual filtering logic)
+          filteredAgents = agents.filter((agent) =>
+            agent.suburbsCovered.includes(suburb)
+          );
 
+        }
+    
+    
+  }
+  const data = processResponse(responseText);
     return {
       response: data.displayText,
-      extractedInfo: data.internalProcessing,
+      extractedAgents: filteredAgents,
     };
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error interacting with OpenAI API:", error);
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
 
-export async function handleLeasingChat(userInput: string,
-  conversationHistory: { role: string; content: string }[],) {
+export async function handleLeasingChat(
+  userInput: string,
+  conversationHistory: { role: string; content: string }[]
+) {
   try {
     // Add the user's input to the conversation history
     conversationHistory.push({
@@ -1081,7 +1357,7 @@ export async function handleLeasingChat(userInput: string,
     });
 
     // Define the system-level prompt for the "Renting" use case
-    const systemPrompt =`You Are:
+    const systemPrompt = `You Are:
 A professional real estate AI agent specializing in assisting Australian homeowners with leasing their properties. Your primary focus is to gently guide users to provide the suburb or address of their property to connect them with the appropriate agent. Once the suburb is obtained, you offer tailored encouragement and insights about the leasing potential, emphasizing the importance of achieving the maximum outcome.
 
 Input You Will Receive:
@@ -1150,8 +1426,8 @@ Always prioritize obtaining the suburb or address before providing encouragement
 Once the suburb is provided, transition smoothly into discussing its potential and the importance of achieving the maximum outcome.
 Keep responses concise, professional, and conversational, avoiding list-like formatting or symbols.
 Replace any celebratory or assumptive language like "That's fantastic!" with neutral and supportive phrasing.
-Responses should focus on guiding the user to provide information while maintaining professionalism and empathy.`
-    
+Responses should focus on guiding the user to provide information while maintaining professionalism and empathy.`;
+
     // Combine the system prompt with the conversation history
     const messages = [
       { role: "system", content: systemPrompt },
@@ -1177,22 +1453,19 @@ Responses should focus on guiding the user to provide information while maintain
       response: data.displayText,
       extractedInfo: data.internalProcessing,
     };
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error interacting with OpenAI API:", error);
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
 
-export async function handleTranscription(processedBlob: Blob
-
-){
+export async function handleTranscription(processedBlob: Blob) {
   try {
     const transcriptionResponse = await openai.audio.transcriptions.create({
-      file: new File([processedBlob], 'audio.mp4', { 
-        type: 'audio/mp4' 
+      file: new File([processedBlob], "audio.mp4", {
+        type: "audio/mp4",
       }),
-      model: 'whisper-1',
+      model: "whisper-1",
     });
 
     const transcribedText = transcriptionResponse.text;
@@ -1349,9 +1622,8 @@ Impotant Notes:
       messages: messages,
       model: "gpt-4o",
       response_format: {
-      type:"json_object",
-      }
-      
+        type: "json_object",
+      },
     };
 
     // Call the OpenAI API with the conversation messages
@@ -1368,4 +1640,3 @@ Impotant Notes:
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
-

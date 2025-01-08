@@ -1,0 +1,23 @@
+.agent .embla {
+  max-width: 48rem;
+  margin: auto;
+  --slide-height: 19rem;
+  --slide-spacing: 1rem;
+  --slide-size: 100%;
+}
+.agent .embla__viewport {
+  overflow: hidden;
+}
+.agent .embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-right: calc(var(--slide-spacing) * 1);
+
+}
+.agent .embla__slide {
+  transform: translate3d(0, 0, 0);
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+}
+

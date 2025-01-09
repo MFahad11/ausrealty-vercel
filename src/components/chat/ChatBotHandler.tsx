@@ -76,10 +76,10 @@ const ChatBotHandler = (
       
     },
     {
-      title:"LOCATION",
-      description: "Find a property in your desired location",
+      title:"LOCATIONS",
+      description: "Find your nearest ausrealty space",
       prompt:'LOCATION_PROMPT',
-      route: "location",
+      route: "locations",
       index:4,
 
     },

@@ -6,22 +6,15 @@ import { cn } from '../lib/utils'
 import PeopleModal from './PeopleModal'
 import AusrealtyModal from './AusrealtyModal'
 
-type MediaItem = {
-  name: string,
-  role: string,
-  contact: string,
-  email:  string,
-  specialisedServiceAreas:string [],
-  image: string
-}
 
 export default function ImageGrid(
   {data,className = 'grid-cols-3',
-    isInsideAusrealty = false
-
+    isInsideAusrealty = false,
+    isLocation = false
   }: {data: any[],
   className?: string
   isInsideAusrealty?: boolean
+  isLocation?: boolean
 }
 ) {
   const [selectedMedia, setSelectedMedia] = useState<any>(null)
@@ -60,13 +53,24 @@ export default function ImageGrid(
           </h1>
         </div>
       )}
+      {isLocation && (
+        <div className="absolute
+        w-full h-full flex items-center justify-center top-0
+        bottom-0 left-0 right-0  p-2 text-center">
+          <h4
+           className="text-white 
+           ">
+            {item?.suburb}
+          </h4>
+        </div>
+      )}
           </div>
           // <h1>{item?.image}</h1>
         ))}
       </div>
     </div>
     {
-     !isInsideAusrealty && (
+     (!isInsideAusrealty && !isLocation) && (
     <PeopleModal 
     isOpen={
       isOpen
@@ -95,6 +99,18 @@ export default function ImageGrid(
       setSelectedMedia(null)
     }}
     text={selectedMedia?.text as string}
+    />)
+    }
+    {
+      isLocation && (<AusrealtyModal
+    isOpen={
+      isOpen
+    }
+    onClose={() => {
+      setIsOpen(false)
+      setSelectedMedia(null)
+    }}
+    text={selectedMedia?.address as string}
     />)
     }
     

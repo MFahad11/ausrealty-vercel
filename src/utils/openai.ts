@@ -1543,7 +1543,7 @@ Location Inquiry: If the user wants information about a location:
 
 {
   "intent": "location",
-  "redirect": "location",
+  "redirect": "locations",
   "page": "chat"
 }
 Moments from Home or Ausrealty Gallery Inquiry: If the user wants to know about "Moments from Home" or see the gallery:

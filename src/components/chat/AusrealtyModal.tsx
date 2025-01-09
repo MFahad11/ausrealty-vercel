@@ -28,7 +28,7 @@ export default function AusrealtyModal({ isOpen, onClose,text }: AusrealtyModalP
       onClick={onClose}
     >
       <div 
-        className={`bg-white rounded-[31px] w-[361px]  p-[62px_48px_48px_48px] flex flex-col items-start gap-4 transition-transform duration-300 ${
+        className={`bg-white rounded-[31px] w-[361px]  p-[62px_48px_48px_48px] flex flex-col items-start gap-4 transition-transform duration-300  ${
           isOpen ? 'scale-100' : 'scale-95'
         }`}
         onClick={(e) => e.stopPropagation()}

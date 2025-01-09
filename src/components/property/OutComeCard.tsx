@@ -61,14 +61,7 @@ export default function OutComeCard({
 
         <p className="text-sm text-gray-500">Sold 24 Dec 2024</p>
 
-        {/* Reserve button */}
-        <Button
-                            onClick={() => {}}
-                              className="black-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center font-abchanel "
-                              aria-label="Reset search"
-                            >
-                              RESERVE APPOINTMENT
-                            </Button>
+
         
       </div>
     </div>

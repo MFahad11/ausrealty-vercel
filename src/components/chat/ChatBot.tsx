@@ -747,9 +747,14 @@ const ChatBot = ({
               const newMessage = {
                 role: "system",
                 content: data?.response,
+                
+              };
+              const agentMessage = {
+                role: "system",
+                content: "See below for the best agents to connect with",
                 agents:data?.extractedAgents || [],
                 isLoading: true,
-              };
+              }
               const pricingToolMessage = {
                 role: "system",
                 content: "Alternatively, click below to try our pricing tool.",
@@ -759,6 +764,8 @@ const ChatBot = ({
               }
               let updatedMessages = [...prevMessages, newMessage];
               typewriterEffect(data?.response, updatedMessages.length - 1);
+              updatedMessages = [...updatedMessages, agentMessage];
+              typewriterEffect("See below for the best agents to connect with", updatedMessages.length - 1);
               updatedMessages = [...updatedMessages, pricingToolMessage];
               typewriterEffect("Alternatively, click below to try our pricing tool.", updatedMessages.length - 1);
               return updatedMessages;
@@ -1175,7 +1182,7 @@ const ChatBot = ({
                     message.agents.length > 0 && (
                       <div className="mt-4 ">
                     
-                      {message.agents[0].isLoading ? (                            
+                      {message.isLoading ? (                            
                         <ContentLoader viewBox="0 0 500 280" height={280} width={500} className="ml-2">
                           <rect x="3" y="3" rx="10" ry="10" width="400" height="180" />
                           <rect x="6" y="190" rx="0" ry="0" width="292" height="15" />
@@ -1229,7 +1236,7 @@ const ChatBot = ({
             <ImageGrid data={INSIDE_AUSREALTY} isInsideAusrealty={true} />
           )}
           {title === "OUR PEOPLE" && <ImageGrid data={OUR_TEAM_DATA} />}
-          {title === "LOCATION" && <ImageGrid data={LOOKING_TO_RENT} />}
+          {title === "LOCATIONS" && <ImageGrid data={LOOKING_TO_RENT} isLocation={true}/>}
         </div>
       </div>
 
@@ -1332,7 +1339,7 @@ const ChatBot = ({
             {!indexPage && (
               <button
                 onClick={handleStartAgain}
-                className="p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-3/4 -translate-y-3/4 bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none"
+                className="p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-20 -translate-y-2 bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none"
                 aria-label="Reset search"
               >
                 <LuRotateCcw title="Restart" className="w-6 h-6" />

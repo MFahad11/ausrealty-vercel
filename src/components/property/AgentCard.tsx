@@ -14,6 +14,7 @@ import OutComeCard from './OutComeCard'
 import { OUR_TEAM_DATA } from '@/constants/our-team'
 import { LOOKING_TO_RENT } from '@/constants/looking-to-rent'
 import useEmblaCarousel from 'embla-carousel-react'
+import Button from '../ui/Button'
 
 const AgentCard = ({
   agent,
@@ -32,7 +33,7 @@ const AgentCard = ({
   return (
     <div
       key={index}
-      className='bg-white border border-darkgray rounded-md shadow-md'
+      className='bg-white border border-darkgray rounded-md shadow-md pb-4'
     >
       <div className='relative aspect-[3/4] w-full'>
         <img
@@ -171,6 +172,14 @@ const AgentCard = ({
             </EmblaCarousel>
           </div>
         )}
+                {/* Reserve button */}
+                <Button
+                            onClick={() => {}}
+                              className="black-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center font-abchanel "
+                              aria-label="Reset search"
+                            >
+                              RESERVE APPOINTMENT
+                            </Button>
     </div>
   )
 }

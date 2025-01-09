@@ -175,7 +175,7 @@ const AgentCard = ({
                 {/* Reserve button */}
                 <Button
                             onClick={() => {}}
-                              className="black-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center font-abchanel "
+                              className="gray-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center font-abchanel "
                               aria-label="Reset search"
                             >
                               RESERVE APPOINTMENT

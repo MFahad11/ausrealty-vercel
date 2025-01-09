@@ -1203,7 +1203,7 @@ const ChatBot = ({
                     className="flex w-full "
                     ><Button
                     onClick={() => {}}
-                      className="black-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center capitalize font-abchanel"
+                      className="gray-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center capitalize font-abchanel"
                       aria-label="Reset search"
                     >
                       {message.buttonText}

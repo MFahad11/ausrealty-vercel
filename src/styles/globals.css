@@ -204,17 +204,18 @@ pre {
   opacity: 0.8;
 }
 
+
 .gray-button {
   border-radius: 4px;
-  background-color: #efeff0;
-  color: #62646a;
+  background-color: #313131 !important;
+  color: white;
   font-size: 14px;
   padding: 8px 16px;
   transition: opacity 0.2s;
 }
 
 .gray-button:hover {
-  background-color: #e5e5e5;
+  background-color: #4a4a4a !important;
 }
 
 input {

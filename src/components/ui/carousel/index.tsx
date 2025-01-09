@@ -67,6 +67,16 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                     controls
                   />
                 )}
+                <div className="absolute top-4 right-4 bg-black text-white backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+          
+          <span className="text-sm">
+            {
+              index + 1
+            } of {
+              slides.length
+            }
+          </span>
+        </div>
                 </div>
             </div>
           ))}

@@ -3,10 +3,17 @@
 import Image from 'next/image'
 import { IoBed, IoBusiness } from "react-icons/io5"
 import { FaParking } from "react-icons/fa"
+import Button from '../ui/Button'
 
-export default function OutComeCard() {
+export default function OutComeCard({
+  index,
+  total
+}:{
+  index:number,
+  total:number
+}) {
   return (
-    <div className=" overflow-hidden bg-white shadow">
+    <div className="overflow-hidden bg-white shadow">
       {/* Image container with relative positioning for the Sold badge */}
       <div className="relative">
         <img
@@ -18,19 +25,25 @@ export default function OutComeCard() {
         />
         <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
           <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-          <span className="text-sm">Sold</span>
+          <p className="text-sm m-0 p-0">Sold</p>
+        </div>
+        <div className="absolute top-4 right-4 bg-black text-white backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+          
+          <span className="text-sm">
+            {index} of {total}
+          </span>
         </div>
       </div>
 
       {/* Property details */}
-      <div className="p-4">
-        <div className="mb-2">
-          <h2 className="text-2xl font-semibold">$2,030,000</h2>
+      <div className="px-2 py-4 space-y-3">
+        <div className="">
+          <h2 className="mb-1 p-0">$2,030,000</h2>
           <p className="text-gray-600">3 Lime Kid Road, Lugarno</p>
         </div>
 
         {/* Icons row */}
-        <div className="flex items-center gap-6 mb-2">
+        <div className="flex items-center gap-4">
           <div className="flex items-center gap-1">
             <IoBed className="w-4 h-4 text-gray-600" />
             <span className="text-sm text-gray-600">5</span>
@@ -46,14 +59,18 @@ export default function OutComeCard() {
           <div className="text-sm text-gray-600">House</div>
         </div>
 
-        <p className="text-sm text-gray-500 mb-4">Sold 24 Dec 2024</p>
+        <p className="text-sm text-gray-500">Sold 24 Dec 2024</p>
 
         {/* Reserve button */}
-        <button className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition-colors">
-          RESERVE APPOINTMENT
-        </button>
+        <Button
+                            onClick={() => {}}
+                              className="black-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center font-abchanel "
+                              aria-label="Reset search"
+                            >
+                              RESERVE APPOINTMENT
+                            </Button>
+        
       </div>
     </div>
   )
 }
-

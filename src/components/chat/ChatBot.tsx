@@ -28,6 +28,7 @@ import PageLoader from "../ui/PageLoader";
 import { convertBlobToBase64, getSupportedMimeType } from "@/utils/helpers";
 import AgentCard from "../property/AgentCard";
 import AgentCarousel from "../ui/carousel/AgentCarousel";
+import Button from "../ui/Button";
 const ChatBot = ({
   title,
   firstMessage,
@@ -79,6 +80,8 @@ const ChatBot = ({
       videoUrl?: string;
       isLoading?: boolean;
       agents?: any[];
+      button?: boolean;
+      buttonText?: string;
     }>
   >([]);
   const [intentExtracting, setIntentExtracting] = useState(false);
@@ -747,8 +750,17 @@ const ChatBot = ({
                 agents:data?.extractedAgents || [],
                 isLoading: true,
               };
-              const updatedMessages = [...prevMessages, newMessage];
+              const pricingToolMessage = {
+                role: "system",
+                content: "Alternatively, click below to try our pricing tool.",
+                isLoading: true,
+                button:true,
+                buttonText:"Price Assessment"
+              }
+              let updatedMessages = [...prevMessages, newMessage];
               typewriterEffect(data?.response, updatedMessages.length - 1);
+              updatedMessages = [...updatedMessages, pricingToolMessage];
+              typewriterEffect("Alternatively, click below to try our pricing tool.", updatedMessages.length - 1);
               return updatedMessages;
             });
 
@@ -1176,9 +1188,21 @@ const ChatBot = ({
                           
                         )}
                     
-                  </div>)
-                        
-                      
+                  </div>)  
+                }
+                {
+                  message.button && (
+                    <div
+                    className="flex w-full "
+                    ><Button
+                    onClick={() => {}}
+                      className="black-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center capitalize font-abchanel"
+                      aria-label="Reset search"
+                    >
+                      {message.buttonText}
+                    </Button></div>
+                    
+                  )
                 }
                 
                 </div>

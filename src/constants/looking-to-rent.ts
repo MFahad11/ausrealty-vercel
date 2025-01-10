@@ -1,6 +1,6 @@
 export const LOOKING_TO_RENT = [
     {
-        image: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/1bf79a3e-9e36-4004-adf8-5f11eb944355-SYLVANIA.jpg",
+        image: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/9efcbfe4-ddb8-405f-b87a-1007b24ff36f-Sylvania.jpg",
         address:"51-53 Princes Highway, Sylvania, NSW 2224",
         suburb: "Sylvania"
     },

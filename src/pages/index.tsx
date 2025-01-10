@@ -8,7 +8,6 @@ export default function Index({data}: {data: any}) {
   const navigate=useRouter();
   return (
     <>
-    
     <Head>
     <title>
       Ausrealty

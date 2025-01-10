@@ -9,7 +9,7 @@ import {
   LuPhone,
   LuTwitter
 } from 'react-icons/lu'
-import EmblaCarousel from '../ui/carousel/AgentCarousel'
+import AgentCarousel from '../ui/carousel/AgentCarousel'
 import OutComeCard from './OutComeCard'
 import { OUR_TEAM_DATA } from '@/constants/our-team'
 import { LOOKING_TO_RENT } from '@/constants/looking-to-rent'
@@ -28,7 +28,7 @@ const AgentCard = ({
   emblaMainRef?: any
 }) => {
   const [isOpen, setIsOpen] = React.useState(false)
-  const [emblaRef] = useEmblaCarousel({ dragFree: true });
+  const [emblaRef] = useEmblaCarousel({ dragFree: true })
 
   return (
     <div
@@ -151,35 +151,31 @@ const AgentCard = ({
             </div>
           </>
         )}
-        
       </div>
       {isOpen && (
-          <div>
-            <EmblaCarousel agents={[]}
-            childEmblaRef={emblaRef}
-           
-            >
-              {LOOKING_TO_RENT.map((agent, index) => (
-                <div className='embla__slide' key={index}>
-                  <div className='embla__slide__number'>
-                    <OutComeCard
-                      index={index + 1}
-                      total={LOOKING_TO_RENT.length}
-                    />
-                  </div>
+        <div>
+          <AgentCarousel agents={[]} childEmblaRef={emblaRef}>
+            {LOOKING_TO_RENT.map((agent, index) => (
+              <div className='embla__slide' key={index}>
+                <div className='embla__slide__number'>
+                  <OutComeCard
+                    index={index + 1}
+                    total={LOOKING_TO_RENT.length}
+                  />
                 </div>
-              ))}
-            </EmblaCarousel>
-          </div>
-        )}
-                {/* Reserve button */}
-                <Button
-                            onClick={() => {}}
-                              className="gray-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center font-abchanel "
-                              aria-label="Reset search"
-                            >
-                              RESERVE APPOINTMENT
-                            </Button>
+              </div>
+            ))}
+          </AgentCarousel>
+        </div>
+      )}
+      {/* Reserve button */}
+      <Button
+        onClick={() => {}}
+        className='gray-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center font-abchanel '
+        aria-label='Reset search'
+      >
+        RESERVE APPOINTMENT
+      </Button>
     </div>
   )
 }

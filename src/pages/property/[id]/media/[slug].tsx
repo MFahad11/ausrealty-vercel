@@ -231,10 +231,7 @@ export default function ImageGallery({ id }: { id: string }) {
                             className={`${isFullWidth ? "col-span-2 relative aspect-[16/9]" : "relative aspect-square"}`}
                           >
                             <iframe
-                              src={
-                                // we need to convert the youtube url to embed url
-                                item.url.replace("youtu.be", "www.youtube.com/embed")
-                              }
+                              src={item.url}
                               className="w-full h-full object-cover"
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen

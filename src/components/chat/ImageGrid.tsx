@@ -2,7 +2,6 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { LuCopy, LuVideo } from 'react-icons/lu'
 import { MediaViewer } from './MediaViewer'
-import { cn } from '../lib/utils'
 import PeopleModal from './PeopleModal'
 import AusrealtyModal from './AusrealtyModal'
 

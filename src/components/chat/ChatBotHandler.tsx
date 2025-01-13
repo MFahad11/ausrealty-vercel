@@ -200,13 +200,13 @@ const ChatBotHandler = (
 
   return (
         <ChatBot
-            title={selectedBox}
+            title={selectedBox || "INDEX"}
             firstMessage={boxes.find((box) => {
             
                 return box.title === selectedBox})?.firstMessage || ""}
-            prompt={boxes.find((box) => box.title === selectedBox)?.prompt || ""}
+            prompt={boxes.find((box) => box.title === selectedBox)?.prompt || "INDEX_PROMPT"}
             placeholder={currentText}
-            route={boxes.find((box) => box.title === selectedBox)?.route || ""}
+            route={boxes.find((box) => box.title === selectedBox)?.route || "/"}
             index={boxes.find((box) => box.title === selectedBox)?.index || 0}
             // @ts-ignore
             handleBoxClick={handleBoxClick}

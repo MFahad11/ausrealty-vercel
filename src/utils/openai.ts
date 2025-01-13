@@ -1558,15 +1558,17 @@ IMPORTANT: Your response should strictly be in the following format, with no add
   "intent": "string",
   "redirect": "string",
   "page": "string",
-  "prompt": "string"
+  "prompt": "string",
+  "response": "string"
 }
 
-IMPORTANT: You should be 100% accurate in identifying the user's intent and providing the correct redirect information. If you are unsure about the intent, you should set all the fields to empty strings.
+IMPORTANT: You should be 100% accurate in identifying the user's intent and providing the correct redirect information. If you are unsure about the intent, you should set all the fields to empty strings with prompt something similar to the following:
 {
   "intent": "",
   "redirect": "",
   "page": "",
-  "prompt": ""
+  "prompt":"",
+  "response": "Thanks for reaching out! I’m here to help, but I need a bit more detail to assist you better. Could you please tell me more about what you're looking for? Whether you're interested in buying, renting, selling, or something else, just let me know, and I’ll direct you to the right place!"
 }
 
 Here are the possible intents and redirects you should handle:
@@ -1577,7 +1579,8 @@ Buying Intent: If the user intends to buy a property or is looking to buy: Note:
   "intent": "buy",
   "redirect": "looking-to-buy",
   "page": "chat",
-  "prompt":"LOOKING_TO_BUY_PROMPT"
+  "prompt":"LOOKING_TO_BUY_PROMPT",
+
 }
 Renting Intent: If the user intends to rent a property or is looking to rent: Note: This intent should be triggered by phrases like "rent a property," "renting," "looking to rent," etc.
 
@@ -1603,7 +1606,7 @@ Leasing Intent: If the user intends to lease a property: Note: This intent shoul
   "page": "chat",
   "prompt":"LEASE_MY_PROPERTY_PROMPT",
 }
-Location Inquiry: If the user wants information about a location:
+Location Inquiry: If the user wants information about our office locations:
 
 {
   "intent": "location",
@@ -1671,10 +1674,72 @@ Floor Plan Inquiry: If the user wants to see the floor plan of the property:
   "redirect": "floorplan",
   "page": "property"
 }
+Examples:
+1. Clear Intent - Buying
+User Input: "I’m looking to buy a house in Sydney."
+Response:
+{
+  "intent": "buy",
+  "redirect": "looking-to-buy",
+  "page": "chat",
+  "prompt": "LOOKING_TO_BUY_PROMPT"
+}
+2. Clear Intent - Renting
+User Input: "I’m looking for a property to rent in Melbourne."
+Response:
+{
+  "intent": "rent",
+  "redirect": "looking-to-rent",
+  "page": "chat",
+  "prompt": "LOOKING_TO_RENT_PROMPT"
+}
+3. Clear Intent - Selling
+User Input: "I want to sell my property."
+Response:
+{
+  "intent": "sell",
+  "redirect": "sell-my-property",
+  "page": "chat",
+  "prompt": "SELL_MY_PROPERTY_PROMPT"
+}
+4. Clear Intent - Leasing
+User Input: "I’m planning to lease my property."
+Response:
+{
+  "intent": "lease",
+  "redirect": "lease-my-property",
+  "page": "chat",
+  "prompt": "LEASE_MY_PROPERTY_PROMPT"
+}
+5. No Clear Intent
+User Input: "Can you tell me more about your services?"
+Response:
+{
+  "intent": "",
+  "redirect": "",
+  "page": "",
+  "response": "Thanks for reaching out! I’m here to help, but I need a bit more detail to assist you better. Could you please tell me more about what you're looking for? Whether you're interested in buying, renting, selling, or something else, just let me know, and I’ll direct you to the right place!"
+}
+6. Ambiguous Intent 
+User Input: "I want a property in Sydney."
+Response:
+{
+  "intent": "",
+  "redirect": "",
+  "page": "",
+  "response": "Thanks for sharing! Are you looking to buy, rent a property in Sydney? Let me know so I can guide you to the right section."
+}
+7. Ambiguous Intent
+User Input: "I’m interested in a property for my business."
+Response:
+{
+  "intent": "",
+  "redirect": "",
+  "page": "",
+  "response": "Thanks for reaching out! To assist you better, could you please specify if you're looking to buy, rent, sell, or lease a property for your business?"
+}
 
 Impotant Notes:
-- If you got confused about the intent between buying and renting you should prioritize buying intent.
-- If you got confused about the intent between selling and leasing you should prioritize selling intent.
 - You must provide only the structured JSON data in your response. nothing in addition. None of these symbol
 - For those where prompt is not provided you should not include the prompt in the response.
 `;
@@ -1706,3 +1771,80 @@ Impotant Notes:
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
+
+export async function handleLogicalTemplateGenerate(systemPrompt:string,userInput:string){
+  try {
+    const messages = [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userInput },
+    ];
+
+    const params: OpenAI.Chat.ChatCompletionCreateParams = {
+      // @ts-ignore
+      messages: messages,
+      model: "gpt-4o",
+      response_format: {
+        type: 'json_object',
+      },
+    };
+
+    // Call the OpenAI API with the conversation messages
+    // @ts-ignore
+    const completion: OpenAI.Chat.ChatCompletion =
+      await openai.chat.completions.create(params);
+    
+    const responseJson=  JSON.parse(completion.choices[0].message?.content || "{}");
+    return responseJson;
+  } catch (error) {
+    console.error("Error interacting with OpenAI API:", error);
+    throw new Error("Failed to process the request. Please try again later.");
+  }
+}
+export async function handleAerialImgAnalyze(imageBuffer:
+  Buffer
+){
+  try {
+    let messages = {
+      role: "user",
+      content: [
+        {
+          type: "text",
+          text: `Answer in JSON format:
+        {
+        landArea: approximate land area of the property [type: number]
+        frontage: approximate frontage of the property. if its 0 and put 0 [type: number]
+        buildType: "[enum: 1 storey, 2 storey, 3 storey, 4+ storey]",
+        wallMaterial: "[enum: Brick, Double brick, Clad, Fibro, Hebel]",
+        waterViews: "[enum: No, Water views, Deep waterfront with jetty, Tidal waterfront with jetty, Waterfront reserve]",
+        finishes: "[enum: High-end finishes, Updated, Original]",
+        streetTraffic: "[enum: Low traffic, Moderate traffic, High traffic]",
+        pool: "[enum: Yes, No]",
+        tennisCourt: "[enum: Yes, No]",
+        topography: "This should be an array. Multiple selections can be made, but only from this list: [High side, Low side, Level block, Irregular block, Unusable land]",
+        grannyFlat: "[enum: Yes, No]",
+        additionalInformation: "Assess the location determine if there are any attributes that are positive or negative nearby. Such as powerlines substation, parks, schools, shops or anything else that may impact the value"
+        }`,
+        },
+        {
+          type: "image_url",
+          image_url: { url: imageBuffer.toString("base64") },
+        },
+      ],
+    };
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      // @ts-ignore
+      messages: [messages],
+      response_format: { type: "json_object" },
+      n: 1,
+      temperature: 0,
+    });
+
+    const analysis = JSON.parse(response.choices[0].message.content || "{}");
+    return analysis;
+  } catch (error:any) {
+    console.error("Error analyzing image with OpenAI:", error.message);
+    throw error;
+  }
+};

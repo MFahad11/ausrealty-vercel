@@ -36,6 +36,7 @@ import AgentCarousel from '../ui/carousel/AgentCarousel'
 import Button from '../ui/Button'
 import PropertyCarousel from '../ui/carousel/PropertyCarousel'
 import QuickSearch from './QuickSearch'
+import { useIsMessageStore } from '@/store/isMessageStore'
 const ChatBot = ({
   title,
   firstMessage,
@@ -114,6 +115,8 @@ const ChatBot = ({
   const audioContextRef = useRef(null)
   const analyserRef = useRef(null)
   const checkSilenceRef = useRef<boolean>(false)
+  const setIsMessage=useIsMessageStore((state) => state.setIsMessage);
+  const isMessage=useIsMessageStore((state) => state.isMessage);
   useEffect(() => {
     setMessages([])
     setFetchedProperties([])
@@ -141,6 +144,9 @@ const ChatBot = ({
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem(prompt, JSON.stringify(messages))
+      if(indexPage){
+        setIsMessage(true);
+      }
     }
   }, [messages])
 
@@ -246,7 +252,6 @@ const ChatBot = ({
 
       setIsRecording(true)
       setIsListening(true)
-      console.log(isRecording)
       checkSilenceRef.current = true // Start silence detection
 
       checkSilence() // Start the silence detection loop
@@ -257,8 +262,7 @@ const ChatBot = ({
   }
 
   const stopRecording = () => {
-    checkSilenceRef.current = false // Stop silence detection
-    console.log(mediaRecorderRef.current, isRecording)
+    checkSilenceRef.current = false 
     if (mediaRecorderRef.current) {
       if (silenceTimeoutRef.current) {
         clearTimeout(silenceTimeoutRef.current)
@@ -385,37 +389,7 @@ const ChatBot = ({
   }
 
   const initializeChat = async () => {
-    // if (title !== "SELL OR LEASE MY PROPERTY") {
-    //   if (firstMessage) {
-    //     setMessages([
-    //       {
-    //         role: "system",
-    //         content: firstMessage,
-    //       },
-    //       // {
-    //       //     role: "user",
-    //       //     content: firstMessage,
-    //       // },
-    //       // {
-    //       //   role: "system",
-    //       //   content: firstMessage?.includes('Sell')?`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`:`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best properties. Otherwise, message us over what you’re looking for and we’ll show you what we have to offer.`,
-    //       // }
-    //     ]);
-    //       // typewriterEffect(
-    //       //   `Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`, 0
-    //       // )
-    //   } else {
-    //     // setMessages([
-    //     //     {
-    //     //       role: "system",
-    //     //       content: 'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.',
-    //     //     },
-    //     //   ]);
-    //   }
-    //   // if(prompt){
-    //   //   localStorage.setItem(prompt, JSON.stringify(messages));
-    //   // }
-    // }
+
     if (firstMessage) {
       setMessages([
         {
@@ -423,25 +397,9 @@ const ChatBot = ({
           content: firstMessage,
           videoUrl: boxes[index]?.videoUrl
         }
-        // {
-        //     role: "user",
-        //     content: firstMessage,
-        // },
-        // {
-        //   role: "system",
-        //   content: firstMessage?.includes('Sell')?`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`:`Great! Let’s get started. Just fill out a few quick details so we can connect you with the best properties. Otherwise, message us over what you’re looking for and we’ll show you what we have to offer.`,
-        // }
+        
       ])
-      // typewriterEffect(
-      //   `Great! Let’s get started. Just fill out a few quick details so we can connect you with the best agent for your area:`, 0
-      // )
-    } else {
-      // setMessages([
-      //     {
-      //       role: "system",
-      //       content: 'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.',
-      //     },
-      //   ]);
+      
     }
   }
   useEffect(() => {
@@ -496,20 +454,7 @@ const ChatBot = ({
     setInputValue('')
 
     try {
-      //   const botResponseText = await chatgptAPICall(inputValue, messages);
-      //   if (!botResponseText) {
-      //     throw new Error("Error in response");
-      //   }
 
-      // setIsTyping(true);
-      // const botResponse = { role: "system", content: "" };
-      // setMessages((prevMessages) => {
-      //   const newMessages = [...prevMessages, botResponse];
-      //   typewriterEffect(
-      //       'Hi! Let us know how we can help you. Otherwise, please click one of the categories below to get started.'
-      //       , newMessages.length - 1);
-      //   return newMessages;
-      // });
 
       // user input to api
       searchData(userMessage?.content)
@@ -531,12 +476,10 @@ const ChatBot = ({
     if (extractIntent) {
       const intent = await handleIdentifyIntent(userInput)
       if (intent?.response) {
-        const { redirect = '/', prompt: extractedPrompt } = JSON.parse(
-          intent?.response
-        )
-
-        if (extractedPrompt && extractedPrompt !== prompt) {
-          setFetchedProperties([])
+        const { redirect = '/', prompt: extractedPrompt,response } = JSON.parse(intent?.response)
+        if (extractedPrompt && extractedPrompt !== prompt){
+         
+            setFetchedProperties([])
           const getStoredMessages = localStorage.getItem(extractedPrompt)
           if (getStoredMessages) {
             const storedMessages = JSON.parse(getStoredMessages)
@@ -555,18 +498,45 @@ const ChatBot = ({
           const currentPromptMessages = localStorage.getItem(prompt)
           if (currentPromptMessages) {
             const messages = JSON.parse(currentPromptMessages)
-            messages.pop()
+            if(messages.length > 1){
+              messages.pop()
+            }
+            
             localStorage.setItem(prompt, JSON.stringify(messages))
             setMessages(messages)
           }
-
           localStorage.setItem(`${extractedPrompt}_send_message`, 'true')
           setIntentExtracting(false)
           redirecting = true
           router.push(`/chat/${redirect}`)
+          
+          
+          
 
           // searchData(userInput);
         }
+        else if(indexPage && prompt==='INDEX_PROMPT' && response){
+          setMessages((prevMessages) => {
+            const userMessage = {
+              role: "user",
+              content: userInput,
+            }
+            const newMessages = [...prevMessages, userMessage];
+            return newMessages;
+          })
+          setIntentExtracting(false)
+          setMessages((prevMessages) => {
+            const newMessage = {
+              role: "system",
+              content: response
+
+            };
+            const updatedMessages = [...prevMessages, newMessage];
+            typewriterEffect(response, updatedMessages.length - 1);
+            return updatedMessages;
+          });
+        }
+        // if the
         // else{
         //   setIntentExtracting(false);
         //   setBotThinking(false);
@@ -719,6 +689,7 @@ const ChatBot = ({
               role: 'system',
               content: data?.response
             }
+
             const agentMessage = {
               role: 'system',
               content: 'See below for the best agents to connect with',
@@ -734,7 +705,8 @@ const ChatBot = ({
             }
             let updatedMessages = [...prevMessages, newMessage]
             typewriterEffect(data?.response, updatedMessages.length - 1)
-            updatedMessages = [...updatedMessages, agentMessage]
+            if(data?.extractedAgents?.length > 0){
+              updatedMessages = [...updatedMessages, agentMessage]
             typewriterEffect(
               'See below for the best agents to connect with',
               updatedMessages.length - 1
@@ -744,6 +716,7 @@ const ChatBot = ({
               'Alternatively, click below to try our pricing tool.',
               updatedMessages.length - 1
             )
+            }
             return updatedMessages
           })
         } else {
@@ -763,7 +736,7 @@ const ChatBot = ({
         setBotThinking(false)
       }
     }
-    if (indexPage) {
+    else if (indexPage) {
       setIntentExtracting(false)
       setBotThinking(false)
     }
@@ -848,7 +821,7 @@ const ChatBot = ({
   return (
     <div className='w-full h-full flex flex-col justify-between'>
       <ToastContainer />
-      {indexPage && intentExtracting && <PageLoader />}
+      {indexPage && intentExtracting && !isMessage && <PageLoader />}
 
       <div className='max-w-4xl w-full mx-auto flex flex-col flex-grow pb-14 overflow-y-auto'>
         <div className=' m-0 w-full rounded-lg mt-4'>
@@ -856,161 +829,9 @@ const ChatBot = ({
           {(title === 'SELL MY PROPERTY' ||
             title === 'LEASE MY PROPERTY' ||
             title === 'LOOKING TO BUY' ||
-            title === 'LOOKING TO RENT') && (
-            //     (title === "SELL OR LEASE MY PROPERTY" && messages?.length === 0 ? (
-            //       <div className={`mb-4 text-left`}>
-            //         <span
-            //           className={`inline-block p-3 max-w-[80%] rounded-lg bg-white`}
-            //         >
-            //           <p>
-            //             Hi! Let us know how we can help you. Otherwise, please click
-            //             one of the categories below to get started.
-            //           </p>
-            //           <div className="mt-2 flex flex-wrap gap-2">
-            //             <Link
-            //               href="/sell-or-lease-my-property font-lato"
-            //               className="text-black underline"
-            //             >
-            //               Sell My Property
-            //             </Link>
-            //             <Link
-            //               href="/sell-or-lease-my-property font-lato"
-            //               className="text-black underline"
-            //             >
-            //               Lease My Property
-            //             </Link>
-            //           </div>
-            //         </span>
-            //       </div>
-            //     ) : (
-            //       <>
-            //         <div
-            //           id="msg"
-            //           ref={messagesContainerRef}
-            //           className="enhanced-textarea overflow-y-auto pl-0 pb-32 "
-            //         >
-            //           {messages.map((message, index) => (
-            //             <>
-
-            //             <div
-            //               key={index}
-            //               className={`mb-4 ${
-            //                 message.role === "system" ? "text-left" : "text-right"
-            //               }`}
-
-            //             >
-
-            //               <span
-            //                 className={`inline-block rounded-lg max-w-[80%] p-3 ${
-            //                   message.role === "system"
-            //                     ? "bg-white rounded-br-none"
-            //                     : "text-start bg-gray-200 rounded-bl-none mr-2"
-            //                 }
-
-            //               `}
-            //               ref={
-            //                   message.role === "system" && index === messages.length - 1
-            //                     ? botResponseRef
-            //                     : null
-            //                 }
-
-            //               >
-
-            //                 <p className="text-[16px] font-light"
-
-            //                 >
-
-            //                   {message.content}</p>
-            //               </span>
-
-            //               <div>
-            //                 {message.properties &&
-            //                   message.properties.length > 0 && (
-            //                     <div className="mt-4">
-            //                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-            //                     {message.properties.map((property, index) => (
-            //                       message.isLoading ? (
-            //                       <ContentLoader viewBox="0 0 500 280" height={280} width={500} className="ml-2">
-            //                         <rect x="3" y="3" rx="10" ry="10" width="400" height="180" />
-            //                         <rect x="6" y="190" rx="0" ry="0" width="292" height="15" />
-            //                         <rect x="4" y="215" rx="0" ry="0" width="239" height="15" />
-            //                         <rect x="4" y="242" rx="0" ry="0" width="274" height="15" />
-            //                       </ContentLoader>):(<div
-            //                         key={index}
-            //                         className="bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full"
-            //                         onClick={() => {
-            //                           router.push(
-            //                             `/property/${property?.id}/media/images`
-            //                           );
-            //                         }}
-            //                       >
-            //                         {property?.media &&
-            //                           Array.isArray(property?.media) && (
-            //                             <EmblaCarousel
-            //                               slides={property?.media}
-            //                             />
-            //                           )}
-            //                         <div className="ml-4">
-            //                           <div className="mt-4 flex flex-col space-y-2">
-            //                             <h5 className="tracking-wide">
-            //                               {property?.priceDetails.displayPrice}
-            //                             </h5>
-
-            //                             <h5 className="text-black font-light">
-            //                               {
-            //                                 property?.addressParts
-            //                                   .displayAddress
-            //                               }
-            //                             </h5>
-            //                           </div>
-
-            //                           <div className="mb-6 text-sm">
-            //                             <h4 className="text-black mb-0">
-            //                               {/* 4B 4B 2C | House */}
-            //                               {
-            //                                 property?.bedrooms
-            //                               }B {property?.bathrooms}B{" "}
-            //                               {property?.carspaces}C |{" "}
-            //                               {property?.propertyTypes?.length > 0
-            //                                 ? property?.propertyTypes?.join(",")
-            //                                 : "N/A"}
-            //                             </h4>
-            //                             <p className="leading-7">
-            //                               Inspection{" "}
-            //                               {dayjs(
-            //                                 property?.dateAvailable
-            //                               )?.format("DD/MM/YYYY")}
-            //                             </p>
-            //                           </div>
-            //                         </div>
-            //                       </div>)
-            //                     ))}
-            //                   </div>
-            //                 </div>)
-
-            //               }
-
-            //               </div>
-            //             </div></>
-            //           ))}
-
-            //           {botThinking && (
-            //             <div className="text-left mb-2 p-3 space-x-1 flex items-center max-w-[80%] ">
-            // <div className="rounded-full h-3 w-3 bg-black animate-pulse"></div>
-
-            //             <p className="animate-pulse text-[16px] font-light">
-
-            //               Getting the information for you
-            //             </p>
-
-            //           </div>
-            //           )}
-            //           <div ref={messagesEndRef} />
-            //         </div>
-
-            //       </>
-            //     )
-            //     )
+            title === 'LOOKING TO RENT' ||
+            title === 'INDEX') && (
+            
             <>
               <div
                 id='msg'
@@ -1265,73 +1086,7 @@ const ChatBot = ({
               autoCapitalize='on'
               className='start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden font-lato text-[16px] font-light'
             />
-            {/* {
-              inputValue.length > 0 ? (<button
-              onClick={
-                () => {
-                  handleSend(
-                    inputValue
-                  );
-                }
-              }
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200"
-              disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}
-            >
-              <IoSend title="Send" className="w-5 h-5" />
-            </button>
-              ):
-              (<button
-                onClick={startListening}
-                className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-black  disabled:cursor-not-allowed transition-colors duration-200  p-2 rounded-full ${
-          isListening ? 'bg-black text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-        }`}
-                disabled={indexPage ? intentExtracting : (botThinking || isTyping)?true:false}>
-              <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-current">
-      <rect x="11" y="1" width="2" height="22" rx="1" fill="currentColor" />
-      <rect 
-        x="7" 
-        y="6" 
-        width="2" 
-        height="12" 
-        rx="1" 
-        fill="currentColor" 
-        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave1' : ''}`}
-        style={{ transformOrigin: 'center' }}
-      />
-      <rect 
-        x="15" 
-        y="6" 
-        width="2" 
-        height="12" 
-        rx="1" 
-        fill="currentColor"
-        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave2' : ''}`}
-        style={{ transformOrigin: 'center' }}
-      />
-      <rect 
-        x="3" 
-        y="8" 
-        width="2" 
-        height="8" 
-        rx="1" 
-        fill="currentColor"
-        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave3' : ''}`}
-        style={{ transformOrigin: 'center' }}
-      />
-      <rect 
-        x="19" 
-        y="8" 
-        width="2" 
-        height="8" 
-        rx="1" 
-        fill="currentColor"
-        className={`transition-transform duration-300 ${isListening ? 'animate-voice-wave4' : ''}`}
-        style={{ transformOrigin: 'center' }}
-      />
-    </svg>
-              </button>)
-              
-            } */}
+            
             <button
               onClick={() => {
                 handleSend(inputValue)

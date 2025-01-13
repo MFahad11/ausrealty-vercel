@@ -5,238 +5,257 @@ type ProcessedResponse = {
   internalProcessing: any;
 };
 interface Agent {
-  dateUpdated?: string
-  agencyId?: number
-  agentId?: number
-  email?: string
-  firstName?: string
-  mobile?: string
-  photo?: string
-  lastName?: string
-  isActiveProfilePage?: string
-  phone?: string
-  saleActive?: boolean
-  rentalActive?: boolean
-  secondaryEmail?: string
-  facebookUrl?: string
-  twitterUrl?: string
-  agentVideo?: string
-  profileText?: string
-  isHideSoldLeasedListings?: boolean
-  googlePlusUrl?: string
-  personalWebsiteUrl?: string
-  linkedInUrl?: string
-  fax?: string
-  mugShotURL?: string
-  mugShotNew?: string
-  contactTypeCode?: number
-  receivesRequests?: boolean
-  creAgentVideoURL?: string
-  receiveScheduledReportEmail?: boolean
-  profileUrl?: string
-  jobPosition?: string
-  suburbsCovered: string[]
-  
+  dateUpdated?: string;
+  agencyId?: number;
+  agentId?: number;
+  email?: string;
+  firstName?: string;
+  mobile?: string;
+  photo?: string;
+  lastName?: string;
+  isActiveProfilePage?: string;
+  phone?: string;
+  saleActive?: boolean;
+  rentalActive?: boolean;
+  secondaryEmail?: string;
+  facebookUrl?: string;
+  twitterUrl?: string;
+  agentVideo?: string;
+  profileText?: string;
+  isHideSoldLeasedListings?: boolean;
+  googlePlusUrl?: string;
+  personalWebsiteUrl?: string;
+  linkedInUrl?: string;
+  fax?: string;
+  mugShotURL?: string;
+  mugShotNew?: string;
+  contactTypeCode?: number;
+  receivesRequests?: boolean;
+  creAgentVideoURL?: string;
+  receiveScheduledReportEmail?: boolean;
+  profileUrl?: string;
+  jobPosition?: string;
+  suburbsCovered: string[];
 }
 // Mock data - replace with your actual data fetching
 const agents: Agent[] = [
   {
-      firstName: "John",
-      lastName: "Smith",
-      jobPosition: "Senior Sales Agent",
-      email: "john.smith@ausrealty.com",
-      phone: "0400 000 000",
-      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
-      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      facebookUrl: "https://facebook.com",
-      twitterUrl: "https://twitter.com",
-      linkedInUrl: "https://linkedin.com",
-      personalWebsiteUrl: "https://example.com",
-      saleActive: true,
-      rentalActive: true,
-      suburbsCovered: [
-        "Peakhurst",
-        "Bondi",
-        "Manly",
-        "Parramatta",
-        "Chatswood",
-        "Blacktown",
-        "Cronulla",
-        "Surry Hills",
-        "Mosman",
-        "Neutral Bay",
-        "Newtown",
-        "Paddington",
-        "Darlinghurst",
-        "North Sydney",
-        "Crows Nest",
-        "St Leonards",
-        "Ryde",
-        "Penrith",
-        "Liverpool",
-        "Campbelltown",
-        "Wollongong",
-        "Hornsby",]
-    },
-    {
-      firstName: "John",
-      lastName: "Smith",
-      jobPosition: "Senior Sales Agent",
-      email: "john.smith@ausrealty.com",
-      phone: "0400 000 000",
-      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
-      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      facebookUrl: "https://facebook.com",
-      twitterUrl: "https://twitter.com",
-      linkedInUrl: "https://linkedin.com",
-      personalWebsiteUrl: "https://example.com",
-      saleActive: true,
-      rentalActive: true,
-      suburbsCovered: [
-        "Peakhurst",
-        "Bondi",
-        "Manly",
-        "Parramatta",
-        "Chatswood",
-        "Blacktown",
-        "Cronulla",
-        "Surry Hills",
-        "Mosman",
-        "Neutral Bay",
-        "Newtown",
-        "Paddington",
-        "Darlinghurst",
-        "North Sydney",
-        "Crows Nest",
-        "St Leonards",
-        "Ryde",
-        "Penrith",
-        "Liverpool",
-        "Campbelltown",
-        "Wollongong",
-        "Hornsby",]
-    },
-    {
-      firstName: "John",
-      lastName: "Smith",
-      jobPosition: "Senior Sales Agent",
-      email: "john.smith@ausrealty.com",
-      phone: "0400 000 000",
-      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
-      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      facebookUrl: "https://facebook.com",
-      twitterUrl: "https://twitter.com",
-      linkedInUrl: "https://linkedin.com",
-      personalWebsiteUrl: "https://example.com",
-      saleActive: true,
-      rentalActive: true,
-      suburbsCovered: [
-        "Peakhurst",
-        "Bondi",
-        "Manly",
-        "Parramatta",
-        "Chatswood",
-        "Blacktown",
-        "Cronulla",
-        "Surry Hills",
-        "Mosman",
-        "Neutral Bay",
-        "Newtown",
-        "Paddington",
-        "Darlinghurst",
-        "North Sydney",
-        "Crows Nest",
-        "St Leonards",
-        "Ryde",
-        "Penrith",
-        "Liverpool",
-        "Campbelltown",
-        "Wollongong",
-        "Hornsby",]
-    },
-    {
-      firstName: "John",
-      lastName: "Smith",
-      jobPosition: "Senior Sales Agent",
-      email: "john.smith@ausrealty.com",
-      phone: "0400 000 000",
-      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
-      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      facebookUrl: "https://facebook.com",
-      twitterUrl: "https://twitter.com",
-      linkedInUrl: "https://linkedin.com",
-      personalWebsiteUrl: "https://example.com",
-      saleActive: true,
-      rentalActive: true,
-      suburbsCovered: [
-        "Peakhurst",
-        "Bondi",
-        "Manly",
-        "Parramatta",
-        "Chatswood",
-        "Blacktown",
-        "Cronulla",
-        "Surry Hills",
-        "Mosman",
-        "Neutral Bay",
-        "Newtown",
-        "Paddington",
-        "Darlinghurst",
-        "North Sydney",
-        "Crows Nest",
-        "St Leonards",
-        "Ryde",
-        "Penrith",
-        "Liverpool",
-        "Campbelltown",
-        "Wollongong",
-        "Hornsby",]
-    },
-    {
-      firstName: "John",
-      lastName: "Smith",
-      jobPosition: "Senior Sales Agent",
-      email: "john.smith@ausrealty.com",
-      phone: "0400 000 000",
-      profileText: "With over 10 years of experience in Sydney's premium real estate market...",
-      photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-      facebookUrl: "https://facebook.com",
-      twitterUrl: "https://twitter.com",
-      linkedInUrl: "https://linkedin.com",
-      personalWebsiteUrl: "https://example.com",
-      saleActive: true,
-      rentalActive: true,
-      suburbsCovered: [
-        "Peakhurst",
-        "Bondi",
-        "Manly",
-        "Parramatta",
-        "Chatswood",
-        "Blacktown",
-        "Cronulla",
-        "Surry Hills",
-        "Mosman",
-        "Neutral Bay",
-        "Newtown",
-        "Paddington",
-        "Darlinghurst",
-        "North Sydney",
-        "Crows Nest",
-        "St Leonards",
-        "Ryde",
-        "Penrith",
-        "Liverpool",
-        "Campbelltown",
-        "Wollongong",
-        "Hornsby",]
-    }
-// Add more agents as needed
-]
+    firstName: "John",
+    lastName: "Smith",
+    jobPosition: "Senior Sales Agent",
+    email: "john.smith@ausrealty.com",
+    phone: "0400 000 000",
+    profileText:
+      "With over 10 years of experience in Sydney's premium real estate market...",
+    photo:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    mugShotURL:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    facebookUrl: "https://facebook.com",
+    twitterUrl: "https://twitter.com",
+    linkedInUrl: "https://linkedin.com",
+    personalWebsiteUrl: "https://example.com",
+    saleActive: true,
+    rentalActive: true,
+    suburbsCovered: [
+      "Peakhurst",
+      "Bondi",
+      "Manly",
+      "Parramatta",
+      "Chatswood",
+      "Blacktown",
+      "Cronulla",
+      "Surry Hills",
+      "Mosman",
+      "Neutral Bay",
+      "Newtown",
+      "Paddington",
+      "Darlinghurst",
+      "North Sydney",
+      "Crows Nest",
+      "St Leonards",
+      "Ryde",
+      "Penrith",
+      "Liverpool",
+      "Campbelltown",
+      "Wollongong",
+      "Hornsby",
+    ],
+  },
+  {
+    firstName: "John",
+    lastName: "Smith",
+    jobPosition: "Senior Sales Agent",
+    email: "john.smith@ausrealty.com",
+    phone: "0400 000 000",
+    profileText:
+      "With over 10 years of experience in Sydney's premium real estate market...",
+    photo:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    mugShotURL:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    facebookUrl: "https://facebook.com",
+    twitterUrl: "https://twitter.com",
+    linkedInUrl: "https://linkedin.com",
+    personalWebsiteUrl: "https://example.com",
+    saleActive: true,
+    rentalActive: true,
+    suburbsCovered: [
+      "Peakhurst",
+      "Bondi",
+      "Manly",
+      "Parramatta",
+      "Chatswood",
+      "Blacktown",
+      "Cronulla",
+      "Surry Hills",
+      "Mosman",
+      "Neutral Bay",
+      "Newtown",
+      "Paddington",
+      "Darlinghurst",
+      "North Sydney",
+      "Crows Nest",
+      "St Leonards",
+      "Ryde",
+      "Penrith",
+      "Liverpool",
+      "Campbelltown",
+      "Wollongong",
+      "Hornsby",
+    ],
+  },
+  {
+    firstName: "John",
+    lastName: "Smith",
+    jobPosition: "Senior Sales Agent",
+    email: "john.smith@ausrealty.com",
+    phone: "0400 000 000",
+    profileText:
+      "With over 10 years of experience in Sydney's premium real estate market...",
+    photo:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    mugShotURL:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    facebookUrl: "https://facebook.com",
+    twitterUrl: "https://twitter.com",
+    linkedInUrl: "https://linkedin.com",
+    personalWebsiteUrl: "https://example.com",
+    saleActive: true,
+    rentalActive: true,
+    suburbsCovered: [
+      "Peakhurst",
+      "Bondi",
+      "Manly",
+      "Parramatta",
+      "Chatswood",
+      "Blacktown",
+      "Cronulla",
+      "Surry Hills",
+      "Mosman",
+      "Neutral Bay",
+      "Newtown",
+      "Paddington",
+      "Darlinghurst",
+      "North Sydney",
+      "Crows Nest",
+      "St Leonards",
+      "Ryde",
+      "Penrith",
+      "Liverpool",
+      "Campbelltown",
+      "Wollongong",
+      "Hornsby",
+    ],
+  },
+  {
+    firstName: "John",
+    lastName: "Smith",
+    jobPosition: "Senior Sales Agent",
+    email: "john.smith@ausrealty.com",
+    phone: "0400 000 000",
+    profileText:
+      "With over 10 years of experience in Sydney's premium real estate market...",
+    photo:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    mugShotURL:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    facebookUrl: "https://facebook.com",
+    twitterUrl: "https://twitter.com",
+    linkedInUrl: "https://linkedin.com",
+    personalWebsiteUrl: "https://example.com",
+    saleActive: true,
+    rentalActive: true,
+    suburbsCovered: [
+      "Peakhurst",
+      "Bondi",
+      "Manly",
+      "Parramatta",
+      "Chatswood",
+      "Blacktown",
+      "Cronulla",
+      "Surry Hills",
+      "Mosman",
+      "Neutral Bay",
+      "Newtown",
+      "Paddington",
+      "Darlinghurst",
+      "North Sydney",
+      "Crows Nest",
+      "St Leonards",
+      "Ryde",
+      "Penrith",
+      "Liverpool",
+      "Campbelltown",
+      "Wollongong",
+      "Hornsby",
+    ],
+  },
+  {
+    firstName: "John",
+    lastName: "Smith",
+    jobPosition: "Senior Sales Agent",
+    email: "john.smith@ausrealty.com",
+    phone: "0400 000 000",
+    profileText:
+      "With over 10 years of experience in Sydney's premium real estate market...",
+    photo:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    mugShotURL:
+      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
+    facebookUrl: "https://facebook.com",
+    twitterUrl: "https://twitter.com",
+    linkedInUrl: "https://linkedin.com",
+    personalWebsiteUrl: "https://example.com",
+    saleActive: true,
+    rentalActive: true,
+    suburbsCovered: [
+      "Peakhurst",
+      "Bondi",
+      "Manly",
+      "Parramatta",
+      "Chatswood",
+      "Blacktown",
+      "Cronulla",
+      "Surry Hills",
+      "Mosman",
+      "Neutral Bay",
+      "Newtown",
+      "Paddington",
+      "Darlinghurst",
+      "North Sydney",
+      "Crows Nest",
+      "St Leonards",
+      "Ryde",
+      "Penrith",
+      "Liverpool",
+      "Campbelltown",
+      "Wollongong",
+      "Hornsby",
+    ],
+  },
+  // Add more agents as needed
+];
 const extractDisplayText = (text: string): string => {
   if (!text.includes("%%")) {
     const [displayPart] = text.split("[");
@@ -1287,22 +1306,22 @@ Responses should focus on guiding the user to provide information while maintain
       model: "gpt-4o",
       functions: [
         {
-          "name": "reply_text_and_filter_agents",
-          "description": "Replies to the user and filters agents based on suburb",
-          "parameters": {
-              "type": "object",
-              "properties": {
-                  "reply_to_user": {
-                      "type": "string",
-                      "description": "What you want to say to the user",
-                  },
-                  "suburb": {
-                      "type": "string",
-                      "description": "Suburb to filter agents by",
-                  }
+          name: "reply_text_and_filter_agents",
+          description: "Replies to the user and filters agents based on suburb",
+          parameters: {
+            type: "object",
+            properties: {
+              reply_to_user: {
+                type: "string",
+                description: "What you want to say to the user",
               },
-              "required": ["reply_to_user"]
-          }
+              suburb: {
+                type: "string",
+                description: "Suburb to filter agents by",
+              },
+            },
+            required: ["reply_to_user"],
+          },
         },
       ],
       function_call: "auto",
@@ -1313,28 +1332,26 @@ Responses should focus on guiding the user to provide information while maintain
     let responseText = "";
     // @ts-ignore
 
-    const completion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params);
+    const completion: OpenAI.Chat.ChatCompletion =
+      await openai.chat.completions.create(params);
     responseText = completion.choices[0].message?.content || "";
-      if (completion.choices[0].message?.function_call) {
-        // @ts-ignore
-        const toolCall = completion.choices[0].message.function_call;
-        const { name, arguments: functionArguments } = toolCall
-        console.log(name, functionArguments)
-        if (name === "reply_text_and_filter_agents") {
-          let { suburb,reply_to_user } = JSON.parse(functionArguments);
-          // convert suburb to camel case
-          suburb = suburb.replace(/\b\w/g, (char:string) => char.toUpperCase());
-          responseText = reply_to_user;
-          // Filter agents logic (replace this with your actual filtering logic)
-          filteredAgents = agents.filter((agent) =>
-            agent.suburbsCovered.includes(suburb)
-          );
-
-        }
-    
-    
-  }
-  const data = processResponse(responseText);
+    if (completion.choices[0].message?.function_call) {
+      // @ts-ignore
+      const toolCall = completion.choices[0].message.function_call;
+      const { name, arguments: functionArguments } = toolCall;
+      console.log(name, functionArguments);
+      if (name === "reply_text_and_filter_agents") {
+        let { suburb, reply_to_user } = JSON.parse(functionArguments);
+        // convert suburb to camel case
+        suburb = suburb.replace(/\b\w/g, (char: string) => char.toUpperCase());
+        responseText = reply_to_user;
+        // Filter agents logic (replace this with your actual filtering logic)
+        filteredAgents = agents.filter((agent) =>
+          agent.suburbsCovered.includes(suburb)
+        );
+      }
+    }
+    const data = processResponse(responseText);
     return {
       response: data.displayText,
       extractedAgents: filteredAgents,
@@ -1450,22 +1467,22 @@ Responses should focus on guiding the user to provide information while maintain
       model: "gpt-4o",
       functions: [
         {
-          "name": "reply_text_and_filter_agents",
-          "description": "Replies to the user and filters agents based on suburb",
-          "parameters": {
-              "type": "object",
-              "properties": {
-                  "reply_to_user": {
-                      "type": "string",
-                      "description": "What you want to say to the user",
-                  },
-                  "suburb": {
-                      "type": "string",
-                      "description": "Suburb to filter agents by",
-                  }
+          name: "reply_text_and_filter_agents",
+          description: "Replies to the user and filters agents based on suburb",
+          parameters: {
+            type: "object",
+            properties: {
+              reply_to_user: {
+                type: "string",
+                description: "What you want to say to the user",
               },
-              "required": ["reply_to_user"]
-          }
+              suburb: {
+                type: "string",
+                description: "Suburb to filter agents by",
+              },
+            },
+            required: ["reply_to_user"],
+          },
         },
       ],
       function_call: "auto",
@@ -1476,28 +1493,26 @@ Responses should focus on guiding the user to provide information while maintain
     let responseText = "";
     // @ts-ignore
 
-    const completion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create(params);
+    const completion: OpenAI.Chat.ChatCompletion =
+      await openai.chat.completions.create(params);
     responseText = completion.choices[0].message?.content || "";
-      if (completion.choices[0].message?.function_call) {
-        // @ts-ignore
-        const toolCall = completion.choices[0].message.function_call;
-        const { name, arguments: functionArguments } = toolCall
-        console.log(name, functionArguments)
-        if (name === "reply_text_and_filter_agents") {
-          let { suburb,reply_to_user } = JSON.parse(functionArguments);
-          // convert suburb to camel case
-          suburb = suburb.replace(/\b\w/g, (char:string) => char.toUpperCase());
-          responseText = reply_to_user;
-          // Filter agents logic (replace this with your actual filtering logic)
-          filteredAgents = agents.filter((agent) =>
-            agent.suburbsCovered.includes(suburb)
-          );
-
-        }
-    
-    
-  }
-  const data = processResponse(responseText);
+    if (completion.choices[0].message?.function_call) {
+      // @ts-ignore
+      const toolCall = completion.choices[0].message.function_call;
+      const { name, arguments: functionArguments } = toolCall;
+      console.log(name, functionArguments);
+      if (name === "reply_text_and_filter_agents") {
+        let { suburb, reply_to_user } = JSON.parse(functionArguments);
+        // convert suburb to camel case
+        suburb = suburb.replace(/\b\w/g, (char: string) => char.toUpperCase());
+        responseText = reply_to_user;
+        // Filter agents logic (replace this with your actual filtering logic)
+        filteredAgents = agents.filter((agent) =>
+          agent.suburbsCovered.includes(suburb)
+        );
+      }
+    }
+    const data = processResponse(responseText);
     return {
       response: data.displayText,
       extractedAgents: filteredAgents,
@@ -1507,7 +1522,6 @@ Responses should focus on guiding the user to provide information while maintain
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
-
 
 export async function handleTranscription(processedBlob: Blob) {
   try {

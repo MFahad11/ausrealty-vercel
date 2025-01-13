@@ -5,6 +5,7 @@ import '@/components/ui/carousel/css/index.css';
 import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 import { useJsApiLoader } from "@react-google-maps/api";
+import ProgressLoader from "@/components/ui/ProgressLoader";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { isLoaded, loadError } = useJsApiLoader({
@@ -12,8 +13,8 @@ export default function App({ Component, pageProps }: AppProps) {
     libraries:["places"], // Corrected libraries
     version: "weekly",
   });
-  if (loadError) return <div>"Error loading Google Maps"</div>;
-  if (!isLoaded) return <div>"Loading Google Maps"</div>;
+  if (loadError) return <div></div>;
+  if (!isLoaded) return <ProgressLoader/>;
   return <>
   
   <ToastContainer/>

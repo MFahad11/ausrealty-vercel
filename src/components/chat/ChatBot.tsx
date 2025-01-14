@@ -117,6 +117,8 @@ const ChatBot = ({
   const checkSilenceRef = useRef<boolean>(false)
   const setIsMessage=useIsMessageStore((state) => state.setIsMessage);
   const isMessage=useIsMessageStore((state) => state.isMessage);
+    
+  
   useEffect(() => {
     setMessages([])
     setFetchedProperties([])
@@ -701,7 +703,7 @@ const ChatBot = ({
               content: 'Alternatively, click below to try our pricing tool.',
               isLoading: true,
               button: true,
-              buttonText: 'Receive a More Accurate Indication'
+              buttonText: 'Price Assessment'
             }
             let updatedMessages = [...prevMessages, newMessage]
             typewriterEffect(data?.response, updatedMessages.length - 1)
@@ -1038,25 +1040,10 @@ const ChatBot = ({
                             >
                               {message.buttonText}
                             </Button>
-                          </div>{
-                          quickSearch &&  <span
-                          className={`inline-block rounded-lg max-w-[80%] p-3 bg-white rounded-br-none ml-2`}
-                          ref={
-                           index === messages.length - 1
-                              ? botResponseRef
-                              : null
-                          }
-                        >
-                          <p className='text-[16px] font-light p-0 m-0'>
-                          Can you please input your address in the text box below?
-                          </p>
-                        </span>
-                        }</>
+                          </div></>
                         )}
                         
-                        {
-                          quickSearch && <QuickSearch />
-                        }
+                        
                         
                       </div>
                     </div>
@@ -1072,6 +1059,26 @@ const ChatBot = ({
                     </p>
                   </div>
                 )}
+                {
+                          quickSearch &&  <span
+                          className={`inline-block rounded-lg max-w-[80%] p-3 bg-white rounded-br-none ml-2`}
+                          ref={
+                           index === messages.length - 1
+                              ? botResponseRef
+                              : null
+                          }
+                        >
+                          <p className='text-[16px] font-light p-0 m-0'>
+                          Can you please input your address in the text box below?
+                          </p>
+                        </span>
+                        }
+                {
+                          quickSearch && <QuickSearch
+                          setQuickSearch={setQuickSearch}
+                          />
+                }
+                
                 <div ref={messagesEndRef} />
               </div>
             </>
@@ -1089,8 +1096,10 @@ const ChatBot = ({
         className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 pb-4 pt-2 text-center`}
       >
         <div className='flex flex-col gap-6'>
-          {
-            !quickSearch && (<div className='w-full max-w-md mx-auto relative'>
+        
+        {
+          !quickSearch && (
+            <div className='w-full max-w-md mx-auto relative'>
             <input
               type='text'
               value={inputValue}
@@ -1137,8 +1146,9 @@ const ChatBot = ({
                 <LuChevronDown className='w-6 h-6' />
               </button>
             )}
-          </div>)
-          }
+          </div>
+          )
+        }
           
 
           <div

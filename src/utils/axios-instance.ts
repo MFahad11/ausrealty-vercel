@@ -2,7 +2,7 @@ import axios from 'axios';
 // a production ready axios instance
 const axiosInstance = axios.create({
   baseURL: process.env.NODE_ENV === 'production' ? process.env.API_URL_PROD : process.env.API_URL_LOCAL,
-  timeout: 10000,
+  timeout: 15000, // 15 seconds
   headers: {
     'Content-Type': 'application/json',
   },

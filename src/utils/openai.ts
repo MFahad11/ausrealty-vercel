@@ -1886,7 +1886,7 @@ export async function handleEstimateValue(
   }
 }
 
-export async function handleGeneralWithReponseasText(
+export async function handleGeneralWithReponse(
   systemPrompt: string,
   userInput: string,
 ){
@@ -1905,12 +1905,14 @@ export async function handleGeneralWithReponseasText(
       },
     };
 
+
     // Call the OpenAI API with the conversation messages
     // @ts-ignore
     const completion: OpenAI.Chat.ChatCompletion =
       await openai.chat.completions.create(params);
     
     const responseText=  completion.choices[0].message?.content || "";
+    console.log(responseText);
     return responseText;
   } catch (error) {
     console.error("Error interacting with OpenAI API:", error);

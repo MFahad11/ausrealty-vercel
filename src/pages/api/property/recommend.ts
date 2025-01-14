@@ -305,7 +305,6 @@ async function duplexMatches(listingType:string, suburb:string, postcode:string,
   
     return transformedArray;
   }
-  export const maxDuration = 1000 * 60 * 5; // 5 minutes
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
       return res.status(405).json({ success: false, message: "Method not allowed" });

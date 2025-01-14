@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-
+import { CiEdit } from "react-icons/ci";
 const LogicalPriceEdit = ({
   value,
   onSave
@@ -67,7 +67,7 @@ const LogicalPriceEdit = ({
   }
 
   return (
-    <span className='w-auto flex items-start justify-start'>
+    <span className='w-auto flex items-center justify-start align-middle'>
       {isEditing ? (
         <input
           ref={inputRef}
@@ -80,15 +80,19 @@ const LogicalPriceEdit = ({
           className='w-full border border-mediumgray form-input resize-none overflow-hidden text-sm p-2 rounded'
         />
       ) : (
-        <span className='inline-block break-words w-auto pr-2'>
+        <span className='inline-block break-words w-auto'>
           {inputValue}
         </span>
       )}
       {!isEditing && (
-        <i
-          className='mx-2 text-sm fa-solid fa-pencil cursor-pointer'
+        // <i
+        //   className='mx-2 text-sm fa-solid fa-pencil cursor-pointer'
+        //   onClick={() => setIsEditing(true)}
+        // ></i>
+        <CiEdit
+          className='mx-2 text-sm cursor-pointer w-5 h-5'
           onClick={() => setIsEditing(true)}
-        ></i>
+        />
       )}
     </span>
   )

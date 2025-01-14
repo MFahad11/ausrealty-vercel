@@ -4,8 +4,10 @@ import { IoChevronDown } from 'react-icons/io5'
 import {
   LuFacebook,
   LuGlobe,
+  LuInstagram,
   LuLinkedin,
   LuMail,
+  LuMessageSquare,
   LuPhone,
   LuTwitter
 } from 'react-icons/lu'
@@ -68,13 +70,19 @@ const AgentCard = ({
         )}
 
         <div className='space-y-2'>
-          {agent.phone && (
+          {agent.phone && (<div className="space-y-1">
             <div className='flex items-center gap-2 text-sm'>
               <LuPhone className='w-4 h-4' />
               <a href={`tel:${agent.phone}`} className='hover:underline'>
                 {agent.phone}
               </a>
             </div>
+             <Link 
+             href={`https://wa.me/${agent.phone?.replace(/\s+/g, '')}`}
+             className="text-xs text-gray-600 hover:underline ml-6"
+           >
+             Message on WhatsApp
+           </Link></div>
           )}
 
           {agent.email && (
@@ -86,9 +94,8 @@ const AgentCard = ({
             </div>
           )}
         </div>
-        {showLinks ? (
-          <>
-            <div className='flex items-center justify-center gap-4 pt-4 border-t'>
+        <>
+          <div className='flex items-center justify-start gap-4 pt-2'>
               {agent.facebookUrl && (
                 <Link
                   href={agent.facebookUrl}
@@ -97,7 +104,18 @@ const AgentCard = ({
                   <LuFacebook className='w-5 h-5' />
                 </Link>
               )}
-              {agent.twitterUrl && (
+              {agent.instagramUrl && (
+                    <Link href={agent.instagramUrl} className="text-gray-600 hover:text-black">
+                      <LuInstagram className="w-5 h-5" />
+                    </Link>
+                  )}
+                   <button 
+                    onClick={() => window.location.href = `sms:${agent.phone}`}
+                    className="text-gray-600 hover:text-black"
+                  >
+                    <LuMessageSquare className="w-5 h-5" />
+                  </button>
+              {/* {agent.twitterUrl && (
                 <Link
                   href={agent.twitterUrl}
                   className='text-gray-600 hover:text-black'
@@ -112,7 +130,7 @@ const AgentCard = ({
                 >
                   <LuLinkedin className='w-5 h-5' />
                 </Link>
-              )}
+              )} */}
               {agent.personalWebsiteUrl && (
                 <Link
                   href={agent.personalWebsiteUrl}
@@ -123,7 +141,7 @@ const AgentCard = ({
               )}
             </div>
 
-            <div className='flex justify-center gap-4 text-xs'>
+            {/* <div className='flex justify-center gap-4 text-xs'>
               {agent.saleActive && (
                 <span className='px-3 py-1 bg-black text-white uppercase'>
                   Sales
@@ -134,11 +152,9 @@ const AgentCard = ({
                   Rentals
                 </span>
               )}
-            </div>
-          </>
-        ) : (
-          <>
+            </div> */}
             <div className='flex items-center justify-between px-4 py-2 border-t border-b'>
+              
               <p className='text-sm text-gray-700 uppercase tracking-wider font-abchanel'>
                 Recent Maximum Outcomes
               </p>
@@ -150,7 +166,6 @@ const AgentCard = ({
               />
             </div>
           </>
-        )}
       </div>
       {isOpen && (
         <div>
@@ -171,7 +186,7 @@ const AgentCard = ({
       {/* Reserve button */}
       <Button
         onClick={() => {}}
-        className='gray-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center font-abchanel '
+        className='gray-button flex w-full max-w-[22rem] md:max-w-[30rem] mx-auto justify-center items-center font-abchanel'
         aria-label='Reset search'
       >
         RESERVE APPOINTMENT

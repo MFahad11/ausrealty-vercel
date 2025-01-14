@@ -26,7 +26,8 @@ import GoogleChart from '../GoogleChart'
 import EmblaCarousel from '../ui/carousel'
 import LogicalPriceEdit from '../ui/LogicalPriceEdit'
 import { PropertyDetailsModal } from '../ui/PropertyDetailsModal'
-
+import { LiaSyncSolid } from "react-icons/lia";
+import { FaSpinner } from 'react-icons/fa'
 const settings = {
   dots: false,
   infinite: false,
@@ -1368,8 +1369,8 @@ const PropertyResult = ({
 
         setLogicalPrice(response?.data?.data?.logical?.logicalPrice || null)
         setLogicalReasoning(response?.data?.data?.logical?.logicalReasoning || null)
-        setSaleProperties(response?.data?.data?.recommendedSales || [])
-        setSoldProperties(response?.data?.data?.recommendedSold || [])
+        // setSaleProperties(response?.data?.data?.recommendedSales || [])
+        // setSoldProperties(response?.data?.data?.recommendedSold || [])
       } catch (error) {
         console.error('Error fetching recommended properties:', error)
       }
@@ -1502,8 +1503,8 @@ Please find enclosed Information for the property at ${property.address}`,
 
   return (
     <div className='flex flex-col items-center justify-center'>
-      <div className='w-full max-w-4xl mx-auto flex flex-col items-center justify-center text-center space-y-20'>
-        <div className='w-full flex justify-end gap-2'>
+      <div className='w-full max-w-4xl mx-auto flex flex-col items-center justify-center text-center space-y-10'>
+        <div className='w-full flex justify-end gap-2 mt-6'>
           <Button className='gray-button' onClick={onEdit} disabled={loading}>
             Edit
           </Button>
@@ -1519,7 +1520,7 @@ Please find enclosed Information for the property at ${property.address}`,
 
         <p>{property.address}</p>
 
-        <div className='space-y-8'>
+        <div className='space-y-6'>
           {property.domainPrice &&
             property.domainPrice.lowerPrice !== undefined &&
             property.domainPrice.upperPrice !== undefined && (
@@ -1532,34 +1533,51 @@ Please find enclosed Information for the property at ${property.address}`,
               </div>
             )}
 
-          <h4>LOGICAL PRICE</h4>
+          
 
           {/* Price and Info Icon */}
           <div className='flex items-center justify-center gap-4'>
             {!loading ? (
               <>
-                <span className='font-bold'>
+                {/* <span className='font-bold'>
                   <LogicalPriceEdit
                     value={logicalPrice ? logicalPrice : 'N/A'}
                     onSave={(newValue: any) => {
                       setLogicalPrice(newValue)
                     }}
                   />
-                </span>
-                <i
+                </span> */}
+                <div className='flex flex-col items-center justify-center'>
+                <h4>LOGICAL PRICE</h4>
+                <LogicalPriceEdit
+                    value={logicalPrice ? logicalPrice : 'N/A'}
+                    onSave={(newValue: any) => {
+                      setLogicalPrice(newValue)
+                    }}
+                  />
+              </div>
+                {/* <i
                   className='fas fa-sync-alt cursor-pointer'
                   onClick={() => setRegenerateLogicalPrice(true)}
-                ></i>
+                ></i> */}
+                {/* <LiaSyncSolid
+                  className='cursor-pointer'
+                  onClick={() => setRegenerateLogicalPrice(true)}
+                  /> */}
               </>
             ) : (
-              <i className='fa-solid fa-spinner animate-spin'></i>
+              <div className='flex flex-col items-center justify-center'>
+                <h4>LOGICAL PRICE</h4>
+                <FaSpinner className='animate-spin' />
+              </div>
+              
             )}
-            <Tooltip
+            {/* <Tooltip
               className='w-[250px]'
               text='This is just a logical estimated price, and is grounded on a comprehensive set of factors including recent local sales, property size, number of bedrooms, the topography of the land, street traffic, recent updates to the property, and various other determinants. The information is sourced from public datasets which, while extensive, might be incomplete or contain inaccuracies, so should not be solely relied upon. For a more precise and accurate estimation of price, we strongly recommend consulting with a licensed real estate agent or a registered valuer. Occasionally, we may send you updates on the property market'
               // text={<i className="fa fa-info-circle text-xs"></i>}
               tooltip='This is just a logical estimated price, and is grounded on a comprehensive set of factors including recent local sales, property size, number of bedrooms, the topography of the land, street traffic, recent updates to the property, and various other determinants. The information is sourced from public datasets which, while extensive, might be incomplete or contain inaccuracies, so should not be solely relied upon. For a more precise and accurate estimation of price, we strongly recommend consulting with a licensed real estate agent or a registered valuer. Occasionally, we may send you updates on the property market'
-            />
+            /> */}
           </div>
 
           {/* Logical Reasoning */}
@@ -1904,6 +1922,9 @@ const PropertyContainer = ({
 
   return (
     <div className='w-full'>
+      <p className='text-[16px] font-light p-0 m-0'>
+        The provided information may not be fully accurate. For a more precise assessment please consult with an agent.
+      </p>
       {!isSubmitted ? (
         <PropertyForm property={formData} onSubmitForm={handleFormSubmit} />
       ) : (
@@ -2049,7 +2070,12 @@ const QuickSearch = () => {
   }
 
   if (loading) {
-    return <PageLoader />
+   
+    return <p className={`rounded-lg max-w-[80%] p-3 bg-white rounded-br-none ml-2`}>
+    <p className='text-[16px] font-light p-0 m-0'>
+    We are retrieving the information for you, Please hold.
+    </p>
+  </p>
   }
 
   if (error) {

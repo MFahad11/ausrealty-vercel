@@ -1027,30 +1027,33 @@ const ChatBot = ({
                           </div>
                         )}
                         {message.button && (
-                          <div className='flex w-full '>
+                          <><div className='flex w-full '>
                             <Button
                               onClick={() => {
                                 setQuickSearch(!quickSearch)
-                                if(!quickSearch){
-                                  setMessages((prevMessages) => {
-                                    const newMessage = {
-                                      role: "system",
-                                      content: "Please provide you address in the search bar below",
-                                    };
-                                    const updatedMessages = [...prevMessages, newMessage];
-                                    typewriterEffect("Please provide you address in the search bar below", updatedMessages.length - 1);
-                                    return updatedMessages;
-                                  }
-                                  );
-                                }
+                                
                               }}
                               className='gray-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center capitalize font-abchanel'
                               aria-label='Reset search'
                             >
                               {message.buttonText}
                             </Button>
-                          </div>
+                          </div>{
+                          quickSearch &&  <span
+                          className={`inline-block rounded-lg max-w-[80%] p-3 bg-white rounded-br-none ml-2`}
+                          ref={
+                           index === messages.length - 1
+                              ? botResponseRef
+                              : null
+                          }
+                        >
+                          <p className='text-[16px] font-light p-0 m-0'>
+                          Please provide you address in the search bar below
+                          </p>
+                        </span>
+                        }</>
                         )}
+                        
                         {
                           quickSearch && <QuickSearch />
                         }

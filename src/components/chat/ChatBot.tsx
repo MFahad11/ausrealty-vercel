@@ -1048,7 +1048,7 @@ const ChatBot = ({
                           }
                         >
                           <p className='text-[16px] font-light p-0 m-0'>
-                          Please provide you address in the search bar below
+                          Can you please input your address in the text box below?
                           </p>
                         </span>
                         }</>

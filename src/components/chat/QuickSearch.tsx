@@ -2097,12 +2097,15 @@ setPropertyForm(true)
   }
 
   if (loading) {
-   
-    return <p className={`rounded-lg max-w-[80%] p-3 bg-white rounded-br-none ml-2`}>
-    <p className='text-[16px] font-light p-0 m-0'>
-    We are retrieving the information for you, Please hold.
-    </p>
-  </p>
+    return (
+      <div className='text-left mb-2 p-3 space-x-1 flex items-center max-w-[80%] '>
+                    <div className='rounded-full h-3 w-3 bg-black animate-pulse'></div>
+
+                    <p className='animate-pulse text-[16px] font-light'>
+                    We are retrieving the information for you, Please hold.
+                    </p>
+                  </div>
+    )
   }
 
   if (error) {

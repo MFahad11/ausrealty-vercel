@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { handleIdentifyIntent } from "@/utils/openai";
 import PropertyDetails from "@/components/property/PropertyDetails";
 import AgentsPage from "@/components/property/AgentDetails";
+import Button from "@/components/ui/Button";
 export default function ImageGallery({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -92,6 +93,20 @@ export default function ImageGallery({ id }: { id: string }) {
       getListing(id);
     }
   }, [id]);
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: property?.headline,
+          text: property?.details,
+          url: window.location.href,
+        })
+        .then(() => console.log("Successful share"))
+        .catch((error) => console.log("Error sharing", error));
+    } else {
+      console.log("Web share not supported");
+    }
+  }
   if (isLoading || !property) {
     return <PageLoader />;
   }
@@ -119,6 +134,18 @@ export default function ImageGallery({ id }: { id: string }) {
         </div>
       </Modal>
       <div className="max-w-4xl mx-auto mt-20">
+        {
+          // make a stcky share button to right center of the screen to share the property
+        }
+        <Button
+          // key={tab.id}
+          onClick={handleShare}
+          className="black-button fixed right-0 top-1/3 transform -translate-y-1/3 z-10"
+          
+        >
+          Share
+        </Button>
+
       <div className="pl-4 py-4 fixed top-[4.4rem] z-50 bg-white overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth w-full">
           <TabGroup
             tabs={[

@@ -1274,12 +1274,15 @@ const PropertyForm = ({
 
 const PropertyResult = ({
   property,
-  onEdit
+  onEdit,
+  setPropertyForm,
+  setQuickSearch
 }: {
   property: any
   onEdit: any
+  setPropertyForm: any,
+  setQuickSearch: any
 }) => {
-  console.log(property)
   const [loading, setLoading] = useState(false)
 
   // const { user } = useContext(AuthContext);
@@ -1505,16 +1508,35 @@ Please find enclosed Information for the property at ${property.address}`,
     <div className='flex flex-col items-center justify-center'>
       <div className='w-full max-w-4xl mx-auto flex flex-col items-center justify-center text-center space-y-10'>
         <div className='w-full flex justify-end gap-2 mt-6'>
+          <Button
+            className='black-button'
+            onClick={
+              () => {
+                // setPropertyForm(false)
+                // setQuickSearch(false)
+              }
+            }
+            // disabled={shareLoading || loading}
+            style={{
+              fontSize:'12px'
+            }}
+          >
+            Receive a More Accurate Indication
+          </Button>
           <Button className='gray-button' onClick={onEdit} disabled={loading}>
             Edit
           </Button>
+          
           <Button
             className='black-button'
-            onClick={handleShareClick}
-            loading={shareLoading}
-            disabled={shareLoading || loading}
+            onClick={()=>{
+              setPropertyForm(false)
+              setQuickSearch(false)
+            }}
+            
+            disabled={loading}
           >
-            Share
+            Close
           </Button>
         </div>
 
@@ -1897,9 +1919,12 @@ Please find enclosed Information for the property at ${property.address}`,
 }
 
 const PropertyContainer = ({
-  property: initialProperty
+  property: initialProperty, setPropertyForm,setQuickSearch
+  
 }: {
-  property: any
+  property: any,
+  setPropertyForm:any,
+  setQuickSearch:any
 }) => {
   const [formData, setFormData] = useState(initialProperty)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -1928,20 +1953,21 @@ const PropertyContainer = ({
       {!isSubmitted ? (
         <PropertyForm property={formData} onSubmitForm={handleFormSubmit} />
       ) : (
-        <PropertyResult property={formData} onEdit={handleEdit} />
+        <PropertyResult property={formData} onEdit={handleEdit} 
+        setPropertyForm={setPropertyForm} setQuickSearch={setQuickSearch}
+        />
       )}
     </div>
   )
 }
 
-const QuickSearch = () => {
+const QuickSearch = ({setQuickSearch}:{setQuickSearch:any}) => {
   const [property, setProperty] = useState('')
-  const [propertyForm, setPropertyForm] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [autocomplete, setAutocomplete] = useState(null)
   const [address, setAddress] = useState('')
-
+  const [propertyForm, setPropertyForm] = useState(false)
   const handleLoad = (
     autocompleteInstance: google.maps.places.Autocomplete
   ) => {
@@ -2038,10 +2064,10 @@ const QuickSearch = () => {
           latitude,
           longitude
         )
-
+setPropertyForm(true)
         setProperty(response || '')
-        
-      setPropertyForm(true)
+        console.log(propertyForm)
+      
       } else {
         // Logic when the input is cleared or invalid place selected
         showToast('error', 'Invalid place selected.')
@@ -2064,9 +2090,10 @@ const QuickSearch = () => {
     }
     //
     const response = await searchProperty(address)
+    setPropertyForm(true)
     setProperty(response || '')
     
-      setPropertyForm(true)
+      
   }
 
   if (loading) {
@@ -2086,7 +2113,10 @@ const QuickSearch = () => {
   if (propertyForm) {
     return (
       <div className='container'>
-        <PropertyContainer property={property} />
+        <PropertyContainer property={property} 
+        setPropertyForm={setPropertyForm}
+        setQuickSearch={setQuickSearch}
+        />
       </div>
     )
   }

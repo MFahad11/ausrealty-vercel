@@ -2066,11 +2066,7 @@ const QuickSearch = () => {
   }
 
   return (
-    <div
-                          className={`w-full right-0 bg-white px-6 pb-4 pt-2 text-center`}
-                        >
-    <div className='container flex flex-col items-center'>
-      <div className='w-full fixed bottom-24 left-0 right-0 px-6 pt-2.5 pb-4 z-50 bg-white'>
+    <div className='w-full fixed bottom-20 md:bottom-[5.8rem] left-0 right-0 px-6 pt-2.5 pb-4 z-50 bg-white'>
         <div className='w-full max-w-4xl mx-auto flex gap-2 items-end justify-center relative'>
           <Autocomplete
             onLoad={handleLoad}
@@ -2100,7 +2096,6 @@ const QuickSearch = () => {
           </Autocomplete>
         </div>
       </div>
-    </div></div>
   )
 }
 

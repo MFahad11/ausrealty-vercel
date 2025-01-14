@@ -1848,3 +1848,67 @@ export async function handleAerialImgAnalyze(imageBuffer:
     throw error;
   }
 };
+
+export async function handleEstimateValue(
+  systemPrompt: string,
+  userInput: string,
+) {
+  try {
+    const messages = [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userInput },
+    ];
+
+    const params: OpenAI.Chat.ChatCompletionCreateParams = {
+      // @ts-ignore
+      messages: messages,
+      model: "gpt-4o",
+      response_format: {
+        type: 'json_object',
+      },
+    };
+
+    // Call the OpenAI API with the conversation messages
+    // @ts-ignore
+    const completion: OpenAI.Chat.ChatCompletion =
+      await openai.chat.completions.create(params);
+    
+    const responseJson=  JSON.parse(completion.choices[0].message?.content || "{}");
+    return responseJson;
+  } catch (error) {
+    console.error("Error interacting with OpenAI API:", error);
+    throw new Error("Failed to process the request. Please try again later.");
+  }
+}
+
+export async function handleGeneralWithReponseasText(
+  systemPrompt: string,
+  userInput: string,
+){
+  try {
+    const messages = [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userInput },
+    ];
+
+    const params: OpenAI.Chat.ChatCompletionCreateParams = {
+      // @ts-ignore
+      messages: messages,
+      model: "gpt-4o",
+      response_format: {
+        type: 'text',
+      },
+    };
+
+    // Call the OpenAI API with the conversation messages
+    // @ts-ignore
+    const completion: OpenAI.Chat.ChatCompletion =
+      await openai.chat.completions.create(params);
+    
+    const responseText=  completion.choices[0].message?.content || "";
+    return responseText;
+  } catch (error) {
+    console.error("Error interacting with OpenAI API:", error);
+    throw new Error("Failed to process the request. Please try again later.");
+  }
+}

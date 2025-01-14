@@ -701,7 +701,7 @@ const ChatBot = ({
               content: 'Alternatively, click below to try our pricing tool.',
               isLoading: true,
               button: true,
-              buttonText: 'Price Assessment'
+              buttonText: 'Receive a More Accurate Indication'
             }
             let updatedMessages = [...prevMessages, newMessage]
             typewriterEffect(data?.response, updatedMessages.length - 1)
@@ -838,7 +838,7 @@ const ChatBot = ({
                 ref={messagesContainerRef}
                 className='enhanced-textarea overflow-y-auto pl-0 pb-32 '
               >
-                {messages.map((message, index) => (
+                {(messages && messages?.length>=1) && messages.map((message, index) => (
                   <>
                     <div
                       key={index}
@@ -1031,6 +1031,18 @@ const ChatBot = ({
                             <Button
                               onClick={() => {
                                 setQuickSearch(!quickSearch)
+                                if(!quickSearch){
+                                  setMessages((prevMessages) => {
+                                    const newMessage = {
+                                      role: "system",
+                                      content: "Please provide you address in the search bar below",
+                                    };
+                                    const updatedMessages = [...prevMessages, newMessage];
+                                    typewriterEffect("Please provide you address in the search bar below", updatedMessages.length - 1);
+                                    return updatedMessages;
+                                  }
+                                  );
+                                }
                               }}
                               className='gray-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center capitalize font-abchanel'
                               aria-label='Reset search'
@@ -1070,13 +1082,12 @@ const ChatBot = ({
           )}
         </div>
       </div>
-      {
-                          !quickSearch &&
-      (<div
+      <div
         className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 pb-4 pt-2 text-center`}
       >
         <div className='flex flex-col gap-6'>
-          <div className='w-full max-w-md mx-auto relative'>
+          {
+            !quickSearch && (<div className='w-full max-w-md mx-auto relative'>
             <input
               type='text'
               value={inputValue}
@@ -1123,7 +1134,9 @@ const ChatBot = ({
                 <LuChevronDown className='w-6 h-6' />
               </button>
             )}
-          </div>
+          </div>)
+          }
+          
 
           <div
             className='overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth'
@@ -1154,7 +1167,7 @@ const ChatBot = ({
             ))}
           </div>
         </div>
-      </div>)}
+      </div>
     </div>
   )
 }

@@ -14,6 +14,8 @@ import { handleIdentifyIntent } from "@/utils/openai";
 import PropertyDetails from "@/components/property/PropertyDetails";
 import AgentsPage from "@/components/property/AgentDetails";
 import Button from "@/components/ui/Button";
+import ChatWindow from "@/components/chat/ChatWindows";
+import ChatBotHandler from "@/components/chat/ChatBotHandler";
 export default function ImageGallery({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -282,36 +284,9 @@ export default function ImageGallery({ id }: { id: string }) {
           }
           
         </div>
-        <div
-                className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 py-4 text-center`}
-              >
-                <div className="flex flex-col gap-6">
-                  <div className="w-full max-w-md mx-auto relative">
-                    <input
-                      type="text"
-                      value={inputValue}
-                      onChange={handleInputChange}
-                      onKeyPress={handleKeyPress}
-                      placeholder={"How can we help? Tell us here"}
-                      // disabled={indexPage ? intentExtracting : false}
-                      autoCapitalize="on"
-                      
-                      className="start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden"
-                    />
-                    <button
-                      onClick={handleSend}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-black"
-                    >
-                      <IoSend title="Send" 
-                      className="w-5 h-5"
-                      />
-                    </button>
-                   
-                    
-                    
-                  </div>
-      </div>
-      </div>
+        <ChatBotHandler
+        data={{}}/>
+      {/* <ChatWindow/> */}
       </div>
     </>
   );

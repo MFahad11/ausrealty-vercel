@@ -37,6 +37,7 @@ import Button from '../ui/Button'
 import PropertyCarousel from '../ui/carousel/PropertyCarousel'
 import QuickSearch from './QuickSearch'
 import { useIsMessageStore } from '@/store/isMessageStore'
+import ChatWindow from './ChatWindows'
 const ChatBot = ({
   title,
   firstMessage,

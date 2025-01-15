@@ -36,7 +36,7 @@ useEffect(() => {
     className="w-full h-full object-cover"
   >
     <source 
-      src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/STARTS+WITH+BELIEF+(5).mp4" 
+      src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/e0f9076c-7041-4d9d-ac79-f7e7ccfebfa3-SORA%20WEBSITE%20VIDEO%20(1)_4.mp4" 
       type="video/mp4" 
     />
   </video>

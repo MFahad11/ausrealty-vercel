@@ -44,14 +44,20 @@ useEffect(() => {
     
     
     
-    <div><ChatBotHandler
+    <div>
+    {/* @ts-ignore */}
+      
+      <ChatBotHandler
       data={data}
       indexPage={true}
     /></div>
     
     <div></div>
   </div>):(<><NavBar /> <div
-  className="mt-10"><ChatBotHandler
+  className="mt-10">
+    {/* @ts-ignore */}
+    
+    <ChatBotHandler
       data={data}
       indexPage={true}
     /></div></>)

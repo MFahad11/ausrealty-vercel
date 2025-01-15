@@ -15,7 +15,9 @@ const ChatbotPage = (
   <NavBar />
   <div
   className="mt-10"
-  ><ChatBotHandler
+  >
+    {/* @ts-ignore */}
+    <ChatBotHandler
       data={data}
     /></div>
   

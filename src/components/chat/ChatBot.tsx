@@ -117,6 +117,7 @@ const ChatBot = ({
   const checkSilenceRef = useRef<boolean>(false)
   const setIsMessage=useIsMessageStore((state) => state.setIsMessage);
   const isMessage=useIsMessageStore((state) => state.isMessage);
+  const [propertyForm, setPropertyForm] = useState(false)
     
   
   useEffect(() => {
@@ -1076,6 +1077,8 @@ const ChatBot = ({
                 {
                           quickSearch && <QuickSearch
                           setQuickSearch={setQuickSearch}
+                          setPropertyForm={setPropertyForm}
+                          propertyForm={propertyForm}
                           />
                 }
                 
@@ -1098,7 +1101,7 @@ const ChatBot = ({
         <div className='flex flex-col gap-6'>
         
         {
-          !quickSearch && (
+          (!quickSearch || propertyForm) && (
             <div className='w-full max-w-md mx-auto relative'>
             <input
               type='text'
@@ -1168,6 +1171,7 @@ const ChatBot = ({
                 `}
                 onClick={() => {
                   if (!isTyping && !botThinking) {
+                    setQuickSearch(false)
                     handleBoxClick(box, index)
                   }
                 }}

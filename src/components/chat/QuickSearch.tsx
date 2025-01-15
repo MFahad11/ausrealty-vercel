@@ -1961,13 +1961,12 @@ const PropertyContainer = ({
   )
 }
 
-const QuickSearch = ({setQuickSearch}:{setQuickSearch:any}) => {
+const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm}:{setQuickSearch:any, propertyForm:any, setPropertyForm:any}) => {
   const [property, setProperty] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [autocomplete, setAutocomplete] = useState(null)
   const [address, setAddress] = useState('')
-  const [propertyForm, setPropertyForm] = useState(false)
   const handleLoad = (
     autocompleteInstance: google.maps.places.Autocomplete
   ) => {

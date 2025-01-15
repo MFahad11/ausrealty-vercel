@@ -137,14 +137,7 @@ export default function ImageGallery({ id }: { id: string }) {
         {
           // make a stcky share button to right center of the screen to share the property
         }
-        <Button
-          // key={tab.id}
-          onClick={handleShare}
-          className="black-button fixed right-0 top-1/3 transform -translate-y-1/3 z-10"
-          
-        >
-          Share
-        </Button>
+        
 
       <div className="pl-4 py-4 fixed top-[4.4rem] z-50 bg-white overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth w-full">
           <TabGroup
@@ -177,6 +170,7 @@ export default function ImageGallery({ id }: { id: string }) {
             ]}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            handleShare={handleShare}
           />
         </div>
         <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">

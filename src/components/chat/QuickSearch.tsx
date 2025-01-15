@@ -2098,7 +2098,7 @@ setPropertyForm(true)
 
   if (loading) {
     return (
-      <div className='text-left mb-2 p-3 space-x-1 flex items-center max-w-[80%] '>
+      <div className='text-left mb-2 p-3 space-x-1 flex items-center w-full '>
                     <div className='rounded-full h-3 w-3 bg-black animate-pulse'></div>
 
                     <p className='animate-pulse text-[16px] font-light'>

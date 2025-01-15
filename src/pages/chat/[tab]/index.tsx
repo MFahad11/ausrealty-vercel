@@ -36,13 +36,20 @@ export const getStaticProps = async ({ params }:{
     };
   }
 
-  const url = `https://graph.facebook.com/v21.0/17841401703973084?fields=media.limit(30){id,caption,like_count,comments_count,media_type,media_url,children{media_url,id}}&access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`;
+  const url = `https://graph.facebook.com/v21.0/17841401703973084?fields=media.limit(40){id,caption,like_count,comments_count,media_type,media_url,children{media_url,id}}&access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`;
   try {
      const response = await axios.get(url);
-  const data = response?.data;
+    const data = response?.data;
+    const filteredMedia = data.media.data.filter((media:{
+      media_type: string;
+    }) => media.media_type !== "VIDEO");
   return {
     props: {
-      data,
+      data: {
+        media:{
+          data: filteredMedia,
+        },
+      },
     },
     revalidate: 86400, // 1 day
   };

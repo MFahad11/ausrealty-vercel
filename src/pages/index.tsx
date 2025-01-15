@@ -26,8 +26,8 @@ useEffect(() => {
     </title>
     </Head>
     {
-      !isMessage ? (<div className="max-w-md mx-auto px-4 flex flex-col space-y-8 items-center md:mt-4">
-  <div className="relative w-full max-w-[417px] h-[656px] md:h-[670px] flex-shrink-0">
+      !isMessage ? (<div className="max-w-md mx-auto px-4 flex flex-col items-center md:mt-4">
+  <div className="relative w-full max-w-[417px] flex-shrink-0">
   <video 
     autoPlay 
     loop 

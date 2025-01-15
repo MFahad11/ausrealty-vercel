@@ -14,9 +14,10 @@ import { handleIdentifyIntent } from "@/utils/openai";
 import PropertyDetails from "@/components/property/PropertyDetails";
 import AgentsPage from "@/components/property/AgentDetails";
 import Button from "@/components/ui/Button";
-import ChatWindow from "@/components/chat/ChatWindows";
+import ChatWindow from "@/components/chat/ChatWindow/index";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
 export default function ImageGallery({ id }: { id: string }) {
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [intentExtracting, setIntentExtracting] = useState(false);
@@ -24,9 +25,12 @@ export default function ImageGallery({ id }: { id: string }) {
   const property = usePropertyStore((state) => state.propertyData);
   const router = useRouter();
   const {slug} = router.query;
-
+  const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [botThinking, setBotThinking] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
   const setProperty = usePropertyStore((state) => state.setPropertyData);
   const getListing = async (id: string) => {
     try {
@@ -285,9 +289,62 @@ export default function ImageGallery({ id }: { id: string }) {
           
         </div>
         <ChatBotHandler
-        data={{}}/>
-      {/* <ChatWindow/> */}
+        messages={messages}
+        setMessages={setMessages}
+        defaultSettings={false}
+        data={{
+          objective:property?.objective,
+          status:property?.status,
+          saleMode:property?.saleMode,
+          channel:property?.channel,
+          id:property?.id,
+          addressParts:property?.addressParts,
+          bathrooms:property?.bathrooms,
+          bedrooms:property?.bedrooms,
+          carspaces:property?.carspaces,
+          dateAvailable:property?.dateAvailable,
+          dateUpdated:property?.dateUpdated,
+          dateListed:property?.dateListed,
+          description:property?.description,
+          geoLocation:property?.geoLocation,
+          headline:property?.headline,
+          inspectionDetails:property?.inspectionDetails,
+          isNewDevelopment:property?.isNewDevelopment,
+          priceDetails:property?.priceDetails,
+          propertyId:property?.propertyId,
+          propertyTypes:property?.propertyTypes,
+          rentalDetails:property?.rentalDetails,
+          agents:[{
+            name:'John Doe',
+            phone:'123456789',
+            email:'test@test.com'
+          }],
+          company:{
+            email:'ausrealty.gmail.com',
+            name:'AusRealty',
+            phone:'123456789',
+            website:'www.ausrealty.com.au'
+          }
+        }}
+        setBotThinking={setBotThinking}
+        botThinking={botThinking}
+        isTyping={isTyping}
+        setIsTyping={setIsTyping}
+        setChatOpen={setIsChatOpen}
+        chatOpen={isChatOpen}
+        
+        />
+      
       </div>
+      <ChatWindow
+      botThinking={botThinking}
+      setBotThinking={setBotThinking}
+      isOpen={isChatOpen}
+      setIsOpen={setIsChatOpen}
+      messages={messages}
+      isTyping={isTyping}
+      
+      />
     </>
   );
 }

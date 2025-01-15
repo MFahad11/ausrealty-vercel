@@ -1,4 +1,5 @@
 import ChatBot from "@/components/chat/ChatBot";
+import CustomChatBot from "@/components/chat/ChatWindow/ChatBot";
 import ImageGrid from "@/components/chat/ImageGrid";
 import NavBar from "@/components/layout/Navbar";
 import axios from "axios";
@@ -8,8 +9,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ChatBotHandler = (
-  {data,indexPage=false
-  }: {data: any, indexPage?: boolean}
+  {data,indexPage=false,defaultSettings=true, botThinking, setBotThinking,isTyping, setIsTyping, chatOpen, setChatOpen,
+  messages,setMessages}: {data: any, indexPage?: boolean,defaultSettings?:boolean,messages:any,setMessages:any
+    botThinking:boolean, setBotThinking:React.Dispatch<React.SetStateAction<boolean>>,isTyping:boolean, setIsTyping:React.Dispatch<React.SetStateAction<boolean>>,
+    setChatOpen:React.Dispatch<React.SetStateAction<boolean>>,chatOpen:boolean,
+  }
 ) => {
   const [step, setStep] = useState(1);
   const [finalMessg, setFinalMessg] = useState("");
@@ -25,8 +29,8 @@ const ChatBotHandler = (
     "How we can help?",
     "Ask us anything"
   ];
- 
-  
+
+
   const [boxes, ] = useState<{
     title: string;
     description: string;
@@ -199,23 +203,45 @@ const ChatBotHandler = (
   };
 
   return (
-        <ChatBot
-            title={selectedBox || "INDEX"}
-            firstMessage={boxes.find((box) => {
-            
-                return box.title === selectedBox})?.firstMessage || ""}
-            prompt={boxes.find((box) => box.title === selectedBox)?.prompt || "INDEX_PROMPT"}
-            placeholder={currentText}
-            route={boxes.find((box) => box.title === selectedBox)?.route || "/"}
-            index={boxes.find((box) => box.title === selectedBox)?.index || 0}
-            // @ts-ignore
-            handleBoxClick={handleBoxClick}
-            boxes={boxes}
-            instaData={data}
-            indexPage={indexPage}
-            scrollContainerRef={scrollContainerRef}
-            boxRefs={boxRefs}
-            />
+    defaultSettings ? (<ChatBot
+      title={selectedBox || "INDEX"}
+      firstMessage={boxes.find((box) => {
+      
+          return box.title === selectedBox})?.firstMessage || ""}
+      prompt={boxes.find((box) => box.title === selectedBox)?.prompt || "INDEX_PROMPT"}
+      placeholder={currentText}
+      route={boxes.find((box) => box.title === selectedBox)?.route || "/"}
+      index={boxes.find((box) => box.title === selectedBox)?.index || 0}
+      // @ts-ignore
+      handleBoxClick={handleBoxClick}
+      boxes={boxes}
+      instaData={data}
+      indexPage={indexPage}
+      scrollContainerRef={scrollContainerRef}
+      boxRefs={boxRefs}
+      defaultSettings={defaultSettings}
+      />):(<CustomChatBot
+        firstMessage='Hey let me know how I can help you, with this property'
+        prompt={`${data?.id}_PROMPT`}
+        placeholder={currentText}
+        route={boxes.find((box) => box.title === selectedBox)?.route || "/"}
+        index={boxes.find((box) => box.title === selectedBox)?.index || 0}
+        // @ts-ignore
+        handleBoxClick={handleBoxClick}
+        boxes={boxes}
+        property={data}
+        scrollContainerRef={scrollContainerRef}
+        boxRefs={boxRefs}
+        messages={messages}
+        setMessages={setMessages}
+        botThinking={botThinking}
+      setBotThinking={setBotThinking}
+      isTyping={isTyping}
+      setIsTyping={setIsTyping}
+      open={chatOpen}
+      setOpen={setChatOpen}
+        />)
+        
   );
 };
 

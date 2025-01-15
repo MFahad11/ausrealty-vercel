@@ -84,7 +84,7 @@ const LogicalPriceEdit = ({
           {inputValue}
         </span>
       )}
-      {!isEditing && (
+      {/* {!isEditing && (
         // <i
         //   className='mx-2 text-sm fa-solid fa-pencil cursor-pointer'
         //   onClick={() => setIsEditing(true)}
@@ -93,7 +93,7 @@ const LogicalPriceEdit = ({
           className='mx-2 text-sm cursor-pointer w-5 h-5'
           onClick={() => setIsEditing(true)}
         />
-      )}
+      )} */}
     </span>
   )
 }

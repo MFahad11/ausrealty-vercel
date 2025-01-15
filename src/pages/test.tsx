@@ -1,3 +1,4 @@
+import BookAppraisal from "@/components/chat/BookApraisal";
 import { useState, FormEvent } from "react";
 
 export default function TestEmail() {
@@ -88,6 +89,7 @@ export default function TestEmail() {
         </button>
       </form>
       {status && <p style={{ marginTop: "20px", color: status.includes("Error") ? "red" : "green" }}>{status}</p>}
+      {/* <BookAppraisal /> */}
     </div>
   );
 }

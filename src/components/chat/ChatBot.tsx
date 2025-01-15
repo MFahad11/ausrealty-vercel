@@ -31,7 +31,6 @@ import {
 } from 'react-icons/lu'
 import PageLoader from '../ui/PageLoader'
 import { convertBlobToBase64, getSupportedMimeType } from '@/utils/helpers'
-import AgentCard from '../property/AgentCard'
 import AgentCarousel from '../ui/carousel/AgentCarousel'
 import Button from '../ui/Button'
 import PropertyCarousel from '../ui/carousel/PropertyCarousel'

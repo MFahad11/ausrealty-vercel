@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IoChevronDown } from 'react-icons/io5'
 import {
   LuFacebook,
@@ -17,22 +17,28 @@ import { OUR_TEAM_DATA } from '@/constants/our-team'
 import { LOOKING_TO_RENT } from '@/constants/looking-to-rent'
 import useEmblaCarousel from 'embla-carousel-react'
 import Button from '../ui/Button'
+import BookingOverlay from '../chat/BookApraisal/Overlay'
 
 const AgentCard = ({
   agent,
   index,
   showLinks = true,
-  emblaMainRef
+  emblaMainRef,
+  isOverlayOpen, setIsOverlayOpen
 }: {
   agent: any
   index: number
   showLinks?: boolean
   emblaMainRef?: any
+  isOverlayOpen: boolean
+  setIsOverlayOpen: any
 }) => {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+
   const [emblaRef] = useEmblaCarousel({ dragFree: true })
 
   return (
+    <>
     <div
       key={index}
       className='bg-white border border-darkgray rounded-md shadow-md pb-4'
@@ -185,13 +191,16 @@ const AgentCard = ({
       )}
       {/* Reserve button */}
       <Button
-        onClick={() => {}}
+        onClick={() => {
+          setIsOverlayOpen(true)
+        }}
         className='gray-button flex w-full max-w-[22rem] md:max-w-[30rem] mx-auto justify-center items-center font-abchanel'
         aria-label='Reset search'
       >
         RESERVE APPOINTMENT
       </Button>
-    </div>
+    </div></>
+    
   )
 }
 

@@ -1,0 +1,85 @@
+@font-face {
+    font-family: "ABC Corporate Extra Light";
+    src: url("../../../pages/fonts/abc-corporate-extra-light.ttf")
+      format("truetype");
+    font-style: normal;
+  }
+  
+  .react-calendar{
+    width: auto !important;
+    max-width: 378px !important;
+  }
+  
+  .react-calendar__tile--active {
+    background-color: black !important;
+    color: white !important;
+    /* border-radius: 30px; */
+  }
+  
+  .react-calendar__month-view__days__day--weekend {
+    color: black;
+  }
+  
+  .react-calendar__tile--now {
+    background: #ffff;
+  }
+  
+  .react-calendar__tile--now:hover {
+    background: #dfdede !important; /* Keep it white on hover */
+  }
+  
+  .react-calendar__tile--now:focus {
+    background: black !important; /* Keep it white on hover */
+  }
+  
+  .react-calendar_month-view_days {
+    justify-content: space-between;
+    padding: 0.2rem;
+  }
+  
+  .react-calendar_month-viewdays .react-calendar_tile {
+    display: inline-flex !important;
+    flex: 0 0 12.8% !important;
+    width: 40px; /* Adjust width */
+    height: 40px; /* Adjust height */
+    border-radius: 50%; /* Circular shape */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5; /* Optional: light background for tiles */
+    margin-bottom: 1rem !important;
+  }
+  
+  .booking-form label {
+    font-family: "ABC Corporate Extra Light", sans-serif;
+    font-size: 12px;
+  }
+  
+  .booking-form input,
+  .booking-form select {
+    font-family: "ABC Corporate Extra Light", sans-serif;
+    font-size: 12px !important;
+  }
+  .react-calendar{
+    border: 1px solid #e5e5e5 !important;
+  }
+  /* .react-calendar__month-view__days {
+    justify-content: space-between;
+    padding: 0.2rem;
+  }
+  
+  .react-calendar__month-view__days .react-calendar__tile {
+    display: inline-flex !important;
+    flex: 0 0 12.8% !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem !important;
+  }
+  
+  .react-calendar__tile:disabled{
+    background: transparent !important;
+  } */

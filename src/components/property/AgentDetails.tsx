@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { LuFacebook, LuGlobe, LuLinkedin, LuMail, LuPhone, LuTwitter } from 'react-icons/lu'
 import AgentCard from './AgentCard'
+import { useState } from 'react'
 interface Agent {
     dateUpdated?: string
     agencyId?: number
@@ -72,6 +73,7 @@ const agents: Agent[] = [
 ]
 
 export default function AgentsPage() {
+    const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   return (
     <div className="container mx-auto px-4 py-12">
         <h1 className="tracking-wider text-center mb-12 uppercase">
@@ -81,9 +83,13 @@ export default function AgentsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {agents.map((agent, index) => (
             <AgentCard
+
+
               index={index}
               agent={agent}
               showLinks={true}
+              isOverlayOpen={isOverlayOpen}
+              setIsOverlayOpen={setIsOverlayOpen}
               />
           ))}
         </div>

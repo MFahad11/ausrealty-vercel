@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import '@/components/ui/carousel/css/property-carousel.css';
 import '@/components/ui/carousel/css/agent-carousel.css';
 import '@/components/ui/carousel/css/index.css';
+import '@/components/chat/BookApraisal/BookApraisal.css';
 import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 import { useJsApiLoader } from "@react-google-maps/api";

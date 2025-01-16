@@ -1524,7 +1524,7 @@ Please find enclosed Information for the property at ${property.address}`,
             Receive a More Accurate Indication
           </Button>
           <Button className='gray-button' onClick={onEdit} disabled={loading}>
-            Edit
+            Back
           </Button>
           
           <Button

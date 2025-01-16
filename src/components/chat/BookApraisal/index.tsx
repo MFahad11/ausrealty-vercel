@@ -1063,88 +1063,14 @@ const BookAppraisal = ({ property
   // };
 
   return (
-    <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center text-center space-y-8 px-4 booking-form">
+    <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center text-center space-y-2 px-4 booking-form">
       
 
       <div className="flex flex-col w-full">
         <form onSubmit={handleSubmit(onSubmit)} className="w-full  text-start">
-          {/* Property Information */}
-          <div className="mb-8">
-            <div className="text-start grid gap-6">
-             
-              {/* Meeting Location */}
-              <div className="col-span-12 relative">
-                
-
-                {/* Conditionally render input box when 'Other' is selected */}
-                {isOtherLocation && (
-                  <>
-                    {/* <input
-                      type="text"
-                      className={`mt-2 form-input border ${
-                        errors?.otherLocation
-                          ? "border-red-500"
-                          : "border-mediumgray"
-                      }`}
-                      {...register("otherLocation", {
-                        required: "Please specify the meeting location",
-                      })}
-                      placeholder="Enter meeting location"
-                    /> */}
-                    {/* <Autocomplete
-                      onLoad={handleLoad}
-                      onPlaceChanged={handlePlaceChanged}
-                      options={{
-                        componentRestrictions: { country: ["au"] },
-                        fields: [
-                          "address_components",
-                          "geometry",
-                          "formatted_address",
-                        ],
-                        types: ["geocode"],
-                      }}
-                      className="w-full"
-                    >
-                      <div className="max-w-md mx-auto relative text-xs">
-                        <input
-                          type="text"
-                          value={address}
-                          onChange={(e) => {
-                            setAddress(e.target.value);
-                          }}
-                          placeholder="Enter address here"
-                          className={`mt-2 form-input border ${
-                            !address ? "border-red-500" : "border-mediumgray"
-                          }`}
-                        />
-                      </div>
-                    </Autocomplete>
-                    {!address && (
-                      <span className="form-error-message text-start pt-1">
-                        Meeting location is required
-                      </span>
-                    )} */}
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Vendor Information */}
-          {/* {vendors.map((vendor, index) => (
-            <div key={vendor.id} className="mb-4">
-              <div
-                id="vendor-info"
-                className="col-span-12 relative flex flex-col gap-4"
-              >
-                
-              </div>
-            </div>
-          ))} */}
-
           
 
-          <br></br>
+          
           {step==1 && (
             <>
               <h5 className="text-center">DATE AND TIME</h5>

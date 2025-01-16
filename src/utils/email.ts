@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { MailOptions } from "nodemailer/lib/smtp-pool";
 
 export interface EmailOptions {
   to: string;
@@ -15,7 +16,7 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
     },
   });
 
-  const mailOptions = {
+  const mailOptions:MailOptions = {
     from: process.env.GMAIL_USER,
     to: options.to,
     subject: options.subject,

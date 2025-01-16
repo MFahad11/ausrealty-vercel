@@ -41,7 +41,7 @@ const CustomToast = ({ type, message }:{
   type: "error" | "success",
   message: string
 }) => (
-  <div className="flex items-center z-[10000] mt-2">
+  <div className="flex items-center z-[10000] mt-6">
     <div className="mr-2">
       {type === "error" ? <ErrorIcon /> : <SuccessIcon />}
     </div>
@@ -59,6 +59,6 @@ export const showToast = (type: "error" | "success"
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    className: "text-darkergray sm:w-max m-2 z-[10000] mt-2",
+    className: "text-darkergray sm:w-max m-2 z-[10000] mt-6",
   });
 };

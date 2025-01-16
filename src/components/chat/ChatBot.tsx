@@ -539,6 +539,12 @@ const ChatBot = ({
             return updatedMessages;
           });
         }
+        else if (indexPage && prompt==='INDEX_PROMPT' &&redirect) {
+          router.push(`/chat/${redirect}`)
+          setBotThinking(false)
+          setIntentExtracting(false)
+          
+        }
         // if the
         // else{
         //   setIntentExtracting(false);

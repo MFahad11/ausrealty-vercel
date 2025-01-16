@@ -81,7 +81,7 @@ export default function ChatWindow({messages,isOpen, setIsOpen,botThinking, setB
     }, [messages])
 
   return (
-    <div className="fixed bottom-40 md:bottom-44 left-1/2 max-w-4xl w-full -translate-x-1/2 z-50">
+    <div className="fixed bottom-40 md:bottom-[9rem] left-1/2 max-w-4xl w-full -translate-x-1/2 z-50">
       <div 
         ref={chatRef}
         

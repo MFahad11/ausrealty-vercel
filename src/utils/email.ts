@@ -19,7 +19,7 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
     from: process.env.GMAIL_USER,
     to: options.to,
     subject: options.subject,
-    text: options.text,
+    html: options.text,
   };
 
   await transporter.sendMail(mailOptions);

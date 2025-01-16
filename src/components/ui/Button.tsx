@@ -1,5 +1,6 @@
 // components/Button.js
 import React from 'react'
+import { FaSpinner } from 'react-icons/fa'
 
 export default function Button ({
   children,
@@ -25,7 +26,7 @@ export default function Button ({
       {...props}
     >
       {loading ? (
-        <i className='fa-solid fa-spinner animate-spin'></i>
+        <FaSpinner className="animate-spin" />
       ) : (
         children
       )}

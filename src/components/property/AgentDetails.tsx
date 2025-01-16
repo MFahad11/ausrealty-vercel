@@ -83,8 +83,6 @@ export default function AgentsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {agents.map((agent, index) => (
             <AgentCard
-
-
               index={index}
               agent={agent}
               showLinks={true}

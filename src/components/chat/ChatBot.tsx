@@ -478,10 +478,10 @@ const ChatBot = ({
     setBotThinking(true)
     if (extractIntent) {
       const intent = await handleIdentifyIntent(userInput)
+      
       if (intent?.response) {
         const { redirect = '/', prompt: extractedPrompt,response } = JSON.parse(intent?.response)
         if (extractedPrompt && extractedPrompt !== prompt){
-         
             setFetchedProperties([])
           const getStoredMessages = localStorage.getItem(extractedPrompt)
           if (getStoredMessages) {
@@ -518,7 +518,9 @@ const ChatBot = ({
 
           // searchData(userInput);
         }
+        
         else if(indexPage && prompt==='INDEX_PROMPT' && response){
+
           setMessages((prevMessages) => {
             const userMessage = {
               role: "user",
@@ -538,6 +540,12 @@ const ChatBot = ({
             typewriterEffect(response, updatedMessages.length - 1);
             return updatedMessages;
           });
+        }
+        else if (indexPage && prompt==='INDEX_PROMPT' &&redirect) {
+          router.push(`/chat/${redirect}`)
+          setIntentExtracting(false)
+          setBotThinking(false)
+
         }
         // if the
         // else{

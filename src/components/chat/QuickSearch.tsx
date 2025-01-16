@@ -28,6 +28,7 @@ import LogicalPriceEdit from '../ui/LogicalPriceEdit'
 import { PropertyDetailsModal } from '../ui/PropertyDetailsModal'
 import { LiaSyncSolid } from "react-icons/lia";
 import { FaSpinner } from 'react-icons/fa'
+import BookingOverlay from './BookApraisal/Overlay'
 const settings = {
   dots: false,
   infinite: false,
@@ -1276,12 +1277,14 @@ const PropertyResult = ({
   property,
   onEdit,
   setPropertyForm,
-  setQuickSearch
+  setQuickSearch,
+  setIsOverlayOpen
 }: {
   property: any
   onEdit: any
   setPropertyForm: any,
-  setQuickSearch: any
+  setQuickSearch: any,
+  setIsOverlayOpen: any
 }) => {
   const [loading, setLoading] = useState(false)
 
@@ -1512,6 +1515,7 @@ Please find enclosed Information for the property at ${property.address}`,
             className='black-button'
             onClick={
               () => {
+                setIsOverlayOpen(true)
                 // setPropertyForm(false)
                 // setQuickSearch(false)
               }
@@ -1524,7 +1528,7 @@ Please find enclosed Information for the property at ${property.address}`,
             Receive a More Accurate Indication
           </Button>
           <Button className='gray-button' onClick={onEdit} disabled={loading}>
-            Edit
+            Back
           </Button>
           
           <Button
@@ -1928,7 +1932,7 @@ const PropertyContainer = ({
 }) => {
   const [formData, setFormData] = useState(initialProperty)
   const [isSubmitted, setIsSubmitted] = useState(false)
-
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   // Function to handle the form submission and pass data to PropertyResult
   const handleFormSubmit = (data: any) => {
     setFormData(data)
@@ -1946,6 +1950,8 @@ const PropertyContainer = ({
   }, [initialProperty])
 
   return (
+    <>
+    <BookingOverlay isOpen={isOverlayOpen} onClose={() => setIsOverlayOpen(false)} />
     <div className='w-full'>
       <p className='text-[16px] font-light p-0 m-0'>
         The provided information may not be fully accurate. For a more precise assessment please consult with an agent.
@@ -1955,9 +1961,11 @@ const PropertyContainer = ({
       ) : (
         <PropertyResult property={formData} onEdit={handleEdit} 
         setPropertyForm={setPropertyForm} setQuickSearch={setQuickSearch}
+        setIsOverlayOpen={setIsOverlayOpen}
         />
       )}
-    </div>
+    </div></>
+    
   )
 }
 

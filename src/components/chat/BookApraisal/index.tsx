@@ -14,133 +14,11 @@ import { Autocomplete } from "@react-google-maps/api"; // Removed useJsApiLoader
 import { IoSend } from "react-icons/io5";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
+import EmailComponent from "./EmailComponent";
+import OTPComponent from "./OtpComponent";
+import ConfirmationComponent from "./ConfirmationComponent";
 
-const Followers = ({ onTagsChange }:{
-    onTagsChange: (tags: any[]) => void
-}) => {
-  const [tags, setTags] = useState<{
-        _id: string
-        name: string
-        picture: string
-  }[]>([]);
-  const [inputValue, setInputValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [allUsers, setAllUsers] = useState([]);
 
-  // Fetch users from /user endpoint on component mount
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const response = await axiosInstance.get("/user"); // Adjust the endpoint as necessary
-  //       setAllUsers(response.data.data); // Assuming response.data.data is the array of user objects
-  //     } catch (error) {
-  //       console.error("Error fetching users:", error);
-  //     }
-  //   };
-
-  //   fetchUsers();
-  // }, []);
-
-  const handleInputChange = (e:any) => {
-    const value = e.target.value;
-    setInputValue(value);
-
-    // Filter suggestions based on input value
-    if (value) {
-      const filteredSuggestions = allUsers.filter(
-        (user:{
-            _id: string
-            name: string
-        }) =>
-          user.name && user.name.toLowerCase().includes(value.toLowerCase()) // Filter by name
-      );
-      setSuggestions(filteredSuggestions);
-    } else {
-      setSuggestions([]);
-    }
-  };
-
-  const handleTagAdd = (user:{
-        _id: string
-        name: string
-  }) => {
-    // Check if the user has already been added to tags
-    if (!tags.some((tag:{
-        _id: string
-    }) => tag._id === user._id)) {
-    // @ts-ignore
-
-      const updatedTags = [...tags, { ...user, picture: user.picture || '' }]; // Add the full user object with picture
-      setTags(updatedTags); // Update local state
-      onTagsChange(updatedTags); // Notify parent component with full user details
-      setInputValue(""); // Clear input
-      setSuggestions([]); // Clear suggestions
-    }
-  };
-
-  const removeTag = (indexToRemove:number) => {
-    const updatedTags = tags.filter((_, index) => index !== indexToRemove);
-    setTags(updatedTags);
-    onTagsChange(updatedTags); // Notify parent component
-  };
-
-  return (
-    <div className="w-full max-w-lg mx-auto my-2">
-      <label className="form-label">Add Co-Agent</label>
-      <input
-        className="form-input border border-mediumgray"
-        type="text"
-        placeholder="Type to search agents"
-        value={inputValue}
-        onChange={handleInputChange}
-      />
-
-      {/* Show suggestions dropdown */}
-      {suggestions.length > 0 && (
-        <ul className="form-input border border-mediumgray bg-white w-full p-0 py-1 m-0 mt-2 list-none max-h-[120px] overflow-y-auto">
-          {suggestions.map((suggestion:{
-            _id: string
-            name: string
-          }) => (
-            <li
-              key={suggestion._id}
-              onClick={() => handleTagAdd(suggestion)} // Pass full user object
-              className="px-2 py-1 cursor-pointer hover:bg-lightgray m-0"
-            >
-              {suggestion.name} {/* Display user name */}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {/* Display tags (multiple selected users) underneath the input */}
-      <div className="mt-2">
-        {tags.length > 0 &&
-          tags.map((tag, index) => (
-            <div
-              key={tag._id}
-              className="flex items-center justify-between bg-lightgray text-darkergray p-2 mb-2"
-            >
-              <div className="flex items-center">
-                <img
-                  src={tag.picture}
-                  alt={tag.name}
-                  className="w-8 h-8 rounded-full mr-2"
-                />
-                <span>{tag.name}</span> {/* Show name */}
-              </div>
-              <button
-                onClick={() => removeTag(index)} // Remove tag when clicking the button
-                className="text-darkergray hover:lightgray px-2"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-      </div>
-    </div>
-  );
-};
 
 const tileDisabled = ({ date, view }:{
     date: Date
@@ -691,27 +569,34 @@ const BookAppraisalList = ({
   );
 };
 
-const BookAppraisal = ({ property }:{
+const BookAppraisal = ({ property
+  , setStep,step,onClose
+ }:{
     property:{
         address: string
         propertyType: string
         waterViews: string
         developmentPotential: string
     }
+    step: number
+    , setStep: (arg0: number) => void,
+    onClose: () => void
 }) => {
   const [vendors, setVendors] = useState([{ id: 1 }]);
   const [bookings, setBookings] = useState(false);
   const [bookAppraisalData, setBookAppraisalData] = useState([]);
-  const [bookingConfirmationScreen, setBookingConfirmationScreen] =
-    useState(false);
+  const [bookingConfirmationScreen, setBookingConfirmationScreen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [selecteddate, setSelectedDate] = useState(new Date());
   const [selectedStartTime, setSelectedStartTime] = useState(null);
   const [endTimes, setEndTimes] = useState([]);
   const [bookingDetails, setBookingDetails] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
+  const [email, setEmail] = useState('')
+
   const [formData, setFormData] = useState(null);
-  const [showDiv, setShowDiv] = useState(true);
   const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
@@ -821,7 +706,9 @@ const BookAppraisal = ({ property }:{
     // @ts-ignore
 
   const onSubmit = async (data) => {
-    setIsModalOpen(true);
+    // setShowDiv(false);
+    // setIsEmailModalOpen(true);
+    setStep(3);
     if (data.meetingLocation === "Other") {
       data.meetingLocation = address;
     }
@@ -954,11 +841,13 @@ const BookAppraisal = ({ property }:{
 
   const confirmDate = () => {
     setSelectedDate(date);
-    setShowDiv(false);
+    setStep(2);
+    // setShowDiv(false);
   };
 
   const backBookingHandle = () => {
-    setShowDiv(true);
+    // setShowDiv(true);
+    setStep(1);
   };
     // @ts-ignore
 
@@ -1175,171 +1064,17 @@ const BookAppraisal = ({ property }:{
 
   return (
     <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center text-center space-y-8 px-4 booking-form">
-      {/* <div className="w-full">
-        <label className="form-label text-start">Property Address</label>
-        <input
-          type="text"
-          className="form-input"
-          value={property?.address}
-          disabled
-          readOnly
-        />
-      </div>
-
-      {property?.media && property?.media[0]?.url ? (
-        <div className="p-3">
-          <img
-            className="w-full h-auto"
-            style={{ borderRadius: "12px" }}
-            src={property?.media[0]?.url}
-            alt="property"
-          />
-        </div>
-      ) : property?.latitude && property?.longitude ? (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-          <GoogleMaps lat={property.latitude} lon={property.longitude} />
-        </div>
-      ) : null} */}
+      
 
       <div className="flex flex-col w-full">
         <form onSubmit={handleSubmit(onSubmit)} className="w-full  text-start">
           {/* Property Information */}
           <div className="mb-8">
             <div className="text-start grid gap-6">
-              {/* Property Type */}
-              {/* <div className="col-span-12 relative">
-                <label className="form-label">Property Type</label>
-                <select
-                  className={`form-input border ${
-                    errors?.propertyType
-                      ? "border-red-500"
-                      : "border-mediumgray"
-                  }`}
-                  {...register("propertyType", {
-                    required: "Property type is required",
-                  })}
-                  value={formData?.propertyType}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      propertyType: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Select Property Type</option>
-                  {[
-                    "ApartmentUnitFlat",
-                    "Duplex",
-                    "House",
-                    "Terrace",
-                    "Townhouse",
-                    "VacantLand",
-                    "Villa",
-                  ].map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-                {errors?.propertyType && (
-                  <span className="form-error-message text-start pt-1">
-                    {errors?.propertyType.message}
-                  </span>
-                )}
-              </div> */}
-
-              {/* Water Views */}
-              {/* <div className="col-span-12 relative">
-                <label className="form-label">Water Views</label>
-                <select
-                  className={`form-input border ${
-                    errors?.waterViews ? "border-red-500" : "border-mediumgray"
-                  }`}
-                  {...register("waterViews", {
-                    required: "Water views selection is required",
-                  })}
-                  value={formData?.waterViews}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      waterViews: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Select Water Views</option>
-                  {[
-                    "No",
-                    "Water views",
-                    "Deep waterfront with jetty",
-                    "Tidal waterfront with jetty",
-                    "Waterfront reserve",
-                  ].map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-                {errors?.waterViews && (
-                  <span className="form-error-message text-start pt-1">
-                    {errors?.waterViews.message}
-                  </span>
-                )}
-              </div> */}
-
-              {/* Development Potential */}
-              {/* <div className="col-span-12 relative">
-                <label className="form-label">Development Potential</label>
-                <select
-                  className="form-input border border-mediumgray"
-                  {...register("developmentPotential")}
-                  value={formData?.developmentPotential}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      developmentPotential: e.target.value,
-                    }))
-                  }
-                >
-                  <option value="">Select Development Potential</option>
-                  {[
-                    "Childcare",
-                    "Duplex site",
-                    "Townhouse site",
-                    "Unit site",
-                  ].map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div> */}
-
+             
               {/* Meeting Location */}
               <div className="col-span-12 relative">
-                {/* <label className="form-label">Meeting at</label>
-                <select
-                  className={`form-input border ${
-                    errors?.meetingLocation
-                      ? "border-red-500"
-                      : "border-mediumgray"
-                  }`}
-                  {...register("meetingLocation", {
-                    required: "Meeting Location is required",
-                  })}
-                  onChange={handleMeetingLocationChange} // Update state on change
-                >
-                  <option value="">Select</option>
-                  {["Property", "Other"].map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-                {errors?.meetingLocation && (
-                  <span className="form-error-message text-start pt-1">
-                    {errors?.meetingLocation.message}
-                  </span>
-                )} */}
+                
 
                 {/* Conditionally render input box when 'Other' is selected */}
                 {isOtherLocation && (
@@ -1396,139 +1131,24 @@ const BookAppraisal = ({ property }:{
           </div>
 
           {/* Vendor Information */}
-          {vendors.map((vendor, index) => (
+          {/* {vendors.map((vendor, index) => (
             <div key={vendor.id} className="mb-4">
               <div
                 id="vendor-info"
                 className="col-span-12 relative flex flex-col gap-4"
               >
-                {/* <label className="form-label">Add Vendor</label>
-                <div className="col-span-12 relative">
-                  <label className="form-label text-start">First Name</label>
-                  <input
-                    type="text"
-                    className={`form-input border ${
-                      errors?.[`form_${vendor.id}`]?.firstName
-                        ? "border-red-500"
-                        : "border-mediumgray"
-                    }`}
-                    {...register(`form_${vendor.id}.firstName`, {
-                      required: "First Name is required",
-                    })}
-                    placeholder="FIRST NAME"
-                  />
-                  {errors?.[`form_${vendor.id}`]?.firstName && (
-                    <span className="form-error-message text-start pt-1">
-                      {errors?.[`form_${vendor.id}`]?.firstName.message}
-                    </span>
-                  )}
-                </div>
-
-                <div className="col-span-12 relative">
-                  <label className="form-label text-start">Last Name</label>
-                  <input
-                    type="text"
-                    className={`form-input border ${
-                      errors?.[`form_${vendor.id}`]?.lastName
-                        ? "border-red-500"
-                        : "border-mediumgray"
-                    }`}
-                    {...register(`form_${vendor.id}.lastName`, {
-                      required: "Last Name is required",
-                    })}
-                    placeholder="LAST NAME"
-                  />
-                  {errors?.[`form_${vendor.id}`]?.lastName && (
-                    <span className="form-error-message text-start pt-1">
-                      {errors?.[`form_${vendor.id}`]?.lastName.message}
-                    </span>
-                  )}
-                </div>
-
-                <div className="col-span-12 relative">
-                  <label className="form-label text-start">Email</label>
-                  <input
-                    type="email"
-                    className={`form-input border ${
-                      errors?.[`form_${vendor.id}`]?.email
-                        ? "border-red-500"
-                        : "border-mediumgray"
-                    }`}
-                    {...register(`form_${vendor.id}.email`, {
-                      // required: "Email is required",
-                      pattern: {
-                        value:
-                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                        message: "Email is not valid",
-                      },
-                    })}
-                    placeholder="ENTER EMAIL ADDRESS"
-                  />
-                  {errors?.[`form_${vendor.id}`]?.email && (
-                    <span className="form-error-message text-start pt-1">
-                      {errors?.[`form_${vendor.id}`]?.email.message}
-                    </span>
-                  )}
-                </div>
-
-                <div className="col-span-12 relative">
-                  <label className="form-label text-start">Mobile</label>
-                  <input
-                    type="text"
-                    className={`form-input border ${
-                      errors?.[`form_${vendor.id}`]?.mobile
-                        ? "border-red-500"
-                        : "border-mediumgray"
-                    }`}
-                    {...register(`form_${vendor.id}.mobile`, {
-                      required: "Mobile is required",
-                      pattern: {
-                        value:
-                          /^(?:\+?(61))? ?(?:\((?=.*\)))?(0?[2-57-8])\)? ?(\d\d(?:[- ](?=\d{3})|(?!\d\d[- ]?\d[- ]))\d\d[- ]?\d[- ]?\d{3})$/,
-                        message: "Mobile number is not valid",
-                      },
-                    })}
-                    placeholder="ENTER MOBILE"
-                  />
-                  {errors?.[`form_${vendor.id}`]?.mobile && (
-                    <span className="form-error-message text-start pt-1">
-                      {errors?.[`form_${vendor.id}`]?.mobile.message}
-                    </span>
-                  )}
-                </div> */}
-
-                {/* Delete Vendor Button */}
-                {/* {vendors.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => deleteVendor(vendor.id)}
-                    className="black-button mt-2 w-max"
-                  >
-                    <FiMinus />
-                  </button>
-                )} */}
+                
               </div>
             </div>
-          ))}
+          ))} */}
 
-          {/* Add Vendor Button */}
-          {/* <div>
-            <button
-              type="button"
-              onClick={addVendor}
-              className="gray-button my-2"
-            >
-              <FaPlus />
-            </button>
-          </div> */}
-
-          {/* <Followers onTagsChange={onTagsChange} /> */}
+          
 
           <br></br>
-          {showDiv ? (
+          {step==1 && (
             <>
               <h5 className="text-center">DATE AND TIME</h5>
-              <div className="flex flex-col items-center justify-center py-4">
+              <div className="flex flex-col items-center justify-center py-2">
                 <Calendar
                   tileDisabled={tileDisabled}
                   prev2Label={null}
@@ -1538,7 +1158,7 @@ const BookAppraisal = ({ property }:{
                   onChange={setDate}
                   value={date}
                 />
-                <div className="w-full flex items-center justify-between py-8">
+                <div className="w-full flex items-center justify-between py-6">
                   <p className="text-sm">
                     {date.toLocaleDateString("en-AU", {
                       day: "numeric",
@@ -1557,93 +1177,138 @@ const BookAppraisal = ({ property }:{
                 </div>
               </div>
             </>
-          ) : (
-            <>
-              <div className="flex flex-col items-center justify-center py-4 w-full">
-                <p className="py-4">
-                  {selecteddate.toLocaleDateString("en-AU", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </p>
-
-                <div className="flex flex-col w-full">
-                  <div className="text-start py-2">
-                    <label className="form-label">Start Time</label>
-                    {startTimes.length === 0 ? (
-                      <p>
-                        No available times for the selected date. Please choose
-                        another date.
-                      </p>
-                    ) : (
+          ) 
+          }
+          {
+            step===2 && ((
+              <>
+                <div className="flex flex-col items-center justify-center py-2 w-full">
+                  <p className="py-4">
+                    {selecteddate.toLocaleDateString("en-AU", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </p>
+  
+                  <div className="flex flex-col w-full">
+                    <div className="text-start py-2">
+                      <label className="form-label">Start Time</label>
+                      {startTimes.length === 0 ? (
+                        <p>
+                          No available times for the selected date. Please choose
+                          another date.
+                        </p>
+                      ) : (
+                        <select
+                          className={`form-select border ${
+                            errors.starttime
+                              ? "border-red-500"
+                              : "border-mediumgray"
+                          }`}
+                          {...register("starttime", {
+                            required: "Start time selection is required",
+                          })}
+                          onChange={handleStartTimeChange}
+                        >
+                          <option value="">Select Start Time</option>
+                          {startTimes.map((time, index) => (
+                            <option key={index} value={time}>
+                              {time}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                      {errors.starttime && (
+                        <span className="form-error-message">
+                          {errors.starttime.message}
+                        </span>
+                      )}
+                    </div>
+  
+                    <div className="text-start py-2">
+                      <label className="form-label">End Time</label>
                       <select
                         className={`form-select border ${
-                          errors.starttime
-                            ? "border-red-500"
-                            : "border-mediumgray"
+                          errors.endtime ? "border-red-500" : "border-mediumgray"
                         }`}
-                        {...register("starttime", {
-                          required: "Start time selection is required",
+                        {...register("endtime", {
+                          required: "End time selection is required",
                         })}
-                        onChange={handleStartTimeChange}
+                        disabled={!selectedStartTime}
                       >
-                        <option value="">Select Start Time</option>
-                        {startTimes.map((time, index) => (
+                        <option value="">Select End Time</option>
+                        {endTimes.map((time, index) => (
                           <option key={index} value={time}>
                             {time}
                           </option>
                         ))}
                       </select>
-                    )}
-                    {errors.starttime && (
-                      <span className="form-error-message">
-                        {errors.starttime.message}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="text-start py-2">
-                    <label className="form-label">End Time</label>
-                    <select
-                      className={`form-select border ${
-                        errors.endtime ? "border-red-500" : "border-mediumgray"
-                      }`}
-                      {...register("endtime", {
-                        required: "End time selection is required",
-                      })}
-                      disabled={!selectedStartTime}
-                    >
-                      <option value="">Select End Time</option>
-                      {endTimes.map((time, index) => (
-                        <option key={index} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.endtime && (
-                      <span className="form-error-message">
-                        {errors.endtime.message}
-                      </span>
-                    )}
+                      {errors.endtime && (
+                        <span className="form-error-message">
+                          {errors.endtime.message}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="flex flex-row justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={backBookingHandle}
-                  className="gray-button"
-                >
-                  Back
-                </button>
-                <button type="submit" className="black-button">
-                  Book
-                </button>
-              </div>
-            </>
-          )}
+  
+                <div className="flex flex-row justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={backBookingHandle}
+                    className="gray-button"
+                  >
+                    Back
+                  </button>
+                  <button type="submit" className="black-button">
+                    Next
+                  </button>
+                </div>
+              </>
+            ))
+          }
+          {
+            step===3 &&(<EmailComponent
+              // onSubmit={() => {
+              //   setStep(4)
+              // }}
+              setStep={setStep}
+              
+              email={email}
+              setEmail={setEmail}
+              onBack={() => setStep(2)}
+              />)
+          }
+          {
+            step===4 &&(<OTPComponent
+              email={email}
+              setStep={setStep}
+              onBack={() => setStep(3)}
+              onResend={() => {}}
+              />)
+          }
+          {
+            step===5 && (
+              <ConfirmationComponent
+              setStep={setStep}
+              onBack={() => setStep(4)}
+              onClose={onClose}
+              details={{
+                date: selecteddate,
+                // @ts-ignore
+                startTime: selectedStartTime || formData?.starttime,
+                // @ts-ignore
+                endTime: formData?.endtime,
+                email: email,
+                agentEmail:"test@test.com",
+                agentName:"Test Agent",
+                agentIds: ["1", "2", "3"],
+                
+              }}
+              />
+            )
+          }
         </form>
       </div>
 

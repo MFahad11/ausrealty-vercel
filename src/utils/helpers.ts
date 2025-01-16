@@ -190,3 +190,9 @@ export const convertBlobToBase64 = (blob: Blob) => {
     export const escapeRegex = (string: string): string => {
       return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     };
+
+export const createOTP = async (email: string): Promise<string> => {
+  const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
+  const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes from now
+  return otp;
+};

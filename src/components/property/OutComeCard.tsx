@@ -1,4 +1,4 @@
-'use client'
+
 
 import Image from 'next/image'
 import { IoBed, IoBusiness } from "react-icons/io5"

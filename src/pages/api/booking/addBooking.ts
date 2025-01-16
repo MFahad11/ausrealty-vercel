@@ -21,6 +21,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         
       });
       await booking.save();
+      res.status(201).json({
+        success: true,
+        data: booking,
+      });
       await sendEmail({to:bookingData.email,subject:'Booking Confirmation',text:`<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; line-height: 1.6; color: #333333; background-color: #f4f4f4;">
     <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
         <tr>
@@ -121,10 +125,7 @@ await sendEmail({to:bookingData.agentEmail,subject:'Booking Confirmation',text:`
       </tr>
   </table>
 </body>`});
-      res.status(201).json({
-        success: true,
-        data: booking,
-      });
+      
     } catch (error:any) {
         console.log(error)
       res.status(400).json({

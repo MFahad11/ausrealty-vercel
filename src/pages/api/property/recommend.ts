@@ -221,90 +221,90 @@ function datePreviousYear() {
   //     return [];
   //   }
   // }
-async function duplexMatches(listingType:string, suburb:string, postcode:string, bedrooms:string) {
-    const response = await axios.post(
-      "https://api.domain.com.au/v1/listings/residential/_search",
-      {
-        listingType,
-        propertyTypes: ["Duplex", "SemiDetached"],
-        listedSince: datePreviousYear(),
-        locations: [
-          {
-            ...(suburb && { suburb }), // Conditionally add suburb if it exists
-            ...(postcode && { postcode }), // Conditionally add postcode if it exists
-            state: "NSW",
-          },
-        ],
-        pageSize: 20,
-        pageNumber: 1,
-      },
-      {
-        headers: {
-          accept: "application/json",
-          "Content-Type": "application/json",
-          "X-Api-Key": process.env.DOMAIN_API_KEY,
-          "X-Api-Call-Source": "live-api-browser",
-        },
-      }
-    );
+// async function duplexMatches(listingType:string, suburb:string, postcode:string, bedrooms:string) {
+//     const response = await axios.post(
+//       "https://api.domain.com.au/v1/listings/residential/_search",
+//       {
+//         listingType,
+//         propertyTypes: ["Duplex", "SemiDetached"],
+//         listedSince: datePreviousYear(),
+//         locations: [
+//           {
+//             ...(suburb && { suburb }), // Conditionally add suburb if it exists
+//             ...(postcode && { postcode }), // Conditionally add postcode if it exists
+//             state: "NSW",
+//           },
+//         ],
+//         pageSize: 20,
+//         pageNumber: 1,
+//       },
+//       {
+//         headers: {
+//           accept: "application/json",
+//           "Content-Type": "application/json",
+//           "X-Api-Key": process.env.DOMAIN_API_KEY,
+//           "X-Api-Call-Source": "live-api-browser",
+//         },
+//       }
+//     );
   
-    // Transform the response data
-    const transformedArray = response.data.map((item:{
-        listing:{
-            id:string,
-            propertyDetails:{
-                address:string,
-        propertyType:string,
-        price:number,
-        landArea:string,
-        bedrooms:string,
-        bathrooms:string,
-        carspaces:string,
-        features:string,
-                displayableAddress:string
+//     // Transform the response data
+//     const transformedArray = response.data.map((item:{
+//         listing:{
+//             id:string,
+//             propertyDetails:{
+//                 address:string,
+//         propertyType:string,
+//         price:number,
+//         landArea:string,
+//         bedrooms:string,
+//         bathrooms:string,
+//         carspaces:string,
+//         features:string,
+//                 displayableAddress:string
                 
 
 
-            },
-            priceDetails:{
-                    price:number
-                },
-            media:[],
-            advertiser:{},
-            soldData:{}
-        }
+//             },
+//             priceDetails:{
+//                     price:number
+//                 },
+//             media:[],
+//             advertiser:{},
+//             soldData:{}
+//         }
             
-    }) => {
-      const { listing } = item;
+//     }) => {
+//       const { listing } = item;
   
-      // Extract and flatten data into the `property` key
-      const property = {
-        id: listing?.id,
-        address: listing?.propertyDetails?.displayableAddress || "N/A",
-        propertyType: listing?.propertyDetails?.propertyType || "N/A",
-        price: listing?.priceDetails?.price || 0, // Default to 0 if price is missing
-        landArea: listing?.propertyDetails?.landArea || "N/A",
-        bedrooms: listing?.propertyDetails?.bedrooms || "N/A",
-        bathrooms: listing?.propertyDetails?.bathrooms || "N/A",
-        carspaces: listing?.propertyDetails?.carspaces || "N/A",
-        features: listing?.propertyDetails?.features || "N/A",
-        media: listing?.media || [],
-        advertiser: listing?.advertiser || {},
-        soldData: listing?.soldData || {},
-      };
+//       // Extract and flatten data into the `property` key
+//       const property = {
+//         id: listing?.id,
+//         address: listing?.propertyDetails?.displayableAddress || "N/A",
+//         propertyType: listing?.propertyDetails?.propertyType || "N/A",
+//         price: listing?.priceDetails?.price || 0, // Default to 0 if price is missing
+//         landArea: listing?.propertyDetails?.landArea || "N/A",
+//         bedrooms: listing?.propertyDetails?.bedrooms || "N/A",
+//         bathrooms: listing?.propertyDetails?.bathrooms || "N/A",
+//         carspaces: listing?.propertyDetails?.carspaces || "N/A",
+//         features: listing?.propertyDetails?.features || "N/A",
+//         media: listing?.media || [],
+//         advertiser: listing?.advertiser || {},
+//         soldData: listing?.soldData || {},
+//       };
   
-      return property;
-    });
+//       return property;
+//     });
   
-    // Sort the transformed array by price in descending order
-    transformedArray.sort((a:{
-        price:number
-    }, b:{
-        price:number
-    }) => b.price - a.price);
+//     // Sort the transformed array by price in descending order
+//     transformedArray.sort((a:{
+//         price:number
+//     }, b:{
+//         price:number
+//     }) => b.price - a.price);
   
-    return transformedArray;
-  }
+//     return transformedArray;
+//   }
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
       return res.status(405).json({ success: false, message: "Method not allowed" });
@@ -328,20 +328,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // recommendedSold = property?.duplexMatches;
   
         let duplexSaleProperties = [];
-        duplexSaleProperties = await duplexMatches(
-          "Sale",
-          property.suburb,
-          property.postcode,
-          property.bedrooms
-        );
+        // duplexSaleProperties = await duplexMatches(
+        //   "Sale",
+        //   property.suburb,
+        //   property.postcode,
+        //   property.bedrooms
+        // );
   
         if (duplexSaleProperties.length === 0) {
-          duplexSaleProperties = await duplexMatches(
-            "Sale",
-            "",
-            property.postcode,
-            property.bedrooms
-          );
+          // duplexSaleProperties = await duplexMatches(
+          //   "Sale",
+          //   "",
+          //   property.postcode,
+          //   property.bedrooms
+          // );
         }
   
         // const transformedDuplexSaleProperties = duplexSaleProperties.map(

@@ -16,6 +16,7 @@ export default async function handler(
       dateUpdatedSince,
       listingStatusFilter,
     };
+    console.log(params);
     const response = await axios.get(
       `https://api.domain.com.au/v1/listings/${id}`,
       {
@@ -27,11 +28,13 @@ export default async function handler(
         params: params,
       }
     );
+    console.log(response.data);
     res.status(200).json({
       data: response.data,
       success: true,
     });
   } catch (error: any) {
+    console.log(error);
     res.status(error.response?.status || 500).json({
       success: false,
       message: error.message || "Error fetching agency listings",

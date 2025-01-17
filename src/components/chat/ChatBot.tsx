@@ -941,9 +941,14 @@ const ChatBot = ({
                                     key={index}
                                     className='bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full'
                                     onClick={() => {
-                                      router.push(
-                                        `/property/${property?.id}/media/images`
-                                      )
+                                      if(title === 'LOOKING TO BUY'){
+                                        router.push(`/property/buy/${property?.id}/media/images`)
+                                      }
+                                      else if(title === 'LOOKING TO RENT'){
+                                        router.push(`/property/rent/${property?.id}/media/images`)
+
+                                      }
+                                      
                                     }}
                                   >
                                     {property?.media &&
@@ -1106,7 +1111,7 @@ const ChatBot = ({
       <div
         className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 pb-4 pt-2 text-center`}
       >
-        <div className='flex flex-col gap-6'>
+        <div className='flex flex-col gap-2'>
         
         {
           (!quickSearch || propertyForm) && (

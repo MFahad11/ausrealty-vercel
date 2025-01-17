@@ -805,31 +805,19 @@ const PropertyForm = ({
           property.domainPrice.lowerPrice !== undefined &&
           property.domainPrice.upperPrice !== undefined && (
             <div className='flex flex-col items-center justify-center'>
+              <h4>Domain Price</h4>
               <h4>
                 {formatCurrency(property.domainPrice.lowerPrice)} -{' '}
                 {formatCurrency(property.domainPrice.upperPrice)}
               </h4>
-              <p>Domain Price</p>
+              
             </div>
           )}
 
-        <div className='max-w-lg mx-auto'>
-          <EmblaCarousel>
-            {/* Slide for the image */}
-            <div>
-              <img
-                src={property?.media?.[0]?.url}
-                alt='Property'
-                className='w-full h-auto object-cover'
-              />
-            </div>
-
-            {/* Slide for the map */}
-            <div>
-              <GoogleMaps lat={property?.latitude} lon={property?.longitude} />
-            </div>
-          </EmblaCarousel>
-        </div>
+<h4>
+        Does this look right?
+        </h4>
+        
 
         <div className='grid grid-cols-12 gap-4'>
           <div className='col-span-12 sm:col-span-6'>
@@ -1308,9 +1296,7 @@ const PropertyResult = ({
   const [logicalReasoning, setLogicalReasoning] = useState(null)
   const [pieChartData, setPieChartData] = useState([['Process', 'Count']])
   const [regenerateLogicalPrice, setRegenerateLogicalPrice] = useState(false)
-  const [recentAreaSoldProcess, setRecentAreaSoldProcess] = useState(
-    property?.recentAreaSoldProcess || []
-  )
+  const [recentAreaSoldProcess, setRecentAreaSoldProcess] = useState(property?.recentAreaSoldProcess || [])
 
   useEffect(() => {
     if (!property?._id) return // Ensure property exists before making API calls
@@ -1510,9 +1496,10 @@ Please find enclosed Information for the property at ${property.address}`,
   return (
     <div className='flex flex-col items-center justify-center'>
       <div className='w-full max-w-4xl mx-auto flex flex-col items-center justify-center text-center space-y-10'>
-        <div className='w-full flex justify-end gap-2 mt-6'>
+        <div className='w-full flex justify-end gap-2 mt-6 relative'
+        >
           <Button
-            className='black-button'
+            className={`black-button`}
             onClick={
               () => {
                 setIsOverlayOpen(true)
@@ -1618,180 +1605,19 @@ Please find enclosed Information for the property at ${property.address}`,
           )}
 
           {/* Property Details */}
-          <div className='max-w-md mx-auto space-y-6'>
-            {/* Property Image */}
-            <img
-              // className="w-full h-auto rounded-lg filter grayscale"
-              className='w-full h-auto rounded-lg'
-              src={property?.media?.[0]?.url}
-              alt='property'
-            />
-
-            {/* Property Address */}
-            <p className='text-center'>{property.address}</p>
-
-            {/* Property Features */}
-            <div className='flex items-center justify-center gap-4'>
-              <div className='text-sm'>
-                <i className='fa fa-bed me-2'></i>
-                {property.bedrooms || 'N/A'}
-              </div>
-              <div className='text-sm'>
-                <i className='fa fa-bath me-2'></i>
-                {property.bathrooms || 'N/A'}
-              </div>
-              <div className='text-sm'>
-                <i className='fa fa-car me-2'></i>
-                {property.carspaces || 'N/A'}
-              </div>
-              <div className='text-sm'>{property.propertyType}</div>
-            </div>
-
-            {/* Sale Details */}
-            <div className='flex justify-between gap-4 text-left text-sm'>
-              <div className='flex flex-col'>
-                <span className='font-semibold'>Sale Price:</span>
-                <span>{formatCurrency(property.price)}</span>
-              </div>
-              <div className='flex flex-col'>
-                <span className='font-semibold'>Sale Date:</span>
-                <span>
-                  {property.dateListed
-                    ? convertDate(property.dateListed)
-                    : 'N/A'}
-                </span>
-              </div>
-              <div className='flex flex-col'>
-                <span className='font-semibold'>Days to Sell:</span>
-                <span>{property.daysListed}</span>
-              </div>
-            </div>
-          </div>
+          
         </div>
 
-        {soldProperties && soldProperties.length > 0 && (
-          <div className='w-full space-y-8'>
-            <h4>SOLD MATCHES</h4>
-            <p>
-              Getting the first part of the process right helps to create the
-              maximum outcome. This is a logical range derived from market
-              insights and the final outcome may vary significantly
-            </p>
-            <EmblaCarousel>
-              {soldProperties.map(({ property }) => (
-                <div
-                  key={property._id}
-                  className='max-w-[320px] sm:max-w-[350px] cursor-pointer flex flex-column bg-lightgray hover:bg-mediumgray py-4 px-6'
-                  onClick={() => handlePropertyClick(property)}
-                >
-                  <img
-                    className='rounded-lg mx-auto max-w-[250px] h-[200px] sm:max-w-[300px] sm:h-[250px] grayscale'
-                    src={property?.media?.[0]?.url || '/placeholder-image.jpg'}
-                    alt='property'
-                  />
-                  <div className='text-center mt-4 space-y-3'>
-                    <p className='font-semibold'>
-                      {formatCurrency(
-                        property?.priceDetails?.price || property?.price
-                      )}
-                    </p>
-                    <p className='text-sm'>
-                      {property?.propertyDetails?.displayableAddress ||
-                        property?.address}
-                    </p>
-                    <div className='flex items-center justify-center gap-4'>
-                      <div className='text-sm'>
-                        <i className='fa fa-bed me-2'></i>
-                        {property?.propertyDetails?.bedrooms ||
-                          property?.bedrooms ||
-                          'N/A'}
-                      </div>
-                      <div className='text-sm'>
-                        <i className='fa fa-bath me-2'></i>
-                        {property?.propertyDetails?.bathrooms ||
-                          property?.bathrooms ||
-                          'N/A'}
-                      </div>
-                      <div className='text-sm'>
-                        <i className='fa fa-car me-2'></i>
-                        {property?.propertyDetails?.carspaces ||
-                          property?.carspaces ||
-                          'N/A'}
-                      </div>
-                    </div>
-                    {/* <div className="text-xs text-start space-y-1">
-                            <p className="font-semibold">Key Matches</p>
-                            <p className="italic">{keyMatches.join(", ")}</p>
-                          </div> */}
-                  </div>
-                </div>
-              ))}
-            </EmblaCarousel>
-          </div>
-        )}
+        
 
-        {saleProperties && saleProperties.length > 0 && (
-          <div className='w-full space-y-8'>
-            <h4>ON MARKET MATCHES</h4>
-            <EmblaCarousel>
-              {saleProperties.map(({ property }: { property: any }) => (
-                <div
-                  key={property._id}
-                  className='max-w-[320px] sm:max-w-[350px] cursor-pointer flex flex-column bg-lightgray hover:bg-mediumgray py-4 px-6'
-                  onClick={() => handlePropertyClick(property)}
-                >
-                  <img
-                    className='rounded-lg mx-auto max-w-[250px] h-[200px] sm:max-w-[300px] sm:h-[250px] grayscale'
-                    src={property?.media?.[0]?.url || '/placeholder-image.jpg'}
-                    alt='property'
-                  />
-                  <div className='text-center mt-4 space-y-3'>
-                    <p className='font-semibold'>
-                      {formatCurrency(
-                        property?.priceDetails?.price || property?.price
-                      )}
-                    </p>
-                    <p className='text-sm'>
-                      {property?.propertyDetails?.displayableAddress ||
-                        property?.address}
-                    </p>
-                    <div className='flex items-center justify-center gap-4'>
-                      <div className='text-sm'>
-                        <i className='fa fa-bed me-2'></i>
-                        {property?.propertyDetails?.bedrooms ||
-                          property?.bedrooms ||
-                          'N/A'}
-                      </div>
-                      <div className='text-sm'>
-                        <i className='fa fa-bath me-2'></i>
-                        {property?.propertyDetails?.bathrooms ||
-                          property?.bathrooms ||
-                          'N/A'}
-                      </div>
-                      <div className='text-sm'>
-                        <i className='fa fa-car me-2'></i>
-                        {property?.propertyDetails?.carspaces ||
-                          property?.carspaces ||
-                          'N/A'}
-                      </div>
-                    </div>
-                    {/* <div className="text-xs text-start space-y-1">
-                            <p className="font-semibold">Key Matches</p>
-                            <p className="italic">{keyMatches.join(", ")}</p>
-                          </div> */}
-                  </div>
-                </div>
-              ))}
-            </EmblaCarousel>
-          </div>
-        )}
+        
 
-        {soldProperties && soldProperties.length > 0 && (
+        {/* {soldProperties && soldProperties.length > 0 && (
           <div className='space-y-8 w-full'>
             <h4>SCORE MATCH ON MARKET</h4>
             <GoogleChart dataPoints={dataPoints} />
           </div>
-        )}
+        )} */}
 
         {/* <div className='space-y-8 w-full'>
           <h4>AREA SALES PROCESS BREAKDOWN</h4>
@@ -1893,7 +1719,7 @@ Please find enclosed Information for the property at ${property.address}`,
           )}
         </div>
 
-        <GoogleMaps lat={property.latitude} lon={property.longitude} />
+        {/* <GoogleMaps lat={property.latitude} lon={property.longitude} /> */}
 
         <div className='space-y-4 flex flex-col'>
           {/* <img src={picture} alt="Agent" className="max-h-[400px]" /> */}

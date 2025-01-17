@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Booking from '@/models/booking';
 import mongoose from 'mongoose';
 import dbConnect from '@/components/lib/db';
 import { sendEmail } from '@/utils/email';
 import dayjs from 'dayjs';
+import Booking from '@/models/booking';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       dbConnect();
       // Create a new booking
       const bookingData = req.body;
-      const booking = new Booking({
+      const booking = await Booking.create({
         agentIds:bookingData.agentIds,
         userEmail: bookingData.email,
         date: bookingData.date,
@@ -20,8 +20,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         endTime:bookingData.endTime
         
       });
-      await booking.save();
-      sendEmail({to:bookingData.email,subject:'Booking Confirmation',text:`<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; line-height: 1.6; color: #333333; background-color: #f4f4f4;">
+     if(!booking){
+        return res.status(400).json({ success: false });
+     }
+sendEmail({to:bookingData.email,subject:'Booking Confirmation',text:`<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; line-height: 1.6; color: #333333; background-color: #f4f4f4;">
     <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
         <tr>
             <td style="padding: 40px 30px; background-color: #f8f9fa; text-align: center;">
@@ -41,22 +43,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     </tr>
                     <tr>
                         <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Start Time:</td>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.startTime}}</td>
+                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.startTime}</td>
                     </tr>
                     <tr>
                         <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">End Time:</td>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.endTime}}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.email}</td>
+                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.endTime}</td>
                     </tr>
                     <tr>
                         <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Agent Name:</td>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.agentName}}</td>
+                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.agentName}</td>
                     </tr>
                     <tr>
                         <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Agent Email:</td>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.agentEmail}}</td>
+                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.agentEmail}</td>
                     </tr>
                 </table>
                 
@@ -91,23 +90,17 @@ sendEmail({to:bookingData.agentEmail,subject:'Booking Confirmation',text:`<body 
                   </tr>
                   <tr>
                       <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Start Time:</td>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.startTime}}</td>
+                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.startTime}</td>
                   </tr>
                   <tr>
                       <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">End Time:</td>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.endTime}}</td>
+                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.endTime}</td>
                   </tr>
                   <tr>
+                      <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">User Name</td>
                       <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.email}</td>
                   </tr>
-                  <tr>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Agent Name:</td>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.agentName}}</td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Agent Email:</td>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.agentEmail}}</td>
-                  </tr>
+                  
               </table>
               
               <p style="margin: 0 0 20px 0;">Please add this meeting to your calendar. If you need to make any changes or have questions, please contact us.</p>

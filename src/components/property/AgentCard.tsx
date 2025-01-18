@@ -18,6 +18,7 @@ import { LOOKING_TO_RENT } from '@/constants/looking-to-rent'
 import useEmblaCarousel from 'embla-carousel-react'
 import Button from '../ui/Button'
 import BookingOverlay from '../chat/BookApraisal/Overlay'
+import OutcomeCarousel from '../ui/carousel/OutComeCarousel'
 
 const AgentCard = ({
   agent,
@@ -34,8 +35,6 @@ const AgentCard = ({
   setIsOverlayOpen: any
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-
-  const [emblaRef] = useEmblaCarousel({ dragFree: true })
 
   return (
     <>
@@ -175,18 +174,7 @@ const AgentCard = ({
       </div>
       {isOpen && (
         <div>
-          <AgentCarousel agents={[]} childEmblaRef={emblaRef}>
-            {LOOKING_TO_RENT.map((agent, index) => (
-              <div className='embla__slide' key={index}>
-                <div className='embla__slide__number'>
-                  <OutComeCard
-                    index={index + 1}
-                    total={LOOKING_TO_RENT.length}
-                  />
-                </div>
-              </div>
-            ))}
-          </AgentCarousel>
+          <OutcomeCarousel outcomes={LOOKING_TO_RENT}/>
         </div>
       )}
       {/* Reserve button */}

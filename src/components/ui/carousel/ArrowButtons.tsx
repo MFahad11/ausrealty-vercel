@@ -27,6 +27,7 @@ import React, {
     const onNextButtonClick = useCallback(() => {
       if (!emblaApi) return
       emblaApi.scrollNext()
+      
     }, [emblaApi])
   
     const onSelect = useCallback((emblaApi: EmblaCarouselType) => {

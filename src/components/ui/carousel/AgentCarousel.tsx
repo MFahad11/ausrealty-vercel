@@ -15,11 +15,7 @@ const AgentCarousel: React.FC<PropType> = props => {
   const { options, childEmblaRef } = props
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
-  const [emblaMainRef, emblaMainApi] = useEmblaCarousel({
-    ...options,
-    containScroll: 'keepSnaps',
-    watchDrag: true // Prevents parent from responding to drag during child interaction
-  })
+  const [emblaMainRef, emblaMainApi] = useEmblaCarousel()
 
   return (
     <>

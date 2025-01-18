@@ -33,13 +33,14 @@
 .embla__buttons {
 
   display: flex;
-
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
   align-items: center;
   justify-content: space-between;
 }
 .embla__button {
 
-  background-color: transparent;
+  background-color: rgb(255, 255, 255);
   touch-action: manipulation;
   display: inline-flex;
   text-decoration: none;
@@ -48,11 +49,11 @@
   padding: 0;
   margin: 0;
   box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2rem;
+  height: 2rem;
   z-index: 1;
   border-radius: 50%;
-  color: white;
+  color: black;
   display: flex;
   align-items: center;
   justify-content: center;

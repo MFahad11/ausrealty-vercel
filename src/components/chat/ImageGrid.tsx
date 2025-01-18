@@ -89,7 +89,8 @@ export default function ImageGrid(
     }
     />)}
     {
-      isInsideAusrealty && (<AusrealtyModal
+      isInsideAusrealty && (
+      <AusrealtyModal
     isOpen={
       isOpen
     }
@@ -101,7 +102,8 @@ export default function ImageGrid(
     />)
     }
     {
-      isLocation && (<AusrealtyModal
+      isLocation && (
+      <AusrealtyModal
     isOpen={
       isOpen
     }

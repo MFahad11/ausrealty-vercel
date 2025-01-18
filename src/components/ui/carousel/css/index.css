@@ -40,7 +40,7 @@
 }
 .embla__button {
 
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.5);
   touch-action: manipulation;
   display: inline-flex;
   text-decoration: none;
@@ -53,7 +53,7 @@
   height: 2rem;
   z-index: 1;
   border-radius: 50%;
-  color: black;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;

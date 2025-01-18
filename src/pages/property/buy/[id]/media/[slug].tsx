@@ -16,10 +16,12 @@ import AgentsPage from "@/components/property/AgentDetails";
 import Button from "@/components/ui/Button";
 import ChatWindow from "@/components/chat/ChatWindow/index";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
+import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
 export default function ImageGallery({ id }: { id: string }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [intentExtracting, setIntentExtracting] = useState(false);
   const [activeTab, setActiveTab] = useState("images");
   const property = usePropertyStore((state) => state.propertyData);
@@ -32,6 +34,29 @@ export default function ImageGallery({ id }: { id: string }) {
   const [botThinking, setBotThinking] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const setProperty = usePropertyStore((state) => state.setPropertyData);
+  const images = property?.media.filter((item:{type:string}) => item.type === "photo");
+  const handlePrev = () => {
+    setSelectedImage((prevImage)=>{
+      const currentIndex = images.findIndex((item:{url:string}) => item.url === prevImage);
+      const prevIndex = currentIndex - 1;
+      if (prevIndex < 0) {
+        return images[images.length - 1].url;
+      }
+      return images[prevIndex].url;
+    })
+  };
+  
+  const handleNext = () => {
+    setSelectedImage((prevImage)=>{
+      const currentIndex = images.findIndex((item:{url:string}) => item.url === prevImage);
+      const nextIndex = currentIndex + 1;
+      if (nextIndex >= images.length) {
+        return images[0].url;
+      }
+      return images[nextIndex].url;
+    }
+    )
+  };
   const getListing = async (id: string) => {
     try {
       const response = await axiosInstance.get(`/api/domain/listings/${id}`);
@@ -137,6 +162,22 @@ export default function ImageGallery({ id }: { id: string }) {
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
+          {
+            activeTab==='images' && (<><button
+      onClick={handlePrev}
+      className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+    >
+      <IoIosArrowBack /> {/* Right Arrow */}
+    
+    </button>
+    <button
+      onClick={handleNext}
+      className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+    >
+      <IoIosArrowForward /> {/* Left Arrow */}
+    </button></>)
+          }
+    
         </div>
       </Modal>
       <div className="max-w-4xl mx-auto mt-20">
@@ -177,6 +218,7 @@ export default function ImageGallery({ id }: { id: string }) {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             handleShare={handleShare}
+            route="buy"
           />
         </div>
         <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">

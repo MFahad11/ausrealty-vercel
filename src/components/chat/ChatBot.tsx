@@ -939,7 +939,7 @@ const ChatBot = ({
                                 ) : (
                                   <div
                                     key={index}
-                                    className='bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full'
+                                    className='bg-white shadow-sm p-0 border-lightgray border w-full'
                                     
                                   >
                                     {property?.media &&
@@ -948,7 +948,7 @@ const ChatBot = ({
                                           slides={property?.media}
                                         />
                                       )}
-                                    <div className='ml-4'
+                                    <div className='ml-4 cursor-pointer'
                                     onClick={() => {
                                       if(title === 'LOOKING TO BUY'){
                                         router.push(`/property/buy/${property?.id}/media/images`)

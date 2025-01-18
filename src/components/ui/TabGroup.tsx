@@ -13,9 +13,10 @@ interface TabGroupProps {
   activeTab?: string
   setActiveTab: (tab: string) => void
   handleShare: () => void
+  route: string
 }
 
-export function TabGroup({ tabs, defaultTab,activeTab, setActiveTab,handleShare }: TabGroupProps) {
+export function TabGroup({ tabs, defaultTab,activeTab, setActiveTab,handleShare,route }: TabGroupProps) {
   
   const navigate=useRouter()
   return (
@@ -26,7 +27,7 @@ export function TabGroup({ tabs, defaultTab,activeTab, setActiveTab,handleShare 
           onClick={() => {
             setActiveTab(tab.id)
             navigate.push(
-              `/property/${navigate.query.id}/media/${tab.route}`
+              `/property/${route}/${navigate.query.id}/media/${tab.route}`
             )
           }}
           className={cn(

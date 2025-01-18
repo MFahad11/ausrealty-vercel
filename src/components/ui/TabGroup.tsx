@@ -41,14 +41,21 @@ export function TabGroup({ tabs, defaultTab,activeTab, setActiveTab,handleShare,
         </button>
       ))}
       <Button
-          // key={tab.id}
-          onClick={handleShare}
-          className="bg-black text-white px-6 gap-2 py-2 text-sm rounded-lg transition-colors flex justify-center items-center"
-          
-        >
-          <LuShare2/>
-          Share
-        </Button>
+                // key={tab.id}
+                onClick={handleShare}
+                className="hidden bg-black text-white px-6 gap-2 py-2 rounded-lg text-sm transition-colors md:flex justify-center items-center"
+                
+              >
+                <LuShare2/>
+                Share
+              </Button>
+      
+              <Button
+                // key={tab.id}
+                onClick={handleShare}
+                className="hidden bg-black text-white px-6 gap-2 py-2 rounded-lg text-sm transition-colors md:flex justify-center items-center">
+                Apply
+              </Button>
     </div>
   )
 }

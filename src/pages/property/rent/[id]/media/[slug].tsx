@@ -17,6 +17,7 @@ import Button from "@/components/ui/Button";
 import ChatWindow from "@/components/chat/ChatWindow/index";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
 import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
+import { LuShare2 } from "react-icons/lu";
 export default function ImageGallery({ id }: { id: string }) {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -220,7 +221,24 @@ export default function ImageGallery({ id }: { id: string }) {
             handleShare={handleShare}
             route="rent"
           />
+          
         </div>
+        <Button
+          // key={tab.id}
+          onClick={handleShare}
+          className="md:hidden bg-black text-white px-6 gap-2 py-2 text-sm transition-colors flex justify-center items-center fixed z-[1000] left-0"
+          
+        >
+          <LuShare2/>
+          Share
+        </Button>
+
+        <Button
+          // key={tab.id}
+          onClick={handleShare}
+          className="md:hidden bg-black text-white px-6 gap-2 py-2 text-sm transition-colors flex justify-center items-center fixed z-[1000] right-0">
+          Apply
+        </Button>
         <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">
           {
             activeTab === 'details' && (

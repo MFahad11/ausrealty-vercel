@@ -940,6 +940,15 @@ const ChatBot = ({
                                   <div
                                     key={index}
                                     className='bg-white shadow-sm p-0 cursor-pointer border-lightgray border w-full'
+                                    
+                                  >
+                                    {property?.media &&
+                                      Array.isArray(property?.media) && (
+                                        <PropertyCarousel
+                                          slides={property?.media}
+                                        />
+                                      )}
+                                    <div className='ml-4'
                                     onClick={() => {
                                       if(title === 'LOOKING TO BUY'){
                                         router.push(`/property/buy/${property?.id}/media/images`)
@@ -950,14 +959,7 @@ const ChatBot = ({
                                       }
                                       
                                     }}
-                                  >
-                                    {property?.media &&
-                                      Array.isArray(property?.media) && (
-                                        <PropertyCarousel
-                                          slides={property?.media}
-                                        />
-                                      )}
-                                    <div className='ml-4'>
+                                    >
                                       <div className='mt-4 flex flex-col space-y-2'>
                                         <h5 className='tracking-wide'>
                                           {property?.priceDetails.displayPrice}
@@ -1115,6 +1117,21 @@ const ChatBot = ({
         
         {
           (!quickSearch || propertyForm) && (
+            
+            <>
+            {
+              (quickSearch && propertyForm) && (<Button
+                className={`black-button w-full max-w-xs mx-auto`}
+                onClick={
+                  () => {
+                    
+                  }
+                }
+              >
+                Receive a More Accurate Indication
+              </Button>)
+            }
+            
             <div className='w-full max-w-md mx-auto relative'>
             <input
               type='text'
@@ -1162,7 +1179,8 @@ const ChatBot = ({
                 <LuChevronDown className='w-6 h-6' />
               </button>
             )}
-          </div>
+          </div></>
+            
           )
         }
           

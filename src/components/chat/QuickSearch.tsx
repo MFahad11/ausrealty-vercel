@@ -1265,14 +1265,12 @@ const PropertyResult = ({
   property,
   onEdit,
   setPropertyForm,
-  setQuickSearch,
-  setIsOverlayOpen
+  setQuickSearch
 }: {
   property: any
   onEdit: any
   setPropertyForm: any,
   setQuickSearch: any,
-  setIsOverlayOpen: any
 }) => {
   const [loading, setLoading] = useState(false)
 
@@ -1498,22 +1496,7 @@ Please find enclosed Information for the property at ${property.address}`,
       <div className='w-full max-w-4xl mx-auto flex flex-col items-center justify-center text-center space-y-10'>
         <div className='w-full flex justify-end gap-2 mt-6 relative'
         >
-          <Button
-            className={`black-button`}
-            onClick={
-              () => {
-                setIsOverlayOpen(true)
-                // setPropertyForm(false)
-                // setQuickSearch(false)
-              }
-            }
-            // disabled={shareLoading || loading}
-            style={{
-              fontSize:'12px'
-            }}
-          >
-            Receive a More Accurate Indication
-          </Button>
+          
           <Button className='gray-button' onClick={onEdit} disabled={loading}>
             Back
           </Button>
@@ -1787,7 +1770,6 @@ const PropertyContainer = ({
       ) : (
         <PropertyResult property={formData} onEdit={handleEdit} 
         setPropertyForm={setPropertyForm} setQuickSearch={setQuickSearch}
-        setIsOverlayOpen={setIsOverlayOpen}
         />
       )}
     </div></>

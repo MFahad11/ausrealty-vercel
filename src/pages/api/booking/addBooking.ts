@@ -17,7 +17,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         userEmail: bookingData.email,
         date: bookingData.date,
         startTime: bookingData.startTime,
-        endTime:bookingData.endTime
         
       });
      if(!booking){
@@ -45,10 +44,7 @@ sendEmail({to:bookingData.email,subject:'Booking Confirmation',text:`<body style
                         <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Start Time:</td>
                         <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.startTime}</td>
                     </tr>
-                    <tr>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">End Time:</td>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.endTime}</td>
-                    </tr>
+                    
                     <tr>
                         <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Agent Name:</td>
                         <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.agentName}</td>
@@ -92,10 +88,7 @@ sendEmail({to:bookingData.agentEmail,subject:'Booking Confirmation',text:`<body 
                       <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Start Time:</td>
                       <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.startTime}</td>
                   </tr>
-                  <tr>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">End Time:</td>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.endTime}</td>
-                  </tr>
+                  
                   <tr>
                       <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">User Name</td>
                       <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.email}</td>

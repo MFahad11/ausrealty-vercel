@@ -18,7 +18,6 @@ const bookingSchema: Schema = new Schema(
     userEmail: { type: String, required: true, match: /.+\@.+\..+/ }, // Email validation
     date: { type: Date, required: true }, // Booking date
     startTime: { type: String, required: true }, // Start time
-    endTime: { type: String, required: true }, // End time
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

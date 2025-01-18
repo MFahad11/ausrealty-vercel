@@ -159,14 +159,14 @@ const AgentCard = ({
                 </span>
               )}
             </div> */}
-            <div className='flex items-center justify-between px-4 py-2 border-t border-b'>
+            <div className='flex items-center justify-between px-4 py-2 border-t border-b cursor-pointer' onClick={() => setIsOpen(!isOpen)}>
               
               <p className='text-sm text-gray-700 uppercase tracking-wider font-abchanel'>
                 Recent Maximum Outcomes
               </p>
               <IoChevronDown
-                onClick={() => setIsOpen(!isOpen)}
-                className={`w-4 h-4 text-gray-700 transition-transform duration-200 cursor-pointer${
+                
+                className={`w-4 h-4 text-gray-700 transition-transform duration-200 ${
                   isOpen ? 'rotate-180' : ''
                 }`}
               />

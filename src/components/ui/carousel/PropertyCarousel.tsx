@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
+import { NextButton, PrevButton, usePrevNextButtons } from './ArrowButtons'
+
 type media = {
   category: string
   url: string
@@ -19,7 +21,12 @@ const PropertyCarousel: React.FC<PropType> = props => {
     containScroll: 'keepSnaps',
     dragFree: true
   })
-
+  const{
+    onNextButtonClick,
+    onPrevButtonClick,
+    prevBtnDisabled,
+    nextBtnDisabled
+  }=usePrevNextButtons(emblaMainApi)
   const onThumbClick = useCallback(
     (index: number) => {
       if (!emblaMainApi || !emblaThumbsApi) return
@@ -46,6 +53,7 @@ const PropertyCarousel: React.FC<PropType> = props => {
       <div className='embla'>
         <div className='embla__viewport' ref={emblaMainRef}>
           <div className='embla__container'>
+            
             {slides.map((item, index) => (
               <div className='embla__slide' key={index}>
                 {/* <div className="">{index + 1}</div> */}
@@ -68,12 +76,19 @@ const PropertyCarousel: React.FC<PropType> = props => {
                       {index + 1} of {slides.length}
                     </span>
                   </div>
+                  <div className="embla__controls absolute w-full">
+        <div className="embla__buttons">
+          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+        </div>
+      </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+      
     </div>
   )
 }

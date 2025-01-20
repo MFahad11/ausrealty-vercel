@@ -1,5 +1,6 @@
 import Button from '@/components/ui/Button'
 import { handlePropertyDetailChat } from '@/utils/openai'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState, useRef, FormEvent } from 'react'
 import { IoSend } from 'react-icons/io5'
 import { LuShare2 } from 'react-icons/lu'
@@ -68,7 +69,7 @@ const ChatBot = ({
   const [intentExtracting, setIntentExtracting] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-   
+   const router=useRouter()
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem(prompt, JSON.stringify(messages))
@@ -233,7 +234,7 @@ const ChatBot = ({
   return (
     <div className='w-full h-full flex flex-col justify-between'>
   <div
-        className='flex justify-center items-center gap-4 z-10 w-full fixed left-0 right-0 bottom-[10rem]'
+        className='flex justify-center items-center gap-4 z-10 w-full fixed left-0 right-0 bottom-[9.5rem]'
         
         >
         <Button
@@ -245,13 +246,17 @@ const ChatBot = ({
                   <LuShare2/>
                   Share
                 </Button>
-        
-                <Button
+          {
+            // the page url contain the word /buy then don't show the apply button
+            !router.pathname.includes('/buy') && (
+              <Button
                   // key={tab.id}
                   onClick={handleShare}
                   className="md:hidden bg-black rounded-md text-white px-6 gap-2 py-2 text-sm transition-colors flex justify-center items-center">
                   Apply
-                </Button>
+                </Button>)
+          }
+                
         </div>
       <div
         className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 pb-4 pt-2 text-center`}

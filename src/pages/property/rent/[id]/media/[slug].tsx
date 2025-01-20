@@ -18,6 +18,7 @@ import ChatWindow from "@/components/chat/ChatWindow/index";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
 import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
 import { LuShare2 } from "react-icons/lu";
+import Head from "next/head";
 export default function ImageGallery({ id }: { id: string }) {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -144,6 +145,19 @@ export default function ImageGallery({ id }: { id: string }) {
   }
   return (
     <>
+     <Head>
+        <title>{property?.headline}</title>
+        <meta property="og:title" content={property?.headline} />
+        <meta property="og:description" content={property?.details} />
+        <meta property="og:image" content={property?.media[0]?.url} />
+        <meta property="og:url" content={window.location.href} />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={property?.headline} />
+        <meta name="twitter:description" content={property?.details} />
+        <meta name="twitter:image" content={property?.media[0]?.url} />
+      </Head>
       <NavBar backgroundColor="black" showBackButton={true} 
       backButtonLink={`/chat/looking-to-buy`}
       />

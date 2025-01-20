@@ -26,7 +26,7 @@ export default function ImageGallery({ id,
     initialPropertyData: any;
     canonicalUrl: string;
     imageUrl: string; }) {
-
+console.log('imageUrl',imageUrl,canonicalUrl,initialPropertyData);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -152,13 +152,14 @@ export default function ImageGallery({ id,
   return (
     <>
     <NextSeo
-        title={property?.headline}
-        description={property?.details}
+        title={initialPropertyData?.headline}
+        description={initialPropertyData?.details}
         canonical={canonicalUrl}
         openGraph={{
           url: canonicalUrl,
-          title: property?.headline,
-          description: property?.details,
+          title: initialPropertyData?.headline,
+          description: initialPropertyData?.details,
+        
           images: [
             {
               url: imageUrl,
@@ -175,26 +176,6 @@ export default function ImageGallery({ id,
         //   cardType: 'summary_large_image',
         // }}
       />
-    <Head>
-        {/* General Meta Tags */}
-        <title>{property?.headline}</title>
-        <meta name="description" content={property?.details} />
-
-        {/* Open Graph Meta Tags for Facebook, WhatsApp, and Instagram */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={property?.headline} />
-        <meta property="og:description" content={property?.details} />
-        <meta property="og:image" content={imageUrl} />
-        <meta property="og:url" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-        <meta property="og:site_name" content="Ausrealty" />
-
-        {/* Twitter Card Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={property?.headline} />
-        <meta name="twitter:description" content={property?.details} />
-        <meta name="twitter:image" content={imageUrl} />
-        <meta name="twitter:url" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-      </Head>
     
       <NavBar backgroundColor="black" showBackButton={true} 
       backButtonLink={`/chat/looking-to-buy`}

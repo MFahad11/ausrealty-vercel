@@ -35,7 +35,7 @@ export default function ImageGrid(
                   alt={`Grid item ${index + 1}`}
                   // fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                   loading='lazy'
                   width={300}
                     height={300}

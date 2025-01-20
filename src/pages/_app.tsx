@@ -7,7 +7,8 @@ import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ProgressLoader from "@/components/ui/ProgressLoader";
-
+import { DefaultSeo } from 'next-seo';
+import SEO from '../../next-seo.config';
 export default function App({ Component, pageProps }: AppProps) {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_MAPS_KEY || '', // Ensure this is correctly set
@@ -17,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
   if (loadError) return <div></div>;
   if (!isLoaded) return <ProgressLoader/>;
   return <>
-  
+  <DefaultSeo {...SEO} />
   <ToastContainer/>
 
   <Component {...pageProps} /></>

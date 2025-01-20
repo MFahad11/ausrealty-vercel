@@ -18,6 +18,7 @@ import ChatWindow from "@/components/chat/ChatWindow/index";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
 import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
 import Head from "next/head";
+import { NextSeo } from "next-seo";
 export default function ImageGallery({ id, 
   initialPropertyData,
   canonicalUrl,
@@ -150,26 +151,30 @@ export default function ImageGallery({ id,
   }
   return (
     <>
-    <Head>
-        {/* General Meta Tags */}
-        <title>{property?.headline}</title>
-        <meta name="description" content={property?.details} />
-
-        {/* Open Graph Meta Tags for Facebook, WhatsApp, and Instagram */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={property?.headline} />
-        <meta property="og:description" content={property?.details} />
-        <meta property="og:image" content={imageUrl} />
-        <meta property="og:url" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-        <meta property="og:site_name" content="Ausrealty" />
-
-        {/* Twitter Card Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={property?.headline} />
-        <meta name="twitter:description" content={property?.details} />
-        <meta name="twitter:image" content={imageUrl} />
-        <meta name="twitter:url" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-      </Head>
+    <NextSeo
+            title={property?.headline}
+            description={property?.details}
+            canonical={canonicalUrl}
+            openGraph={{
+              url: canonicalUrl,
+              title: property?.headline,
+              description: property?.details,
+              images: [
+                {
+                  url: imageUrl,
+                  width: 800,
+                  height: 600,
+                  alt: `Ausrealty`,
+                },
+              ],
+              siteName: 'Ausrealty',
+            }}
+            // twitter={{
+            //   handle: '@yourhandle',
+            //   site: '@yourwebsite',
+            //   cardType: 'summary_large_image',
+            // }}
+          />
       <NavBar backgroundColor="black" showBackButton={true} 
       backButtonLink={`/chat/looking-to-rent`}
       />

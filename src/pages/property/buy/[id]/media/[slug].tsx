@@ -150,15 +150,15 @@ export default function ImageGallery({ id,
   }
   return (
     <>
-    <Head>
+<Head>
         <title>{property?.headline}</title>
         <meta property="og:title" content={property?.headline} />
         <meta property="og:description" content={property?.details} />
-        <meta property="og:image" content={imageUrl} />
+        <meta property="og:image" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
         <meta property="og:url" content={canonicalUrl} />
         
         {/* WhatsApp specific meta tags */}
-        <meta property="og:site_name" content="Devaus Realty" />
+        <meta property="og:site_name" content="Ausrealty" />
         <meta property="og:type" content="website" />
         
         {/* Twitter Card tags */}

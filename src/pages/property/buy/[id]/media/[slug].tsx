@@ -374,7 +374,7 @@ export default function ImageGallery({ id }: { id: string }) {
         setIsTyping={setIsTyping}
         setChatOpen={setIsChatOpen}
         chatOpen={isChatOpen}
-        
+        handleShare={handleShare}
         />
       
       </div>

@@ -1,6 +1,8 @@
+import Button from '@/components/ui/Button'
 import { handlePropertyDetailChat } from '@/utils/openai'
 import React, { useEffect, useState, useRef, FormEvent } from 'react'
 import { IoSend } from 'react-icons/io5'
+import { LuShare2 } from 'react-icons/lu'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -19,7 +21,7 @@ const ChatBot = ({
   scrollContainerRef,
   boxRefs,
   defaultSettings,
-  messages, setMessages,botThinking, setBotThinking,isTyping, setIsTyping,open, setOpen,property
+  messages, setMessages,botThinking, setBotThinking,isTyping, setIsTyping,open, setOpen,property,handleShare
 }: {
   title: string
   firstMessage: string
@@ -61,6 +63,7 @@ const ChatBot = ({
   open: boolean
   setOpen: any
   property:any
+  handleShare: any
 }) => {
   const [intentExtracting, setIntentExtracting] = useState(false)
   const [inputValue, setInputValue] = useState('')
@@ -232,8 +235,28 @@ const ChatBot = ({
       <div
         className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 pb-4 pt-2 text-center`}
       >
-        <div className='flex flex-col gap-6'>
+        <div className='flex flex-col gap-2'>
+        <div
+        className='flex justify-center items-center gap-4'
         
+        >
+        <Button
+                  // key={tab.id}
+                  onClick={handleShare}
+                  className="md:hidden bg-black rounded-md text-white px-6 gap-2 py-2 text-sm transition-colors flex justify-center items-center "
+                  
+                >
+                  <LuShare2/>
+                  Share
+                </Button>
+        
+                <Button
+                  // key={tab.id}
+                  onClick={handleShare}
+                  className="md:hidden bg-black rounded-md text-white px-6 gap-2 py-2 text-sm transition-colors flex justify-center items-center">
+                  Apply
+                </Button>
+        </div>
         <div className='w-full max-w-md mx-auto relative'>
             <input
               type='text'

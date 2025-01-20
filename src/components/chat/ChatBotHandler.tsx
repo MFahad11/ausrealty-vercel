@@ -10,9 +10,9 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ChatBotHandler = (
   {data,indexPage=false,defaultSettings=true, botThinking, setBotThinking,isTyping, setIsTyping, chatOpen, setChatOpen,
-  messages,setMessages}: {data: any, indexPage?: boolean,defaultSettings?:boolean,messages:any,setMessages:any
+  messages,setMessages,handleShare}: {data: any, indexPage?: boolean,defaultSettings?:boolean,messages:any,setMessages:any
     botThinking:boolean, setBotThinking:React.Dispatch<React.SetStateAction<boolean>>,isTyping:boolean, setIsTyping:React.Dispatch<React.SetStateAction<boolean>>,
-    setChatOpen:React.Dispatch<React.SetStateAction<boolean>>,chatOpen:boolean,
+    setChatOpen:React.Dispatch<React.SetStateAction<boolean>>,chatOpen:boolean,handleShare:()=>void
   }
 ) => {
   const [step, setStep] = useState(1);
@@ -240,6 +240,7 @@ const ChatBotHandler = (
       setIsTyping={setIsTyping}
       open={chatOpen}
       setOpen={setChatOpen}
+      handleShare={handleShare}
         />)
         
   );

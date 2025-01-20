@@ -223,22 +223,7 @@ export default function ImageGallery({ id }: { id: string }) {
           />
           
         </div>
-        <Button
-          // key={tab.id}
-          onClick={handleShare}
-          className="md:hidden bg-black text-white px-6 gap-2 py-2 text-sm transition-colors flex justify-center items-center fixed z-[1000] left-0"
-          
-        >
-          <LuShare2/>
-          Share
-        </Button>
-
-        <Button
-          // key={tab.id}
-          onClick={handleShare}
-          className="md:hidden bg-black text-white px-6 gap-2 py-2 text-sm transition-colors flex justify-center items-center fixed z-[1000] right-0">
-          Apply
-        </Button>
+        
         <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">
           {
             activeTab === 'details' && (
@@ -392,7 +377,7 @@ export default function ImageGallery({ id }: { id: string }) {
         setIsTyping={setIsTyping}
         setChatOpen={setIsChatOpen}
         chatOpen={isChatOpen}
-        
+        handleShare={handleShare}
         />
       
       </div>

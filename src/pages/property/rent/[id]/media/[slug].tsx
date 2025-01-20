@@ -152,13 +152,13 @@ export default function ImageGallery({ id,
   return (
     <>
     <NextSeo
-            title={property?.headline}
-            description={property?.details}
+            title={initialPropertyData?.displayAddress}
+            description={initialPropertyData?.headline}
             canonical={canonicalUrl}
             openGraph={{
               url: canonicalUrl,
-              title: property?.headline,
-              description: property?.details,
+              title: initialPropertyData?.displayAddress,
+              description: initialPropertyData?.headline,
               images: [
                 {
                   url: imageUrl,

@@ -152,30 +152,29 @@ console.log('imageUrl',imageUrl,canonicalUrl,initialPropertyData);
   return (
     <>
     <NextSeo
-        title={initialPropertyData?.headline}
-        description={initialPropertyData?.details}
-        canonical={canonicalUrl}
-        openGraph={{
-          url: canonicalUrl,
-          title: initialPropertyData?.headline,
-          description: initialPropertyData?.details,
-        
-          images: [
-            {
-              url: imageUrl,
-              width: 800,
-              height: 600,
-              alt: `Ausrealty`,
-            },
-          ],
-          siteName: 'Ausrealty',
-        }}
-        // twitter={{
-        //   handle: '@yourhandle',
-        //   site: '@yourwebsite',
-        //   cardType: 'summary_large_image',
-        // }}
-      />
+            title={initialPropertyData?.displayAddress}
+            description={initialPropertyData?.headline}
+            canonical={canonicalUrl}
+            openGraph={{
+              url: canonicalUrl,
+              title: initialPropertyData?.displayAddress,
+              description: initialPropertyData?.headline,
+              images: [
+                {
+                  url: imageUrl,
+                  width: 800,
+                  height: 600,
+                  alt: `Ausrealty`,
+                },
+              ],
+              siteName: 'Ausrealty',
+            }}
+            // twitter={{
+            //   handle: '@yourhandle',
+            //   site: '@yourwebsite',
+            //   cardType: 'summary_large_image',
+            // }}
+          />
     
       <NavBar backgroundColor="black" showBackButton={true} 
       backButtonLink={`/chat/looking-to-buy`}

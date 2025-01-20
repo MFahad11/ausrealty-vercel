@@ -22,7 +22,7 @@ interface IBox {
 }
 
 export interface IUserProperty extends Document {
-  userId: mongoose.Types.ObjectId;
+  // userId: mongoose.Types.ObjectId;
   propertyId: string | null;
   listingId: string;
   address: string;
@@ -128,7 +128,7 @@ export interface IUserProperty extends Document {
 // Define the schema
 const UserPropertySchema: Schema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    // userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     propertyId: { type: String, default: null },
     listingId: { type: String },
     address: { type: String, required: true, unique: true },

@@ -118,7 +118,7 @@ const ChatBot = ({
   const setIsMessage=useIsMessageStore((state) => state.setIsMessage);
   const isMessage=useIsMessageStore((state) => state.isMessage);
   const [propertyForm, setPropertyForm] = useState(false)
-    
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   
   useEffect(() => {
     setMessages([])
@@ -1040,7 +1040,10 @@ const ChatBot = ({
                                 />
                               </ContentLoader>
                             ) : (
-                              <AgentCarousel agents={message.agents || []} />
+                              <AgentCarousel agents={message.agents || []} 
+                              isOverlayOpen={isOverlayOpen}
+                              setIsOverlayOpen={setIsOverlayOpen}
+                              />
                             )}
                           </div>
                         )}
@@ -1049,7 +1052,7 @@ const ChatBot = ({
                             <Button
                               onClick={() => {
                                 setQuickSearch(!quickSearch)
-                                
+                                setPropertyForm(false)
                               }}
                               className='gray-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center capitalize font-abchanel'
                               aria-label='Reset search'
@@ -1124,7 +1127,7 @@ const ChatBot = ({
                 className={`black-button w-full max-w-xs mx-auto`}
                 onClick={
                   () => {
-                    
+                    setIsOverlayOpen(true)
                   }
                 }
               >

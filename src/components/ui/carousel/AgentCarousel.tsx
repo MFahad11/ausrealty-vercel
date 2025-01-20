@@ -9,17 +9,18 @@ type PropType = {
   options?: EmblaOptionsType
   childEmblaRef?: any
   stopPropagation?: (e: React.TouchEvent | React.MouseEvent) => void
+  isOverlayOpen: boolean
+  setIsOverlayOpen: (isOpen: boolean) => void
 }
 
 const AgentCarousel: React.FC<PropType> = props => {
   const { options, childEmblaRef } = props
   const [selectedIndex, setSelectedIndex] = useState(0)
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel()
 
   return (
     <>
-    <BookingOverlay isOpen={isOverlayOpen} onClose={() => setIsOverlayOpen(false)} />
+    <BookingOverlay isOpen={props?.isOverlayOpen} onClose={() => props?.setIsOverlayOpen(false)} />
        <div className='agent'>
       <div className='embla'>
         <div
@@ -36,8 +37,8 @@ const AgentCarousel: React.FC<PropType> = props => {
                         agent={agent}
                         index={index}
                         showLinks={false}
-                        isOverlayOpen={isOverlayOpen}
-                        setIsOverlayOpen={setIsOverlayOpen}
+                        isOverlayOpen={props?.isOverlayOpen}
+                        setIsOverlayOpen={props?.setIsOverlayOpen}
                       />
                     </div>
                   </div>

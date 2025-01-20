@@ -17,7 +17,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         userEmail: bookingData.email,
         date: bookingData.date,
         startTime: bookingData.startTime,
-        
       });
      if(!booking){
         return res.status(400).json({ success: false });

@@ -1152,7 +1152,7 @@ const BookAppraisal = ({ property
                       )}
                     </div>
   
-                    <div className="text-start py-2">
+                    {/* <div className="text-start py-2">
                       <label className="form-label">End Time</label>
                       <select
                         className={`form-select border ${
@@ -1175,7 +1175,7 @@ const BookAppraisal = ({ property
                           {errors.endtime.message}
                         </span>
                       )}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
   
@@ -1206,26 +1206,26 @@ const BookAppraisal = ({ property
               onBack={() => setStep(2)}
               />)
           }
-          {
+          {/* {
             step===4 &&(<OTPComponent
               email={email}
               setStep={setStep}
               onBack={() => setStep(3)}
               onResend={() => {}}
               />)
-          }
+          } */}
           {
-            step===5 && (
+            step===4 && (
               <ConfirmationComponent
               setStep={setStep}
-              onBack={() => setStep(4)}
+              onBack={() => setStep(3)}
               onClose={onClose}
               details={{
                 date: selecteddate,
                 // @ts-ignore
                 startTime: selectedStartTime || formData?.starttime,
                 // @ts-ignore
-                endTime: formData?.endtime,
+                // endTime: formData?.endtime,
                 email: email,
                 agentEmail:"test@test.com",
                 agentName:"Test Agent",

@@ -31,19 +31,20 @@ export default function EmailComponent({  onBack,email, setEmail,setStep }: Emai
       setError('Please enter a valid email')
       return
     }
-setLoading(true)
-    try {
-      const response= await axiosInstance.post('/api/auth/sendOtp', { email })
-      if(response?.data?.success){
-        setLoading(false)
-        setStep(4)
-        showToast('success','OTP sent successfully')
-      }
-    } catch (error) {
-      showToast('error','Error sending OTP. Please try again')
-      setLoading(false)
-      setError('Error sending OTP. Please try again')
-    }
+// setLoading(true)
+//     try {
+//       const response= await axiosInstance.post('/api/auth/sendOtp', { email })
+//       if(response?.data?.success){
+//         setLoading(false)
+//         setStep(4)
+//         showToast('success','OTP sent successfully')
+//       }
+//     } catch (error) {
+//       showToast('error','Error sending OTP. Please try again')
+//       setLoading(false)
+//       setError('Error sending OTP. Please try again')
+//     }
+setStep(4)
   }
 
   return (

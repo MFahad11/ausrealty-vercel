@@ -2,7 +2,7 @@
 interface BookingDetails {
   date: Date
   startTime: string
-  endTime: string
+  // endTime: string
   email: string
   agentName: string
   agentEmail: string
@@ -54,7 +54,7 @@ export default function ConfirmationComponent({
           <div className="border-b pb-4">
             <h4 className="text-sm text-gray-500 mb-1">TIME</h4>
             <p >
-              {details.startTime} - {details.endTime}
+              {details.startTime}
             </p>
           </div>
 

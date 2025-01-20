@@ -3,6 +3,7 @@ import UserProperty from "@/models/userProperty";
 import { escapeRegex, extractStreetAddress, getSuburbMedianPrice } from "@/utils/helpers";
 import axios from "axios";
 import dbConnectBeleef from "@/utils/db";
+import dbConnect from "@/components/lib/db";
 
 async function getExtendedPropertyDetails(propertyId:string) {
     try {
@@ -331,7 +332,6 @@ await dbConnectBeleef();
   let regex = new RegExp(`^${regexPattern}.*`, "i");
 
   try {
-    
     // Check if a UserProperty with the same userId and address already exists
     const userPropertyExists = await UserProperty.findOne({
       address: { $regex: regex },
@@ -426,10 +426,10 @@ await dbConnectBeleef();
       latitude,
       longitude
     );
-
+    dbConnect();
     // Create a new UserProperty document
     const newUserProperty = await UserProperty.create({
-    //   userId: id,
+      userId: "60b9e4b3b3b3b3b3b3b3b3b3",
       ...property,
       boxStatus,
       processChain,

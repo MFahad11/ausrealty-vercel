@@ -1,59 +1,158 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-// Define the TypeScript interface for the Agent document
-interface IAgent extends Document {
+// Define interfaces for nested types
+interface Agency {
   agencyId: number;
-  agentId: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  mobile: string;
-  phone?: string;
-  photo?: string;
+  agencyName: string;
+  officeId: string;
+  officeName: string;
+  companyAddress: string;
+}
+
+interface Suburb {
+  suburb: string;
+  state: string;
+  postcode: string;
+}
+
+// Main Agent interface
+interface IAgent extends Document {
+  // Unique Identifiers
+  beleefId?: mongoose.Types.ObjectId;
+  domainId?: number[];
+
+  // Personal Information
+  name?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
   secondaryEmail?: string;
+  mobile?: string;
+  phone?: string;
+  birthDate?: Date;
+  picture?: string;
+  signature?: string;
+
+  // Profile Information
+  role: string;
+  title?: string;
+  profileText?: string;
+  agentVideo?: string;
+  story?: string;
+  vision?: string;
+  profileComplete: boolean;
+
+  // Social Links
   facebookUrl?: string;
   twitterUrl?: string;
-  agentVideo?: string;
-  profileText?: string;
+  linkedInUrl?: string;
   googlePlusUrl?: string;
   personalWebsiteUrl?: string;
-  linkedInUrl?: string;
-  mugShotURL?: string;
-  contactTypeCode: number;
-  profileUrl: string;
+
+  // Agency Information
+  agencies: Agency[];
+
+  // Licensing and Compliance
+  license?: string;
+  licenseNumber?: string;
+  licenseExpiry?: Date;
+  validLicence: boolean;
+  conjunctionAgent?: string;
+  ownCompany: boolean;
+
+  // Financial Information
+  abn?: string;
+  gst?: string;
+  stripeCustomerId?: string;
+  paymentMethods: string[];
+
+  // Service Areas
+  suburbs: Suburb[];
+
+
+  // Metadata
   createdAt: Date;
   updatedAt: Date;
 }
 
-// Define the schema for the Agent model
-const agentSchema: Schema = new Schema(
+// Schema definition
+const AgentSchema = new Schema<IAgent>(
   {
-    agencyId: { type: Number, required: true },
-    agentId: { type: Number, required: true, unique: true },
-    email: { type: String, required: true, match: /.+\@.+\..+/ },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    mobile: { type: String, required: true },
-    phone: { type: String, default: '' },
-    photo: { type: String, default: '' },
-    secondaryEmail: { type: String, default: '' },
-    facebookUrl: { type: String, default: '' },
-    twitterUrl: { type: String, default: '' },
-    agentVideo: { type: String, default: '' },
-    profileText: { type: String, default: '' },
-    googlePlusUrl: { type: String, default: '' },
-    personalWebsiteUrl: { type: String, default: '' },
-    linkedInUrl: { type: String, default: '' },
-    mugShotURL: { type: String, default: '' },
-    contactTypeCode: { type: Number, required: true },
-    profileUrl: { type: String, required: true },
+    // Unique Identifiers
+    beleefId: { type: Schema.Types.ObjectId, unique: true, sparse: true },
+    domainId: [{ type: Number }],
+
+    // Personal Information
+    name: { type: String },
+    firstName: { type: String },
+    lastName: { type: String },
+    email: { type: String, unique: true, sparse: true },
+    secondaryEmail: { type: String },
+    mobile: { type: String },
+    phone: { type: String },
+    birthDate: { type: Date },
+    picture: { type: String },
+    signature: { type: String },
+
+    // Profile Information
+    role: { type: String, default: 'user' },
+    title: { type: String },
+    profileText: { type: String },
+    agentVideo: { type: String },
+    story: { type: String },
+    vision: { type: String },
+    profileComplete: { type: Boolean, default: false },
+
+    // Social Links
+    facebookUrl: { type: String },
+    twitterUrl: { type: String },
+    linkedInUrl: { type: String },
+    googlePlusUrl: { type: String },
+    personalWebsiteUrl: { type: String },
+
+    // Agency Information
+    agencies: [{
+      agencyId: { type: Number },
+      agencyName: { type: String },
+      officeId: { type: String },
+      officeName: { type: String },
+      companyAddress: { type: String },
+    }],
+
+    // Licensing and Compliance
+    license: { type: String },
+    licenseNumber: { type: String },
+    licenseExpiry: { type: Date },
+    validLicence: { type: Boolean, default: false },
+    conjunctionAgent: { type: String },
+    ownCompany: { type: Boolean, default: false },
+
+    // Financial Information
+    abn: { type: String },
+    gst: { type: String },
+    stripeCustomerId: { type: String },
+    paymentMethods: [{ type: String }],
+
+    // Service Areas
+    suburbs: [{
+      suburb: { type: String },
+      state: { type: String },
+      postcode: { type: String },
+    }],
+
+
+    // Metadata timestamps are handled by the timestamps option
   },
-  {
-    timestamps: true, // Automatically adds createdAt and updatedAt fields
-  }
+  { timestamps: true }
 );
 
-// Create the Agent model
-const Agent: Model<IAgent> = mongoose.models.Agent || mongoose.model<IAgent>('Agent', agentSchema);
+// Index to prevent duplicate agents across unique fields
+AgentSchema.index(
+  { email: 1, beleefId: 1, domainId: 1},
+  { unique: true, sparse: true }
+);
+
+// Model definition with interface
+const Agent = mongoose.models.Agent || mongoose.model<IAgent>('Agent', AgentSchema);
 
 export default Agent;

@@ -22,7 +22,7 @@ export default function ImageGrid(
   return (
     <>
     <div className="max-w-4xl mx-auto px-4 py-4 enhanced-textarea overflow-y-auto">
-      <div className={'grid gap-1 grid-cols-2 md:grid-cols-3'}>
+      <div className={'grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4'}>
         {data?.map((item, index) => (
           <div key={index} className="relative aspect-square overflow-hidden"
           onClick={() => {
@@ -35,7 +35,7 @@ export default function ImageGrid(
                   alt={`Grid item ${index + 1}`}
                   // fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 33vw, (max-width: 1200px) 33vw, 33vw"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                   loading='lazy'
                   width={300}
                     height={300}

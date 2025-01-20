@@ -17,8 +17,14 @@ import Button from "@/components/ui/Button";
 import ChatWindow from "@/components/chat/ChatWindow/index";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
 import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
-import { LuShare2 } from "react-icons/lu";
-export default function ImageGallery({ id }: { id: string }) {
+import Head from "next/head";
+export default function ImageGallery({ id, 
+  initialPropertyData,
+  canonicalUrl,
+  imageUrl }: { id: string;
+    initialPropertyData: any;
+    canonicalUrl: string;
+    imageUrl: string; }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -144,8 +150,28 @@ export default function ImageGallery({ id }: { id: string }) {
   }
   return (
     <>
+    <Head>
+        {/* General Meta Tags */}
+        <title>{property?.headline}</title>
+        <meta name="description" content={property?.details} />
+
+        {/* Open Graph Meta Tags for Facebook, WhatsApp, and Instagram */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={property?.headline} />
+        <meta property="og:description" content={property?.details} />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:url" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
+        <meta property="og:site_name" content="Ausrealty" />
+
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={property?.headline} />
+        <meta name="twitter:description" content={property?.details} />
+        <meta name="twitter:image" content={imageUrl} />
+        <meta name="twitter:url" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
+      </Head>
       <NavBar backgroundColor="black" showBackButton={true} 
-      backButtonLink={`/chat/looking-to-buy`}
+      backButtonLink={`/chat/looking-to-rent`}
       />
       {/* 
     @ts-ignore */}
@@ -221,9 +247,7 @@ export default function ImageGallery({ id }: { id: string }) {
             handleShare={handleShare}
             route="rent"
           />
-          
         </div>
-        
         <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">
           {
             activeTab === 'details' && (
@@ -408,9 +432,30 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   }
 
-  return {
-    props: {
-      id: params.id as string,
-    },
-  };
+  try {
+    // Fetch the property data at build time
+    const response = await axiosInstance.get(`/api/domain/listings/${params.id}`);
+    const propertyData = response?.data?.data;
+
+    // Get the base URL for absolute URLs
+    const baseUrl = 'https://devausrealty.vercel.app';
+
+    return {
+      props: {
+        id: params.id as string,
+        // Pass initial property data
+        initialPropertyData: propertyData,
+        // Pass the full URL for meta tags
+        canonicalUrl: `${baseUrl}/property/rent/${params.id}`,
+        // Ensure image URL is absolute
+        imageUrl: propertyData?.media[0]?.url
+      },
+      revalidate: 60, // Revalidate pages every 60 seconds
+    };
+  } catch (error) {
+    console.error('Error fetching property:', error);
+    return {
+      notFound: true,
+    };
+  }
 };

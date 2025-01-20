@@ -18,7 +18,13 @@ import ChatWindow from "@/components/chat/ChatWindow/index";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
 import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
 import Head from "next/head";
-export default function ImageGallery({ id }: { id: string }) {
+export default function ImageGallery({ id, 
+  initialPropertyData,
+  canonicalUrl,
+  imageUrl }: { id: string;
+    initialPropertyData: any;
+    canonicalUrl: string;
+    imageUrl: string; }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
@@ -148,14 +154,22 @@ export default function ImageGallery({ id }: { id: string }) {
         <title>{property?.headline}</title>
         <meta property="og:title" content={property?.headline} />
         <meta property="og:description" content={property?.details} />
-        <meta property="og:image" content={property?.media[0]?.url} />
-        <meta property="og:url" content={window.location.href} />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:url" content={canonicalUrl} />
+        
+        {/* WhatsApp specific meta tags */}
+        <meta property="og:site_name" content="Devaus Realty" />
+        <meta property="og:type" content="website" />
         
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={property?.headline} />
         <meta name="twitter:description" content={property?.details} />
-        <meta name="twitter:image" content={property?.media[0]?.url} />
+        <meta name="twitter:image" content={imageUrl} />
+        
+        {/* Making sure the page is indexable */}
+        <meta name="robots" content="index,follow" />
+        <link rel="canonical" href={canonicalUrl} />
       </Head>
       <NavBar backgroundColor="black" showBackButton={true} 
       backButtonLink={`/chat/looking-to-buy`}
@@ -419,9 +433,30 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   }
 
-  return {
-    props: {
-      id: params.id as string,
-    },
-  };
+  try {
+    // Fetch the property data at build time
+    const response = await axiosInstance.get(`/api/domain/listings/${params.id}`);
+    const propertyData = response?.data?.data;
+
+    // Get the base URL for absolute URLs
+    const baseUrl = 'https://devausrealty.vercel.app';
+
+    return {
+      props: {
+        id: params.id as string,
+        // Pass initial property data
+        initialPropertyData: propertyData,
+        // Pass the full URL for meta tags
+        canonicalUrl: `${baseUrl}/property/buy/${params.id}`,
+        // Ensure image URL is absolute
+        imageUrl: propertyData?.media[0]?.url
+      },
+      revalidate: 60, // Revalidate pages every 60 seconds
+    };
+  } catch (error) {
+    console.error('Error fetching property:', error);
+    return {
+      notFound: true,
+    };
+  }
 };

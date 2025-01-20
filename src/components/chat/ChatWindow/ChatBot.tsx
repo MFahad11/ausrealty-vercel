@@ -232,7 +232,12 @@ const ChatBot = ({
   }
   return (
     <div className='w-full h-full flex flex-col justify-between'>
+  
       <div
+        className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 pb-4 pt-2 text-center`}
+      >
+        <div className='flex flex-col gap-2'>
+        <div
         className='flex justify-center items-center gap-4'
         
         >
@@ -253,11 +258,6 @@ const ChatBot = ({
                   Apply
                 </Button>
         </div>
-      <div
-        className={`z-10 w-full fixed left-0 right-0 bg-white px-6 bottom-0 pb-4 pt-2 text-center`}
-      >
-        <div className='flex flex-col gap-2'>
-        
         <div className='w-full max-w-md mx-auto relative'>
             <input
               type='text'

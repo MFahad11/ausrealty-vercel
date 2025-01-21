@@ -42,9 +42,9 @@ const AgentCard = ({
       key={index}
       className='bg-white border border-darkgray rounded-md shadow-md pb-4'
     >
-      <div className='relative aspect-[3/4] w-full'>
+      <div className='relative aspect-[3/4] w-full h-96'>
         <img
-          src={agent.photo || '/placeholder.svg'}
+          src={agent.picture || '/placeholder.svg'}
           alt={`${agent.firstName} ${agent.lastName}`}
           //   fill
           className='object-cover'
@@ -63,8 +63,8 @@ const AgentCard = ({
           <h2 className='text-xl font-light tracking-wider uppercase'>
             {agent.firstName} {agent.lastName}
           </h2>
-          {agent.jobPosition && (
-            <p className='text-sm text-gray-600 mt-1'>{agent.jobPosition}</p>
+          {agent.title && (
+            <p className='text-sm text-gray-600 mt-1'>{agent.title}</p>
           )}
         </div>
 
@@ -114,12 +114,12 @@ const AgentCard = ({
                       <LuInstagram className="w-5 h-5" />
                     </Link>
                   )}
-                   <button 
+                   {/* <button 
                     onClick={() => window.location.href = `sms:${agent.phone}`}
                     className="text-gray-600 hover:text-black"
                   >
                     <LuMessageSquare className="w-5 h-5" />
-                  </button>
+                  </button> */}
               {/* {agent.twitterUrl && (
                 <Link
                   href={agent.twitterUrl}

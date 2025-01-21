@@ -133,7 +133,7 @@ const ChatBot = ({
           const getLatestMessage = JSON.parse(getStoredMessages)
           localStorage.removeItem(`${prompt}_send_message`)
           searchData(
-            getLatestMessage[getLatestMessage.length - 1]?.content,
+            getLatestMessage[getLatestmessage?.length - 1]?.content,
             false
           )
         }
@@ -619,7 +619,14 @@ const ChatBot = ({
               priceDetails: property?.priceDetails,
               propertyId: property?.propertyId,
               headline: property?.headline,
-              agents: 'auseralty.com.au'
+              website: 'auseralty.com.au',
+              agentsResponsible: property?.agentInfo?.map((agent: any) => ({
+                email: agent?.email,
+                phone: agent?.mobile,
+                firstName: agent?.firstName,
+                lastName: agent?.lastName,
+                suburbsCovered: agent?.suburbs,
+              }))
             }))
           )
         } else if (title === 'LOOKING TO RENT') {
@@ -645,7 +652,14 @@ const ChatBot = ({
               priceDetails: property?.priceDetails,
               propertyId: property?.propertyId,
               headline: property?.headline,
-              agents: 'auseralty.com.au'
+              website: 'auseralty.com.au',
+              agentsResponsible: property?.agentInfo?.map((agent: any) => ({
+                email: agent?.email,
+                phone: agent?.mobile,
+                firstName: agent?.firstName,
+                lastName: agent?.lastName,
+                suburbsCovered: agent?.suburbs,
+              }))
             }))
           )
         } else if (title === 'SELL MY PROPERTY') {
@@ -854,7 +868,7 @@ const ChatBot = ({
                     <div
                       key={index}
                       className={`mb-4 ${
-                        message.role === 'system' ? 'text-left' : 'text-right'
+                        message?.role === 'system' ? 'text-left' : 'text-right'
                       }`}
                     >
                       {message?.videoUrl && (
@@ -872,7 +886,7 @@ const ChatBot = ({
                       )}
                       <span
                         className={`inline-block rounded-lg max-w-[80%] p-3 ${
-                          message.role === 'system'
+                          message?.role === 'system'
                             ? 'bg-white rounded-br-none ml-2'
                             : 'text-start bg-gray-200 rounded-bl-none mr-2'
                         }
@@ -880,23 +894,23 @@ const ChatBot = ({
                 
                 `}
                         ref={
-                          message.role === 'system' &&
+                          message?.role === 'system' &&
                           index === messages.length - 1
                             ? botResponseRef
                             : null
                         }
                       >
                         <p className='text-[16px] font-light p-0 m-0'>
-                          {message.content}
+                          {message?.content}
                         </p>
                       </span>
 
                       <div>
-                        {message.properties && message.properties.length > 0 && (
+                        {message?.properties && message?.properties.length > 0 && (
                           <div className='mt-4'>
                             <div className='grid grid-cols-1 md:grid-cols-2 gap-2 mt-2'>
-                              {message.properties.map((property, index) =>
-                                message.isLoading ? (
+                              {message?.properties.map((property, index) =>
+                                message?.isLoading ? (
                                   <ContentLoader
                                     viewBox='0 0 500 280'
                                     height={280}
@@ -997,9 +1011,9 @@ const ChatBot = ({
                             </div>
                           </div>
                         )}
-                        {message.agents && message.agents.length > 0 && (
+                        {message?.agents && message?.agents.length > 0 && (
                           <div className='mt-4 '>
-                            {message.isLoading ? (
+                            {message?.isLoading ? (
                               <ContentLoader
                                 viewBox='0 0 500 280'
                                 height={280}
@@ -1040,14 +1054,14 @@ const ChatBot = ({
                                 />
                               </ContentLoader>
                             ) : (
-                              <AgentCarousel agents={message.agents || []} 
+                              <AgentCarousel agents={message?.agents || []} 
                               isOverlayOpen={isOverlayOpen}
                               setIsOverlayOpen={setIsOverlayOpen}
                               />
                             )}
                           </div>
                         )}
-                        {message.button && (
+                        {message?.button && (
                           <><div className='flex w-full '>
                             <Button
                               onClick={() => {
@@ -1057,7 +1071,7 @@ const ChatBot = ({
                               className='gray-button flex w-[22rem] md:w-[30rem] mx-auto justify-center items-center capitalize font-abchanel'
                               aria-label='Reset search'
                             >
-                              {message.buttonText}
+                              {message?.buttonText}
                             </Button>
                           </div></>
                         )}
@@ -1165,6 +1179,7 @@ const ChatBot = ({
             {!indexPage && (
               <button
                 onClick={handleStartAgain}
+                disabled={botThinking || isTyping}
                 className='p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-20 -translate-y-2 bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none'
                 aria-label='Reset search'
               >

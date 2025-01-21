@@ -25,14 +25,11 @@ export default async function handler(req: NextApiRequest,
 
     combinedResponse = combinedResponse.flat().filter((property:any) => {
         property['agentInfo']=[];
-        property.advertiserIdentifiers.agentIds.forEach((agentId:any) => {
-            // Find all agents that have this agentId in their domainId array
-            console.log('agentId',agentId);
-            const idWithoutPrefix = agentId.replace('A','');
-            console.log('idWithoutPrefix',idWithoutPrefix);
+        property.advertiserIdentifiers.contactIds.forEach((agentId:any) => {
+
             const matchingAgents = agents.filter((agent:any) => {
-                console.log('agent',agent.domainId);
-                return agent.domainId.includes(idWithoutPrefix);
+
+                return agent.domainId.includes(agentId);
             }
             );
             
@@ -56,7 +53,6 @@ export default async function handler(req: NextApiRequest,
         }
         return true;
     });
-    console.log('combinedResponse',combinedResponse[0].agentInfo);
     res.status(200).json({
         data:combinedResponse || [],
         success: true,

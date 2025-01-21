@@ -81,7 +81,7 @@ export default function ChatWindow({messages,isOpen, setIsOpen,botThinking, setB
     }, [messages])
 
   return (
-    <div className="fixed bottom-40 md:bottom-[9rem] left-1/2 max-w-4xl w-full -translate-x-1/2 z-50">
+    <div className="fixed bottom-[8.7rem] md:bottom-[10rem] left-1/2 max-w-4xl w-full -translate-x-1/2 z-50">
       <div 
         ref={chatRef}
         
@@ -160,7 +160,7 @@ export default function ChatWindow({messages,isOpen, setIsOpen,botThinking, setB
         {/* Close button */}
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-2 right-4  border-b border-lightgray"
+          className="absolute top-4 right-4  border-b border-lightgray"
           disabled={botThinking || isTyping}
         >
           <RxCross2 className="w-5 h-5" />

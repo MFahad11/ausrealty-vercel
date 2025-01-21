@@ -10,7 +10,7 @@ interface Agent {
     email?: string
     firstName?: string
     mobile?: string
-    photo?: string
+    picture?: string
     lastName?: string
     isActiveProfilePage?: string
     phone?: string
@@ -36,43 +36,11 @@ interface Agent {
     jobPosition?: string
   }
 // Mock data - replace with your actual data fetching
-const agents: Agent[] = [
-    {
-        firstName: "John",
-        lastName: "Smith",
-        jobPosition: "Senior Sales Agent",
-        email: "john.smith@ausrealty.com",
-        phone: "0400 000 000",
-        profileText: "With over 10 years of experience in Sydney's premium real estate market...",
-        photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-        mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-        facebookUrl: "https://facebook.com",
-        twitterUrl: "https://twitter.com",
-        linkedInUrl: "https://linkedin.com",
-        personalWebsiteUrl: "https://example.com",
-        saleActive: true,
-        rentalActive: true
-      },
-      {
-        firstName: "John",
-        lastName: "Smith",
-        jobPosition: "Senior Sales Agent",
-        email: "john.smith@ausrealty.com",
-        phone: "0400 000 000",
-        profileText: "With over 10 years of experience in Sydney's premium real estate market...",
-        photo:"https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-        mugShotURL: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-        facebookUrl: "https://facebook.com",
-        twitterUrl: "https://twitter.com",
-        linkedInUrl: "https://linkedin.com",
-        personalWebsiteUrl: "https://example.com",
-        saleActive: true,
-        rentalActive: true
-      }
-  // Add more agents as needed
-]
 
-export default function AgentsPage() {
+
+export default function AgentsPage({agents}:{
+  agents:any
+}) {
     const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   return (
     <div className="container mx-auto px-4 py-12">
@@ -81,7 +49,7 @@ export default function AgentsPage() {
         </h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {agents.map((agent, index) => (
+          {agents.map((agent:any, index:number) => (
             <AgentCard
               index={index}
               agent={agent}

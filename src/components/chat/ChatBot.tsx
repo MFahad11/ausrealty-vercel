@@ -119,7 +119,7 @@ const ChatBot = ({
   const isMessage=useIsMessageStore((state) => state.isMessage);
   const [propertyForm, setPropertyForm] = useState(false)
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
-  
+  const [agents,setAgents]=useState([])
   useEffect(() => {
     setMessages([])
     setFetchedProperties([])
@@ -156,6 +156,22 @@ const ChatBot = ({
   useEffect(() => {
     resizeTextarea()
   }, [inputValue])
+  const fetchAgents=async ()=>{
+    try {
+      const response=await axiosInstance.get('/api/agent')
+    if(response?.data?.success){
+      setAgents(response?.data?.data)
+    }
+    } catch (error) {
+      
+    }
+  }
+  useEffect(()=>{
+
+    if((title === 'SELL MY PROPERTY' || title === 'LEASE MY PROPERTY') && agents?.length==0){
+      fetchAgents()
+    }
+  },[title])
 
   const startRecording = async () => {
     try {
@@ -668,7 +684,8 @@ const ChatBot = ({
             messages.map(({ content, role }) => ({
               content,
               role
-            }))
+            })),
+            agents
           )
         } else if (title === 'LEASE MY PROPERTY') {
           data = await handleLeasingChat(
@@ -676,7 +693,8 @@ const ChatBot = ({
             messages.map(({ content, role }) => ({
               content,
               role
-            }))
+            })),
+            agents
           )
         }
         if (data?.extractedInfo) {

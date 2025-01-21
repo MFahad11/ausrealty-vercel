@@ -241,6 +241,7 @@ export default function ImageGallery({ id,
             setActiveTab={setActiveTab}
             handleShare={handleShare}
             route="rent"
+            address={property?.addressParts?.displayAddress?.split(' NSW')[0]}
           />
         </div>
         <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">

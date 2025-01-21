@@ -394,11 +394,7 @@ export default function ImageGallery({ id,
           propertyId:property?.propertyId,
           propertyTypes:property?.propertyTypes,
           rentalDetails:property?.rentalDetails,
-          agents:[{
-            name:'John Doe',
-            phone:'123456789',
-            email:'test@test.com'
-          }],
+          agentInfo:property?.agentInfo,
           company:{
             email:'ausrealty.gmail.com',
             name:'AusRealty',

@@ -35,7 +35,7 @@ interface Agent {
   receiveScheduledReportEmail?: boolean;
   profileUrl?: string;
   jobPosition?: string;
-  suburbsCovered: string[];
+  suburbs: string[];
 }
 
 const extractDisplayText = (text: string): string => {
@@ -1130,7 +1130,7 @@ Responses should focus on guiding the user to provide information while maintain
         responseText = reply_to_user;
         // Filter agents logic (replace this with your actual filtering logic)
         filteredAgents = agents.filter((agent) =>
-          agent.suburbsCovered.includes(suburb)
+          agent.suburbs.includes(suburb)
         );
       }
     }
@@ -1292,7 +1292,7 @@ Responses should focus on guiding the user to provide information while maintain
         responseText = reply_to_user;
         // Filter agents logic (replace this with your actual filtering logic)
         filteredAgents = agents.filter((agent) =>
-          agent.suburbsCovered.includes(suburb)
+          agent.suburbs.includes(suburb)
         );
       }
     }

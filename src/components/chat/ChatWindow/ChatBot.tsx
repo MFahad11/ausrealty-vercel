@@ -1,5 +1,6 @@
 import Button from '@/components/ui/Button'
 import { handlePropertyDetailChat } from '@/utils/openai'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState, useRef, FormEvent } from 'react'
 import { IoSend } from 'react-icons/io5'
@@ -22,7 +23,7 @@ const ChatBot = ({
   scrollContainerRef,
   boxRefs,
   defaultSettings,
-  messages, setMessages,botThinking, setBotThinking,isTyping, setIsTyping,open, setOpen,property,handleShare
+  messages, setMessages,botThinking, setBotThinking,isTyping, setIsTyping,open, setOpen,property,handleShare,address
 }: {
   title: string
   firstMessage: string
@@ -65,6 +66,7 @@ const ChatBot = ({
   setOpen: any
   property:any
   handleShare: any
+  address:string
 }) => {
   const [intentExtracting, setIntentExtracting] = useState(false)
   const [inputValue, setInputValue] = useState('')
@@ -249,12 +251,14 @@ const ChatBot = ({
           {
             // the page url contain the word /buy then don't show the apply button
             !router.pathname.includes('/buy') && (
-              <Button
-                  // key={tab.id}
-                  onClick={handleShare}
+              <Link
+              target="_blank"
+              href={`https://2apply.com.au/Form?AgentAccountName=ausrealty&Address=${address}`}
+                // key={tab.id}
+                // onClick={handleShare}
                   className="md:hidden bg-black rounded-md text-white px-6 gap-2 py-2 text-sm transition-colors flex justify-center items-center">
                   Apply
-                </Button>)
+                </Link>)
           }
                 
         </div>

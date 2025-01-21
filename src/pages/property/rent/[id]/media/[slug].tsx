@@ -398,6 +398,7 @@ export default function ImageGallery({ id,
         setChatOpen={setIsChatOpen}
         chatOpen={isChatOpen}
         handleShare={handleShare}
+        address={property?.addressParts?.displayAddress?.split(' NSW')[0]}
         />
       
       </div>

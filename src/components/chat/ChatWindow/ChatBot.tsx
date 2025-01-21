@@ -139,7 +139,16 @@ const ChatBot = ({
     let data: any
     let redirecting = false
     setBotThinking(true)
-    const botMessage= await handlePropertyDetailChat(userInput,messages,property)
+    const botMessage= await handlePropertyDetailChat(userInput,messages,{
+      ...property,
+      agentInfo: property?.agentInfo?.map((agent: any) => ({
+        email: agent?.email,
+        phone: agent?.mobile,
+        firstName: agent?.firstName,
+        lastName: agent?.lastName,
+        suburbsCovered: agent?.suburbs,
+      }))
+    })
     if(botMessage){
       setMessages((prevMessages:{
         role:string,

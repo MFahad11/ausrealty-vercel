@@ -42,7 +42,7 @@ const AgentCard = ({
       key={index}
       className='bg-white border border-darkgray rounded-md shadow-md pb-4'
     >
-      <div className='relative aspect-[3/4] w-full h-96'>
+      <div className='relative aspect-[3/4] w-full'>
         <img
           src={agent.picture || '/placeholder.svg'}
           alt={`${agent.firstName} ${agent.lastName}`}

@@ -46,7 +46,7 @@ export default function InstaGrid(
 ) {
   const [selectedMedia, setSelectedMedia] = useState<InstaItem | null>(null)
   return (
-    <><div className="max-w-4xl lg:h-[555px] h-[474px]  mx-auto px-4 py-8 enhanced-textarea overflow-y-auto">
+    <><div className="max-w-4xl lg:h-[555px] h-[474px]  mx-auto px-4 py-4 enhanced-textarea overflow-y-auto">
       <div className={cn(
           'grid gap-1',
           className

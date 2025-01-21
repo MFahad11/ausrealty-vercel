@@ -160,7 +160,7 @@ export default function ChatWindow({messages,isOpen, setIsOpen,botThinking, setB
         {/* Close button */}
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4  border-b border-lightgray"
+          className="absolute top-8 right-4  border-b border-lightgray"
           disabled={botThinking || isTyping}
         >
           <RxCross2 className="w-5 h-5" />

@@ -1,3 +1,4 @@
+import axiosInstance from "@/utils/axios-instance";
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(
@@ -28,9 +29,33 @@ export default async function handler(
         params: params,
       }
     );
-    console.log(response.data);
+    let agentsResponse=await axiosInstance.get('/api/agent');
+    const agents=agentsResponse.data.data;
+    let property=response?.data
+    property['agentInfo']=[];
+        property.advertiserIdentifiers.contactIds.forEach((agentId:any) => {
+
+            const matchingAgents = agents.filter((agent:any) => {
+
+                return agent.domainId.includes(agentId);
+            }
+            );
+            
+            // Add matching agents' info to agentInfo array
+            matchingAgents.forEach((agent:any) => {
+                const agentInfo = {
+                    ...agent,
+                };
+                
+                // Only add if not already in agentInfo array
+                if (!property.agentInfo.some((existing:any) => existing.email === agent.email)) {
+                    property.agentInfo.push(agentInfo);
+                }
+            });
+        });
+    console.log(property);
     res.status(200).json({
-      data: response.data,
+      data: property,
       success: true,
     });
   } catch (error: any) {

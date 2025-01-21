@@ -26,7 +26,6 @@ export default function ImageGallery({ id,
     initialPropertyData: any;
     canonicalUrl: string;
     imageUrl: string; }) {
-console.log('imageUrl',imageUrl,canonicalUrl,initialPropertyData);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -151,30 +150,20 @@ console.log('imageUrl',imageUrl,canonicalUrl,initialPropertyData);
   }
   return (
     <>
-    <NextSeo
-            title={initialPropertyData?.displayAddress}
-            description={initialPropertyData?.headline}
-            canonical={canonicalUrl}
-            openGraph={{
-              url: canonicalUrl,
-              title: initialPropertyData?.displayAddress,
-              description: initialPropertyData?.headline,
-              images: [
-                {
-                  url: imageUrl,
-                  width: 800,
-                  height: 600,
-                  alt: `Ausrealty`,
-                },
-              ],
-              siteName: 'Ausrealty',
-            }}
-            // twitter={{
-            //   handle: '@yourhandle',
-            //   site: '@yourwebsite',
-            //   cardType: 'summary_large_image',
-            // }}
-          />
+    <Head>
+        <title>{initialPropertyData?.addressParts?.displayAddress || `Property ${id}`}</title>
+        <meta name="description" content={initialPropertyData.description || `Details for property ${id}`} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:title" content={initialPropertyData?.addressParts?.displayAddress || `Property ${id}`} />
+        <meta property="og:description" content={initialPropertyData.description || `Details for property ${id}`} />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={initialPropertyData?.addressParts?.displayAddress || `Property ${id}`} />
+        <meta name="twitter:description" content={initialPropertyData.description || `Details for property ${id}`} />
+        <meta name="twitter:image" content={imageUrl} />
+      </Head>
     
       <NavBar backgroundColor="black" showBackButton={true} 
       backButtonLink={`/chat/looking-to-buy`}

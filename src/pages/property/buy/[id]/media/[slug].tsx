@@ -269,7 +269,9 @@ export default function ImageGallery({ id,
           }
           {
             activeTab === 'contact' && (
-              <AgentsPage />
+              <AgentsPage 
+              agents={property?.agentInfo || []}
+              />
             )
           }
           {

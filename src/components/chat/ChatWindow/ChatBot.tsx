@@ -66,7 +66,7 @@ const ChatBot = ({
   setOpen: any
   property:any
   handleShare: any
-  address:string
+  address?:string
 }) => {
   const [intentExtracting, setIntentExtracting] = useState(false)
   const [inputValue, setInputValue] = useState('')

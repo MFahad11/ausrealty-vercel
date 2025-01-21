@@ -37,230 +37,7 @@ interface Agent {
   jobPosition?: string;
   suburbsCovered: string[];
 }
-// Mock data - replace with your actual data fetching
-const agents: Agent[] = [
-  {
-    firstName: "John",
-    lastName: "Smith",
-    jobPosition: "Senior Sales Agent",
-    email: "john.smith@ausrealty.com",
-    phone: "0400 000 000",
-    profileText:
-      "With over 10 years of experience in Sydney's premium real estate market...",
-    photo:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    mugShotURL:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    facebookUrl: "https://facebook.com",
-    twitterUrl: "https://twitter.com",
-    linkedInUrl: "https://linkedin.com",
-    personalWebsiteUrl: "https://example.com",
-    saleActive: true,
-    rentalActive: true,
-    suburbsCovered: [
-      "Peakhurst",
-      "Bondi",
-      "Manly",
-      "Parramatta",
-      "Chatswood",
-      "Blacktown",
-      "Cronulla",
-      "Surry Hills",
-      "Mosman",
-      "Neutral Bay",
-      "Newtown",
-      "Paddington",
-      "Darlinghurst",
-      "North Sydney",
-      "Crows Nest",
-      "St Leonards",
-      "Ryde",
-      "Penrith",
-      "Liverpool",
-      "Campbelltown",
-      "Wollongong",
-      "Hornsby",
-      'Hurstville',
-      "Mortdale",
-      "Peakhurst Heights",
-      "Riverwood",
-      
-    ],
-  },
-  {
-    firstName: "John",
-    lastName: "Smith",
-    jobPosition: "Senior Sales Agent",
-    email: "john.smith@ausrealty.com",
-    phone: "0400 000 000",
-    profileText:
-      "With over 10 years of experience in Sydney's premium real estate market...",
-    photo:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    mugShotURL:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    facebookUrl: "https://facebook.com",
-    twitterUrl: "https://twitter.com",
-    linkedInUrl: "https://linkedin.com",
-    personalWebsiteUrl: "https://example.com",
-    saleActive: true,
-    rentalActive: true,
-    suburbsCovered: [
-      "Peakhurst",
-      "Bondi",
-      "Manly",
-      "Parramatta",
-      "Chatswood",
-      "Blacktown",
-      "Cronulla",
-      "Surry Hills",
-      "Mosman",
-      "Neutral Bay",
-      "Newtown",
-      "Paddington",
-      "Darlinghurst",
-      "North Sydney",
-      "Crows Nest",
-      "St Leonards",
-      "Ryde",
-      "Penrith",
-      "Liverpool",
-      "Campbelltown",
-      "Wollongong",
-      "Hornsby",
-    ],
-  },
-  {
-    firstName: "John",
-    lastName: "Smith",
-    jobPosition: "Senior Sales Agent",
-    email: "john.smith@ausrealty.com",
-    phone: "0400 000 000",
-    profileText:
-      "With over 10 years of experience in Sydney's premium real estate market...",
-    photo:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    mugShotURL:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    facebookUrl: "https://facebook.com",
-    twitterUrl: "https://twitter.com",
-    linkedInUrl: "https://linkedin.com",
-    personalWebsiteUrl: "https://example.com",
-    saleActive: true,
-    rentalActive: true,
-    suburbsCovered: [
-      "Peakhurst",
-      "Bondi",
-      "Manly",
-      "Parramatta",
-      "Chatswood",
-      "Blacktown",
-      "Cronulla",
-      "Surry Hills",
-      "Mosman",
-      "Neutral Bay",
-      "Newtown",
-      "Paddington",
-      "Darlinghurst",
-      "North Sydney",
-      "Crows Nest",
-      "St Leonards",
-      "Ryde",
-      "Penrith",
-      "Liverpool",
-      "Campbelltown",
-      "Wollongong",
-      "Hornsby",
-    ],
-  },
-  {
-    firstName: "John",
-    lastName: "Smith",
-    jobPosition: "Senior Sales Agent",
-    email: "john.smith@ausrealty.com",
-    phone: "0400 000 000",
-    profileText:
-      "With over 10 years of experience in Sydney's premium real estate market...",
-    photo:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    mugShotURL:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    facebookUrl: "https://facebook.com",
-    twitterUrl: "https://twitter.com",
-    linkedInUrl: "https://linkedin.com",
-    personalWebsiteUrl: "https://example.com",
-    saleActive: true,
-    rentalActive: true,
-    suburbsCovered: [
-      "Peakhurst",
-      "Bondi",
-      "Manly",
-      "Parramatta",
-      "Chatswood",
-      "Blacktown",
-      "Cronulla",
-      "Surry Hills",
-      "Mosman",
-      "Neutral Bay",
-      "Newtown",
-      "Paddington",
-      "Darlinghurst",
-      "North Sydney",
-      "Crows Nest",
-      "St Leonards",
-      "Ryde",
-      "Penrith",
-      "Liverpool",
-      "Campbelltown",
-      "Wollongong",
-      "Hornsby",
-    ],
-  },
-  {
-    firstName: "John",
-    lastName: "Smith",
-    jobPosition: "Senior Sales Agent",
-    email: "john.smith@ausrealty.com",
-    phone: "0400 000 000",
-    profileText:
-      "With over 10 years of experience in Sydney's premium real estate market...",
-    photo:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    mugShotURL:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-    facebookUrl: "https://facebook.com",
-    twitterUrl: "https://twitter.com",
-    linkedInUrl: "https://linkedin.com",
-    personalWebsiteUrl: "https://example.com",
-    saleActive: true,
-    rentalActive: true,
-    suburbsCovered: [
-      "Peakhurst",
-      "Bondi",
-      "Manly",
-      "Parramatta",
-      "Chatswood",
-      "Blacktown",
-      "Cronulla",
-      "Surry Hills",
-      "Mosman",
-      "Neutral Bay",
-      "Newtown",
-      "Paddington",
-      "Darlinghurst",
-      "North Sydney",
-      "Crows Nest",
-      "St Leonards",
-      "Ryde",
-      "Penrith",
-      "Liverpool",
-      "Campbelltown",
-      "Wollongong",
-      "Hornsby",
-    ],
-  },
-  // Add more agents as needed
-];
+
 const extractDisplayText = (text: string): string => {
   if (!text.includes("%%")) {
     const [displayPart] = text.split("[");
@@ -1207,7 +984,8 @@ Return only primary suburb results when more options exist nearby
 
 export async function handleSellingChat(
   userInput: string,
-  conversationHistory: { role: string; content: string }[]
+  conversationHistory: { role: string; content: string }[],
+  agents:Agent[]
 ) {
   try {
     // Add the user's input to the conversation history
@@ -1368,7 +1146,8 @@ Responses should focus on guiding the user to provide information while maintain
 }
 export async function handleLeasingChat(
   userInput: string,
-  conversationHistory: { role: string; content: string }[]
+  conversationHistory: { role: string; content: string }[],
+  agents:Agent[]
 ) {
   try {
     // Add the user's input to the conversation history
@@ -1925,6 +1704,7 @@ export async function handlePropertyDetailChat(
   conversationHistory: { role: string; content: string }[],
   properties: any[],
 ) {
+  console.log(properties[0]?.agentInfo)
   try {
     // Add the user's input to the conversation history
     conversationHistory.push({

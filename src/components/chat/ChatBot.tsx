@@ -133,7 +133,7 @@ const ChatBot = ({
           const getLatestMessage = JSON.parse(getStoredMessages)
           localStorage.removeItem(`${prompt}_send_message`)
           searchData(
-            getLatestMessage[getLatestmessage?.length - 1]?.content,
+            getLatestMessage[getLatestMessage.length - 1]?.content,
             false
           )
         }

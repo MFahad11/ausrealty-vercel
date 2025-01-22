@@ -422,7 +422,6 @@ export default function ImageGallery({ id,
       setIsOpen={setIsChatOpen}
       messages={messages}
       isTyping={isTyping}
-      
       />
     </>
   );

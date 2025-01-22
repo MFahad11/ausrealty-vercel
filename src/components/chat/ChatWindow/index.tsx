@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState, useRef, useEffect } from 'react'
 import { LuChevronDown } from 'react-icons/lu';
 import { RxCross2 } from "react-icons/rx";
@@ -5,15 +6,17 @@ import { RxCross2 } from "react-icons/rx";
 interface Message {
   role: 'system' | 'user';
   content: string;
+  link?: string;
 }
 
-export default function ChatWindow({messages,isOpen, setIsOpen,botThinking, setBotThinking,isTyping}:{
+export default function ChatWindow({messages,isOpen, setIsOpen,botThinking, setBotThinking,isTyping,link}:{
     messages:Message[]
     isOpen:boolean
     setIsOpen:React.Dispatch<React.SetStateAction<boolean>>
     botThinking:boolean
     setBotThinking:React.Dispatch<React.SetStateAction<boolean>>
     isTyping:boolean
+    link?:string
     
 }) {
   
@@ -23,7 +26,7 @@ export default function ChatWindow({messages,isOpen, setIsOpen,botThinking, setB
   const botResponseRef = useRef<HTMLDivElement>(null)
     const [showScrollButton, setShowScrollButton] = useState(false)
   
-
+const router=useRouter();
   useEffect(() => {
     if (isOpen && chatRef.current) {
       chatRef.current.style.display = 'flex'
@@ -96,6 +99,7 @@ export default function ChatWindow({messages,isOpen, setIsOpen,botThinking, setB
                 className='enhanced-textarea overflow-y-auto pl-0 '
               >
                 {(messages && messages?.length>=1) && messages.map((message, index) => (
+                  
                   <>
                     <div
                       key={index}
@@ -125,7 +129,39 @@ export default function ChatWindow({messages,isOpen, setIsOpen,botThinking, setB
                         </p>
                       </span>
 
+                      
+
                     </div>
+                    {
+                        (message?.link && router.pathname?.includes('/rent')
+                        ) && (
+                          <a
+                          href=''
+                        className={`inline-block rounded-lg max-w-[80%] p-3 ${
+                          message.role === 'system'
+                            ? 'bg-white rounded-br-none ml-2'
+                            : 'text-start bg-gray-200 rounded-bl-none mr-2'
+                        }
+               
+                
+                `}
+                // @ts-ignore
+                        ref={
+                          message.role === 'system' &&
+                          index === messages.length - 1
+                            ? botResponseRef
+                            : null
+                        }
+                      >
+                        <a className='text-[16px] font-light p-0 m-0'
+                        target='_blank'
+                        href={link}
+                        >
+                          Apply
+                        </a>
+                      </a>
+                        )
+                      }
                   </>
                 ))}
 

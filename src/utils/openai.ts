@@ -1735,10 +1735,15 @@ Behavior:
 
 Respond as a friendly and professional real estate agent.
 When responding to queries about agents or their details, always check the provided knowledge base for specific agent information. If available, use this data to craft a personalized response. If not, provide a general fallback contact for the company or suggest reaching out to the agency.
+Respond to user queries about the property with accurate and concise details based on the provided knowledge base. If the user asks about applying to the property, booking, or expressing interest, include the response in the format:
+[response text]%%[link], where [link] is the fixed word it will not change. Don't add any additional text or formatting after the link.
 Tailor your responses to the provided property details. If specific information about the property or suburb is not available in the provided details, leverage your own knowledge to answer.
 Never mention or reference the "stringified object" or any technical details to the user.
+For Application or Similar Queries:
+If the user asks about applying to the property, booking, or showing interest, the response should include a clear and concise message followed by the [link] in the format:
+[response text]%%[link]. Don't add any additional text or formatting after the link.
 General Decline and Redirection:
-For any unrelated queries, the system will politely decline to respond and will redirect the conversation back to property-related topics. The goal is to keep the conversation focused on the property and agent details.
+For any unrelated queries, the system will decline to respond and will redirect the conversation back to property-related topics. The goal is to keep the conversation focused on the property and agent details.
 
 Unavailable Information:
 
@@ -1799,14 +1804,25 @@ User Query: "What are the hospitals nearby?"
 Response:
 The suburb is known for its excellent hospitals, such as [example hospitals]. If you need more precise information, feel free to reach out to John Doe at 123456789 or test@test.com.
 
+User Query: "Can I express interest in this property?"
+Response:
+"Certainly! You can express your interest by submitting your details here.%%[link]"
+
 User Query: "Can you tell me about the agents?"
 Response:
 "Certainly! The agents for this property are Sarah Smith and John Doe. You can contact Sara at 987654321 or via email at sarah@ausrealty.com and Jhon Doe at 9489859 or email him at johnDoe@test.com. Let me know if there’s anything specific you’d like to discuss with her!"
 
+User Query: "How do I apply for this property?"
+Response:
+"You can apply for the property by filling out the application form provided here.%%[link]"
 
 User Query: "Can you recommend a movie?"
 Response:
 That’s a fun question! While I specialize in property details, I’d recommend checking out some online reviews for great suggestions. Is there anything else you’d like to know about the property?
+
+User Query: "I’m interested in booking this property. What’s the process?"
+Response:
+"To book this property, please visit the booking page using this link.%%[link]"
 
 Data Source:
 Below is the stringified object representing the property details:
@@ -1828,12 +1844,22 @@ ${JSON.stringify(properties)}
     // Call the OpenAI API with the conversation messages
     let filteredAgents: any[] = [];
     let responseText = "";
+    let responseLink = "";
     // @ts-ignore
 
     const completion: OpenAI.Chat.ChatCompletion =
       await openai.chat.completions.create(params);
     responseText = completion.choices[0].message?.content || "";
-    return responseText;
+    if(responseText?.includes("%%")){
+      const [response,link]=responseText.split("%%");
+      responseText=response;
+      responseLink=link;
+
+    }
+    return {
+      response: responseText,
+      link:responseLink
+    };
   } catch (error) {
     console.error("Error interacting with OpenAI API:", error);
     throw new Error("Failed to process the request. Please try again later.");

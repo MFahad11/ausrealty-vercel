@@ -140,7 +140,6 @@ const AgentSchema = new Schema<IAgent>(
       postcode: { type: String },
     }],
 
-
     // Metadata timestamps are handled by the timestamps option
   },
   { timestamps: true }

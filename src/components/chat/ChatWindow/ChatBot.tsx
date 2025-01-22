@@ -154,10 +154,11 @@ const ChatBot = ({
         role:string,
         content:string
       }[])=>{
-        const updatedMessages = [...prevMessages,{role:'system',content:botMessage}]
-        typewriterEffect(botMessage, updatedMessages.length - 1)
+        const updatedMessages = [...prevMessages,{role:'system',content:botMessage?.response,link:botMessage?.link}]
+        typewriterEffect(botMessage?.response, updatedMessages.length - 1)
         return updatedMessages
       })
+      
     }
   }
 

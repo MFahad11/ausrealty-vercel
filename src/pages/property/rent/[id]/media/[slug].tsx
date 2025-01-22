@@ -424,7 +424,7 @@ export default function ImageGallery({ id,
       setIsOpen={setIsChatOpen}
       messages={messages}
       isTyping={isTyping}
-      
+      link={`https://2apply.com.au/Form?AgentAccountName=ausrealty&Address=${initialPropertyData?.addressParts?.displayAddress?.split(' NSW')[0]}`}
       />
     </>
   );

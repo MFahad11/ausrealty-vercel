@@ -65,6 +65,25 @@ export default function ImageGallery({ id,
     }
     )
   };
+  useEffect(() => {
+    if (!isOpen) return; // Don't add event listener if modal is not open
+
+    const handleKeyDown = (e:any) => {
+      if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+      }
+    };
+
+    // Add event listener when modal is open
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Clean up the event listener on component unmount or when modal is closed
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
   const getListing = async (id: string) => {
     try {
       const response = await axiosInstance.get(`/api/domain/listings/${id}`);

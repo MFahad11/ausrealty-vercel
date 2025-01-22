@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
          <title>{`Ausrealty`}</title>
          <meta name="twitter:image" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-         <meta name="twitter:card" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
+         <meta name="twitter:card" content={'Find your dream home with Ausrealty'} />
          <meta name="twitter:title" content={`Ausrealty`} />
          <meta name="twitter:description" content='Find your dream home with Ausrealty' />
          <meta name="description" content='Find your dream home with Ausrealty' />

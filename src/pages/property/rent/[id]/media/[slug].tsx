@@ -340,12 +340,11 @@ export default function ImageGallery({ id,
                             className={`${isFullWidth ? "col-span-2 relative aspect-[16/9]" : "relative aspect-square"}`}
                           >
                             <iframe
-                              src={item.url}
-                              className="w-full h-full object-cover"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                              
-                            />
+  src={`https://www.youtube.com/embed/${item.url.split('/').pop()}`}
+  className="w-full h-full object-cover"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+/>
                           </div>
                         )}
                         

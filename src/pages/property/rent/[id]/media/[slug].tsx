@@ -18,7 +18,7 @@ import ChatWindow from "@/components/chat/ChatWindow/index";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
 import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
 import Head from "next/head";
-import { NextSeo } from "next-seo";
+import { NextSeo } from 'next-seo';
 export default function ImageGallery({ id, 
   initialPropertyData,
   canonicalUrl,
@@ -26,13 +26,11 @@ export default function ImageGallery({ id,
     initialPropertyData: any;
     canonicalUrl: string;
     imageUrl: string; }) {
-
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [intentExtracting, setIntentExtracting] = useState(false);
   const [activeTab, setActiveTab] = useState("images");
-  const property = usePropertyStore((state) => state.propertyData);
   const router = useRouter();
   const {slug} = router.query;
   const [messages, setMessages] = useState([]);
@@ -41,8 +39,7 @@ export default function ImageGallery({ id,
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [botThinking, setBotThinking] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
-  const setProperty = usePropertyStore((state) => state.setPropertyData);
-  const images = property?.media.filter((item:{type:string}) => item.type === "photo");
+  const images = initialPropertyData?.media.filter((item:{type:string}) => item.type === "photo");
   const handlePrev = () => {
     setSelectedImage((prevImage)=>{
       const currentIndex = images.findIndex((item:{url:string}) => item.url === prevImage);
@@ -84,18 +81,7 @@ export default function ImageGallery({ id,
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);
-  const getListing = async (id: string) => {
-    try {
-      const response = await axiosInstance.get(`/api/domain/listings/${id}`);
-      if (response?.data?.success) {
-        setProperty(response?.data?.data);
-      }
-    } catch (error) {
-      console.log("error", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
   };
@@ -145,18 +131,13 @@ export default function ImageGallery({ id,
     
     }
   }, [slug]);
-  useEffect(() => {
-    if (id) {
-      setIsLoading(true);
-      getListing(id);
-    }
-  }, [id]);
+
   const handleShare = () => {
     if (navigator.share) {
       navigator
         .share({
-          title: property?.headline,
-          text: property?.details,
+          title: initialPropertyData?.headline,
+          text: initialPropertyData?.details,
           url: window.location.href,
         })
         .then(() => console.log("Successful share"))
@@ -165,39 +146,44 @@ export default function ImageGallery({ id,
       console.log("Web share not supported");
     }
   }
-  if (isLoading || !property) {
+  if (!initialPropertyData) {
     return <PageLoader />;
   }
   return (
     <>
     <Head>
-         <title>{`Ausrealty`}</title>
-         <meta name="twitter:image" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-         <meta name="twitter:card" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-         <meta name="twitter:title" content={`Ausrealty`} />
-         <meta name="twitter:description" content='Find your dream home with Ausrealty' />
-         <meta name="description" content='Find your dream home with Ausrealty' />
-         <meta property="og:image" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-         <meta property="og:site_name" content="Ausrealty"></meta>
-         <meta property="og:title" content={`Ausrealty`} />
-         <meta property="og:description" content='Find your dream home with Ausrealty' />
-         <meta property="og:url" content={'https://devausrealty.vercel.app/'} />
-         <link rel="canonical" href={'https://devausrealty.vercel.app/'} />
-         <meta property="description" content="Find your dream home with Ausrealty" />
-           
-           
-           <meta property="og:type" content="website" />
-           
-           
-           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-         </Head>
-      
+  <title>{initialPropertyData?.headline || 'Ausrealty'}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</Head>
+<NextSeo
+  title={initialPropertyData?.headline || 'Ausrealty'}
+  description={initialPropertyData?.details || 'Find your dream home with Ausrealty'}
+  canonical={canonicalUrl}
+  openGraph={{
+    url: canonicalUrl,
+    title: initialPropertyData?.headline || 'Ausrealty',
+    description: initialPropertyData?.details || 'Find your dream home with Ausrealty',
+    images: [
+      {
+        url: initialPropertyData?.media[0]?.url || 'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg',
+        width: 1200,
+        height: 630,
+        alt: initialPropertyData?.headline || 'Ausrealty',
+      }
+    ],
+    siteName: 'Ausrealty',
+  }}
+  twitter={{
+    handle: '@ausrealty',
+    site: '@ausrealty',
+    cardType: 'summary_large_image',
+  }}
+/>
+    
       <NavBar backgroundColor="black" showBackButton={true} 
       backButtonLink={`/chat/looking-to-rent`}
       />
-      {/* 
-    @ts-ignore */}
-
+      {/* @ts-ignore */}
       <Modal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -214,6 +200,7 @@ export default function ImageGallery({ id,
           {
             activeTab==='images' && (<><button
       onClick={handlePrev}
+    
       className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
     >
       <IoIosArrowBack /> {/* Right Arrow */}
@@ -268,7 +255,7 @@ export default function ImageGallery({ id,
             setActiveTab={setActiveTab}
             handleShare={handleShare}
             route="rent"
-            address={property?.addressParts?.displayAddress?.split(' NSW')[0]}
+            address={initialPropertyData?.addressParts?.displayAddress?.split(' NSW')[0]}
           />
         </div>
         <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">
@@ -276,23 +263,23 @@ export default function ImageGallery({ id,
             activeTab === 'details' && (
               // <div className="p-4">
               //   <h2 className="text-2xl font-semibold mb-2">details</h2>
-              //   <p>{property?.details}</p>
+              //   <p>{initialPropertyData?.details}</p>
               // </div>
-              <PropertyDetails property={property} />
+              <PropertyDetails property={initialPropertyData} />
             )
           }
           {
             activeTab === 'contact' && (
               <AgentsPage 
-              agents={property?.agentInfo || []}
+              agents={initialPropertyData?.agentInfo || []}
               />
             )
           }
           {
             (activeTab==='images' || activeTab==='floorplan' || activeTab==='video') && (<div className="grid grid-cols-2 gap-1">
-              {property?.media &&
-                property?.media.length > 0 &&
-                property.media.map(
+              {initialPropertyData?.media &&
+                initialPropertyData?.media.length > 0 &&
+                initialPropertyData?.media.map(
                   (
                     item: {
                       url: string;
@@ -330,7 +317,7 @@ export default function ImageGallery({ id,
                           activeTab === "floorplan" && (
                             <div
                             key={index}
-                            className={`${isFullWidth ? "col-span-2 relative aspect-[16/9] overflow-hidden" : "relative aspect-square overflow-hidden"}`}
+                            className="col-span-2 relative aspect-[16/9] overflow-hidden"
                             onClick={() => {
                               setSelectedImage(item.url);
                               setIsOpen(true);
@@ -349,7 +336,7 @@ export default function ImageGallery({ id,
                         {item?.type === "youtube" && activeTab === "video" && (
                           <div
                             key={index}
-                            className={`${isFullWidth ? "col-span-2 relative aspect-[16/9]" : "relative aspect-square"}`}
+                            className="col-span-2 relative aspect-[16/9] overflow-hidden"
                           >
                             <iframe
   src={`https://www.youtube.com/embed/${item.url.split('/').pop()}`}
@@ -364,21 +351,22 @@ export default function ImageGallery({ id,
                     );
                   }
                 )}
-                {property?.media.filter((item:{
+                {initialPropertyData?.media.filter((item:{
                   type:string
                 }) => item.type === 'photo').length === 0 && activeTab === 'images' && (
         <div className="col-span-2 text-center p-4"><p>No images available.</p></div>
       )}
-      {property?.media.filter((item:{
+      {initialPropertyData?.media.filter((item:{
        type:string
       }) => item.type === 'floorplan').length === 0 && activeTab === 'floorplan' && (
         <div className="col-span-2 text-center p-4"><p>No floor plans available.</p></div>
       )}
-      {property?.media.filter((item:{ type:string }) => item.type === 'youtube').length === 0 && activeTab === 'video' && (
+      {initialPropertyData?.media.filter((item:{ type:string }) => item.type === 'youtube').length === 0 && activeTab === 'video' && (
         <div className="col-span-2 text-center p-4"><p>No videos available.</p></div> 
       )}
             </div>)
           }
+          
           
         </div>
         <ChatBotHandler
@@ -386,28 +374,28 @@ export default function ImageGallery({ id,
         setMessages={setMessages}
         defaultSettings={false}
         data={{
-          objective:property?.objective,
-          status:property?.status,
-          saleMode:property?.saleMode,
-          channel:property?.channel,
-          id:property?.id,
-          addressParts:property?.addressParts,
-          bathrooms:property?.bathrooms,
-          bedrooms:property?.bedrooms,
-          carspaces:property?.carspaces,
-          dateAvailable:property?.dateAvailable,
-          dateUpdated:property?.dateUpdated,
-          dateListed:property?.dateListed,
-          description:property?.description,
-          geoLocation:property?.geoLocation,
-          headline:property?.headline,
-          inspectionDetails:property?.inspectionDetails,
-          isNewDevelopment:property?.isNewDevelopment,
-          priceDetails:property?.priceDetails,
-          propertyId:property?.propertyId,
-          propertyTypes:property?.propertyTypes,
-          rentalDetails:property?.rentalDetails,
-          agentInfo:property?.agentInfo,
+          objective:initialPropertyData?.objective,
+          status:initialPropertyData?.status,
+          saleMode:initialPropertyData?.saleMode,
+          channel:initialPropertyData?.channel,
+          id:initialPropertyData?.id,
+          addressParts:initialPropertyData?.addressParts,
+          bathrooms:initialPropertyData?.bathrooms,
+          bedrooms:initialPropertyData?.bedrooms,
+          carspaces:initialPropertyData?.carspaces,
+          dateAvailable:initialPropertyData?.dateAvailable,
+          dateUpdated:initialPropertyData?.dateUpdated,
+          dateListed:initialPropertyData?.dateListed,
+          description:initialPropertyData?.description,
+          geoLocation:initialPropertyData?.geoLocation,
+          headline:initialPropertyData?.headline,
+          inspectionDetails:initialPropertyData?.inspectionDetails,
+          isNewDevelopment:initialPropertyData?.isNewDevelopment,
+          priceDetails:initialPropertyData?.priceDetails,
+          propertyId:initialPropertyData?.propertyId,
+          propertyTypes:initialPropertyData?.propertyTypes,
+          rentalDetails:initialPropertyData?.rentalDetails,
+          agentInfo:initialPropertyData?.agentInfo,
           company:{
             email:'ausrealty.gmail.com',
             name:'AusRealty',
@@ -422,7 +410,7 @@ export default function ImageGallery({ id,
         setChatOpen={setIsChatOpen}
         chatOpen={isChatOpen}
         handleShare={handleShare}
-        address={property?.addressParts?.displayAddress?.split(' NSW')[0]}
+        address={initialPropertyData?.addressParts?.displayAddress?.split(' NSW')[0]}
         />
       
       </div>
@@ -480,3 +468,5 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   }
 };
+
+

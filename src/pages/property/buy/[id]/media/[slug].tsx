@@ -316,7 +316,7 @@ export default function ImageGallery({ id,
                           activeTab === "floorplan" && (
                             <div
                             key={index}
-                            className={`${isFullWidth ? "col-span-2 relative aspect-[16/9] overflow-hidden" : "relative aspect-square overflow-hidden"}`}
+                            className="col-span-2 relative aspect-[16/9] overflow-hidden"
                             onClick={() => {
                               setSelectedImage(item.url);
                               setIsOpen(true);
@@ -335,7 +335,7 @@ export default function ImageGallery({ id,
                         {item?.type === "youtube" && activeTab === "video" && (
                           <div
                             key={index}
-                            className={`${isFullWidth ? "col-span-2 relative aspect-[16/9]" : "relative aspect-square"}`}
+                            className="col-span-2 relative aspect-[16/9] overflow-hidden"
                           >
                             <iframe
   src={`https://www.youtube.com/embed/${item.url.split('/').pop()}`}
@@ -365,6 +365,7 @@ export default function ImageGallery({ id,
       )}
             </div>)
           }
+          
           
         </div>
         <ChatBotHandler

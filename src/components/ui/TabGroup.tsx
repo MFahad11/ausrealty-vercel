@@ -51,15 +51,17 @@ export function TabGroup({ tabs, defaultTab,activeTab, setActiveTab,handleShare,
                 <LuShare2/>
                 Share
               </Button>
-      
-              <Link
+        {
+          route!=="buy" && (<Link
               target="_blank"
               href={`https://2apply.com.au/Form?AgentAccountName=ausrealty&Address=${address}`}
                 // key={tab.id}
                 // onClick={handleShare}
                 className="hidden bg-black text-white px-6 gap-2 py-2 rounded-lg text-sm transition-colors md:flex justify-center items-center">
                 Apply
-              </Link>
+              </Link>)
+        }
+              
     </div>
   )
 }

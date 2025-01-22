@@ -42,12 +42,12 @@ const AgentCard = ({
       key={index}
       className='bg-white border border-darkgray rounded-md shadow-md pb-4'
     >
-      <div className='relative aspect-[3/4] w-full'>
+      <div className='relative w-full  sm:h-96 md:h-[400px] lg:h-[500px]'>
         <img
           src={agent.picture || '/placeholder.svg'}
           alt={`${agent.firstName} ${agent.lastName}`}
           //   fill
-          className='object-cover'
+          className='object-cover w-full h-full'
         />
         {!showLinks && (
           <div className='absolute top-4 right-4 bg-black text-white backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1'>

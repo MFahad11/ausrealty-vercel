@@ -152,44 +152,36 @@ export default function ImageGallery({ id,
   return (
     <>
 <Head>
-  <title>{initialPropertyData?.headline || 'Ausrealty'}</title>
-  <link rel="canonical" href={canonicalUrl} />
-  
-  {/* Essential OG Tags */}
-  <meta key="og:url" property="og:url" content={canonicalUrl} />
-  <meta key="og:title" property="og:title" content={initialPropertyData?.headline || 'Ausrealty'} />
-  <meta key="og:description" property="og:description" content={initialPropertyData?.details || 'Find your dream home with Ausrealty'} />
-  <meta key="og:image" property="og:image" content={initialPropertyData?.media[0]?.url || 'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-  
-  {/* Essential Twitter Tags */}
-  <meta key="twitter:title" name="twitter:title" content={initialPropertyData?.headline || 'Ausrealty'} />
-  <meta key="twitter:description" name="twitter:description" content={initialPropertyData?.details || 'Find your dream home with Ausrealty'} />
-  <meta key="twitter:image" name="twitter:image" content={initialPropertyData?.media[0]?.url || 'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
-</Head>
-<NextSeo
-  title={initialPropertyData?.headline || 'Ausrealty'}
-  description={initialPropertyData?.details || 'Find your dream home with Ausrealty'}
-  canonical={canonicalUrl}
-  openGraph={{
-    url: canonicalUrl,
-    title: initialPropertyData?.headline || 'Ausrealty',
-    description: initialPropertyData?.details || 'Find your dream home with Ausrealty',
-    images: [
-      {
-        url: initialPropertyData?.media[0]?.url || 'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg',
-        width: 1200,
-        height: 630,
-        alt: initialPropertyData?.headline || 'Ausrealty',
-      }
-    ],
-    siteName: 'Ausrealty',
-  }}
-  twitter={{
-    handle: '@ausrealty',
-    site: '@ausrealty',
-    cardType: 'summary_large_image',
-  }}
-/>
+        <title>{initialPropertyData?.headline || "Property"} | Ausrealty</title>
+        <meta name="description" content={initialPropertyData?.details || "Find your dream home with Ausrealty"} />
+        <meta property="og:title" content={initialPropertyData?.headline || "Property | Ausrealty"} />
+        <meta
+          property="og:description"
+          content={initialPropertyData?.details || "Find your dream home with Ausrealty"}
+        />
+        <meta
+          property="og:image"
+          content={
+            initialPropertyData?.media[0]?.url ||
+            "https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"
+          }
+        />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={initialPropertyData?.headline || "Property | Ausrealty"} />
+        <meta
+          name="twitter:description"
+          content={initialPropertyData?.details || "Find your dream home with Ausrealty"}
+        />
+        <meta
+          name="twitter:image"
+          content={
+            initialPropertyData?.media[0]?.url ||
+            "https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"
+          }
+        />
+      </Head>
     
       <NavBar backgroundColor="black" showBackButton={true} 
       backButtonLink={`/chat/looking-to-buy`}

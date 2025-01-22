@@ -151,9 +151,20 @@ export default function ImageGallery({ id,
   }
   return (
     <>
-    <Head>
+<Head>
   <title>{initialPropertyData?.headline || 'Ausrealty'}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="canonical" href={canonicalUrl} />
+  
+  {/* Essential OG Tags */}
+  <meta key="og:url" property="og:url" content={canonicalUrl} />
+  <meta key="og:title" property="og:title" content={initialPropertyData?.headline || 'Ausrealty'} />
+  <meta key="og:description" property="og:description" content={initialPropertyData?.details || 'Find your dream home with Ausrealty'} />
+  <meta key="og:image" property="og:image" content={initialPropertyData?.media[0]?.url || 'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
+  
+  {/* Essential Twitter Tags */}
+  <meta key="twitter:title" name="twitter:title" content={initialPropertyData?.headline || 'Ausrealty'} />
+  <meta key="twitter:description" name="twitter:description" content={initialPropertyData?.details || 'Find your dream home with Ausrealty'} />
+  <meta key="twitter:image" name="twitter:image" content={initialPropertyData?.media[0]?.url || 'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
 </Head>
 <NextSeo
   title={initialPropertyData?.headline || 'Ausrealty'}

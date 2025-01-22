@@ -972,15 +972,6 @@ const ChatBot = ({
                                   <div
                                     key={index}
                                     className='bg-white shadow-sm p-0 border-lightgray border w-full'
-                                    
-                                  >
-                                    {property?.media &&
-                                      Array.isArray(property?.media) && (
-                                        <PropertyCarousel
-                                          slides={property?.media}
-                                        />
-                                      )}
-                                    <div className='ml-4 cursor-pointer'
                                     onClick={() => {
                                       if(title === 'LOOKING TO BUY'){
                                         router.push(`/property/buy/${property?.id}/media/images`)
@@ -991,6 +982,15 @@ const ChatBot = ({
                                       }
                                       
                                     }}
+                                  >
+                                    {property?.media &&
+                                      Array.isArray(property?.media) && (
+                                        <PropertyCarousel
+                                          slides={property?.media}
+                                        />
+                                      )}
+                                    <div className='ml-4 cursor-pointer'
+                                    
                                     >
                                       <div className='mt-4 flex flex-col space-y-2'>
                                         <h5 className='tracking-wide'>

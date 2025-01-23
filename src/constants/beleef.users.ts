@@ -328,7 +328,9 @@ export const AGENTS=[
                 "state": "NSW",
                 "postcode": "2221"
             }
-        ]
+        ],
+        "facebookUrl": "",
+        "instagramUrl": "https://www.instagram.com/profile.php?id=100008590171000"
     },
     {
         "_id": "67527bc38e047d13f850a90c",
@@ -363,7 +365,9 @@ export const AGENTS=[
                 "state": "NSW",
                 "postcode": "2200"
             }
-        ]
+        ],
+        "instagramUrl": "https://www.instagram.com/joyceboustani_ausrealty?igsh=MTlkdDMxbXAwN3h3Ng%3D%3D&utm_source=qr",
+        "facebookUrl": "https://www.facebook.com/share/163JyBeyAc/?mibextid=wwXIfr"
     },
     {
         "_id": "66e92c08a67237b0fc63b2fe",

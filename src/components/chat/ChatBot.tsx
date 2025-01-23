@@ -530,9 +530,7 @@ const ChatBot = ({
           name:string
         }
       }) => {
-        console.log(property.addressParts.displayAddress.toLowerCase()?.includes(isAddress?.address.toLowerCase()),property.addressParts.displayAddress.toLowerCase(),isAddress?.address.toLowerCase())
         return (
-          
           property.addressParts.suburb.toLowerCase() == isAddress?.suburb?.toLowerCase() &&
           property.addressParts.postcode == isAddress?.postcode &&
           property.addressParts.displayAddress.toLowerCase()?.includes(isAddress?.address.toLowerCase())

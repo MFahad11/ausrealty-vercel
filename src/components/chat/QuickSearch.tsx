@@ -1834,6 +1834,24 @@ const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData}
             text: `Hello ${agent.name}, ${property.addressParts.displayAddress} has been searched.`
           })
         })
+        if(property?.agentInfo?.length>=1){
+          axiosInstance.post('/api/send-email', {
+            to: 'caitlin.micallef@hellomelo.com.au',
+            subject: `${property.addressParts.displayAddress} has been searched`,
+            text: `Hello, ${property.addressParts.displayAddress} has been searched.`
+          })
+          axiosInstance.post('/api/send-email', {
+            to: 'caitlin.micallef@hellomelo.com.au',
+            subject: `${property.addressParts.displayAddress} has been searched`,
+            text: `Hello, ${property.addressParts.displayAddress} has been searched.`
+          })
+          axiosInstance.post('/api/send-email', {
+            to: 'joyce.boustani@ausrealty.com.au',
+            subject: `${property.addressParts.displayAddress} has been searched`,
+            text: `Hello, ${property.addressParts.displayAddress} has been searched.`
+          })
+          
+        }
         return response.data.data
       }
     } catch (error: any) {

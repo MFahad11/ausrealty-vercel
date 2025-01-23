@@ -457,7 +457,27 @@ const ChatBot = ({
       scrollToElement(messagesEndRef)
     }
   }, [messages])
+  const getAllProperties = async () => {
+      try {
+        const response = await axiosInstance.post('/api/domain/listings')
+        if (response.data.success) {
+          const properties = response.data.data
+          if (properties.length > 0) {
+            setFetchedProperties(() => {
+              const updatedProperties = properties
+              return updatedProperties
+            })
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching properties:', error)
+        
+      }
+    }
+  useEffect(() => {
+    getAllProperties()
 
+  }, [])
   const handleSend = async (inputValue: string) => {
     if (!inputValue.trim()) {
       // toast.error("Please type something");
@@ -1129,6 +1149,7 @@ const ChatBot = ({
                           setQuickSearch={setQuickSearch}
                           setPropertyForm={setPropertyForm}
                           propertyForm={propertyForm}
+                          propertyData={fetchedProperties}
                           />
                 }
                 
@@ -1177,7 +1198,6 @@ const ChatBot = ({
               autoCapitalize='on'
               className='start-campaign-input w-full  z-10 flex-grow p-2 bg-lightgray rounded-md py-5 pl-3 pr-8 outline-none focus:outline-none resize-none overflow-y-hidden font-lato text-[16px] font-light'
             />
-            
             <button
               onClick={() => {
                 handleSend(inputValue)
@@ -1193,7 +1213,6 @@ const ChatBot = ({
             >
               <IoSend title='Send' className='w-5 h-5' />
             </button>
-
             {!indexPage && (
               <button
                 onClick={handleStartAgain}

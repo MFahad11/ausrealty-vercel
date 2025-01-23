@@ -19,6 +19,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Button from '../ui/Button'
 import BookingOverlay from '../chat/BookApraisal/Overlay'
 import OutcomeCarousel from '../ui/carousel/OutComeCarousel'
+import { useRouter } from 'next/router'
 
 const AgentCard = ({
   agent,
@@ -36,14 +37,14 @@ const AgentCard = ({
   totalAgents: number
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-
+  const router = useRouter()
   return (
     <>
     <div
       key={index}
       className='bg-white border border-darkgray rounded-md shadow-md pb-4'
     >
-      <div className='relative w-full  sm:h-96 md:h-[400px] lg:h-[500px]'>
+      <div className={`relative w-full ${(router?.query?.tab=='sell-my-property' || router?.query?.tab=='lease-my-property') ? '' : 'sm:h-96 md:h-[400px] lg:h-[500px]'}`}>
         <img
           src={agent.picture || '/placeholder.svg'}
           alt={`${agent.firstName} ${agent.lastName}`}

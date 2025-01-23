@@ -1777,7 +1777,7 @@ const PropertyContainer = ({
   )
 }
 
-const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm}:{setQuickSearch:any, propertyForm:any, setPropertyForm:any}) => {
+const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData}:{setQuickSearch:any, propertyForm:any, setPropertyForm:any,propertyData:any}) => {
   const [property, setProperty] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -1809,6 +1809,31 @@ const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm}:{setQuickSea
       })
 
       if (response.data.success) {
+        const property = propertyData.find((property:{
+          addressParts:{
+            suburb:string,
+            postcode:string,
+            displayAddress:string
+          },
+          agentInfo:{
+            email:string,
+            name:string
+          }
+        }) => {
+          return (
+            property.addressParts.suburb.toLowerCase() == suburb?.toLowerCase() &&
+            property.addressParts.postcode == postcode &&
+            property.addressParts.displayAddress.toLowerCase()?.includes(shortAddress.toLowerCase())
+          )
+        })
+        // @ts-ignore
+        property?.agentInfo?.map((agent) => {
+          axiosInstance.post('/api/send-email', {
+            to: agent.email,
+            subject: `${property.addressParts.displayAddress} has been searched`,
+            text: `Hello ${agent.name}, ${property.addressParts.displayAddress} has been searched.`
+          })
+        })
         return response.data.data
       }
     } catch (error: any) {

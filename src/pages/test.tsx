@@ -1,4 +1,4 @@
-import BookAppraisal from "@/components/chat/BookApraisal";
+// import BookAppraisal from "@/components/chat/BookApraisal";
 import { useState, FormEvent } from "react";
 
 export default function TestEmail() {

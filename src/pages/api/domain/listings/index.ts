@@ -45,6 +45,9 @@ export default async function handler(req: NextApiRequest,
                 }
             });
         });
+        if(!extractedInfo){
+            return true;
+        }
         if (extractedInfo.objective && property.objective !== extractedInfo.objective) {
             return false;
         }

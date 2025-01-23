@@ -430,51 +430,14 @@ export default function ImageGallery({ id,
   );
 }
 
-// export async function getStaticPaths() {
-//   return {
-//     paths: [],
-//     fallback: true,
-//   };
-// }
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: true,
+  };
+}
 
-// export const getStaticProps: GetStaticProps = async ({ params }) => {
-//   if (!params || !params.id) {
-//     return {
-//       notFound: true,
-//     };
-//   }
-
-//   try {
-//     // Fetch the property data at build time
-//     const response = await axiosInstance.get(`/api/domain/listings/${params.id}`);
-//     const propertyData = response?.data?.data;
-
-//     // Get the base URL for absolute URLs
-//     const baseUrl = 'https://devausrealty.vercel.app';
-
-//     return {
-//       props: {
-//         id: params.id as string,
-//         // Pass initial property data
-//         initialPropertyData: propertyData,
-//         // Pass the full URL for meta tags
-//         canonicalUrl: `${baseUrl}/property/rent/${params.id}`,
-//         // Ensure image URL is absolute
-//         imageUrl: propertyData?.media[0]?.url
-//       },
-//       revalidate: 60, // Revalidate pages every 60 seconds
-//     };
-//   } catch (error) {
-//     console.error('Error fetching property:', error);
-//     return {
-//       notFound: true,
-//     };
-//   }
-// };
-
-
-
-export async function getServerSideProps({ params }: { params: { id: string; slug: string } }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (!params || !params.id) {
     return {
       notFound: true,
@@ -499,6 +462,7 @@ export async function getServerSideProps({ params }: { params: { id: string; slu
         // Ensure image URL is absolute
         imageUrl: propertyData?.media[0]?.url
       },
+      revalidate: 60, // Revalidate pages every 60 seconds
     };
   } catch (error) {
     console.error('Error fetching property:', error);
@@ -506,4 +470,6 @@ export async function getServerSideProps({ params }: { params: { id: string; slu
       notFound: true,
     };
   }
-}
+};
+
+

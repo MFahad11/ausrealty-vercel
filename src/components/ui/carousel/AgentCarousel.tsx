@@ -39,6 +39,7 @@ const AgentCarousel: React.FC<PropType> = props => {
                         showLinks={false}
                         isOverlayOpen={props?.isOverlayOpen}
                         setIsOverlayOpen={props?.setIsOverlayOpen}
+                        totalAgents={props?.agents.length}
                       />
                     </div>
                   </div>

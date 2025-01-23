@@ -25,7 +25,7 @@ const AgentCard = ({
   index,
   showLinks = true,
   emblaMainRef,
-  isOverlayOpen, setIsOverlayOpen
+  isOverlayOpen, setIsOverlayOpen,totalAgents
 }: {
   agent: any
   index: number
@@ -33,6 +33,7 @@ const AgentCard = ({
   emblaMainRef?: any
   isOverlayOpen: boolean
   setIsOverlayOpen: any
+  totalAgents: number
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -52,7 +53,7 @@ const AgentCard = ({
         {!showLinks && (
           <div className='absolute top-4 right-4 bg-black text-white backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1'>
             <span className='text-sm'>
-              {index + 1} of {LOOKING_TO_RENT.length}
+              {index + 1} of {totalAgents}
             </span>
           </div>
         )}

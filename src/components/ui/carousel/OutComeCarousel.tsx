@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
-import AgentCard from '@/components/property/AgentCard'
 import BookingOverlay from '@/components/chat/BookApraisal/Overlay'
 import { NextButton, PrevButton, usePrevNextButtons } from './ArrowButtons'
 import OutComeCard from '@/components/property/OutComeCard'

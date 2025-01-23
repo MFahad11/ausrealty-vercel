@@ -56,6 +56,7 @@ export default function AgentsPage({agents}:{
               showLinks={true}
               isOverlayOpen={isOverlayOpen}
               setIsOverlayOpen={setIsOverlayOpen}
+              totalAgents={agents.length}
               />
           ))}
         </div>

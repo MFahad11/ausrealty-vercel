@@ -1865,3 +1865,50 @@ ${JSON.stringify(properties)}
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
+export async function checkIsAddress(text: string) {
+  try {
+    const messages = [
+      { role: "system", content: `
+  You are an expert in Australian address validation, specifically for New South Wales (NSW).
+  
+  Tasks:
+  1. Determine if the input is a valid Australian street address
+  2. Correct any typos or formatting issues
+  3. Standardize the address format
+  4. Extract suburb and postcode if possible
+  
+  Rules:
+  - Focus on NSW addresses only
+  - Correct common address formatting errors
+  - Use authoritative knowledge about Australian address standards
+  - Be precise and accurate
+  
+  Input: ${text}
+  
+  Respond with a JSON object containing:
+  {
+    "isAddress": true/false,
+    "address": "Corrected Full Address without suburb and postcode",
+    "suburb": "Suburb Name",
+    "postcode": "Postcode"
+  }
+  
+  If the input is not a valid address, set isAddress to false and leave other fields empty.` },
+    ]
+    const params: OpenAI.Chat.ChatCompletionCreateParams = {
+      // @ts-ignore
+      messages: messages,
+      model: "gpt-4o",
+      response_format: {
+        type: 'json_object',
+      },
+    };
+    const response = await openai.chat.completions.create(params);
+      // @ts-ignore
+      const result = JSON.parse(response.choices[0].message.content || '{}');
+      return result;
+  } catch (error) {
+    console.error("Error checking address:", error);
+    throw new Error("Failed to check the address. Please try again later.");
+  }
+}

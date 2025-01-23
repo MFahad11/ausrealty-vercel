@@ -15,6 +15,7 @@ import axiosInstance from '@/utils/axios-instance'
 import ContentLoader from 'react-content-loader'
 import { RiVoiceprintFill } from 'react-icons/ri'
 import {
+  checkIsAddress,
   handleBuyingChat,
   handleIdentifyIntent,
   handleLeasingChat,
@@ -514,11 +515,41 @@ const ChatBot = ({
     setBotThinking(true)
     if (extractIntent) {
       const intent = await handleIdentifyIntent(userInput)
+      const isAddress = await checkIsAddress(userInput)
       
+    
+    if(isAddress?.isAddress){
+      const property = fetchedProperties.find((property:{
+        addressParts:{
+          suburb:string,
+          postcode:string,
+          displayAddress:string
+        },
+        agentInfo:{
+          email:string,
+          name:string
+        }
+      }) => {
+        console.log(property.addressParts.displayAddress.toLowerCase()?.includes(isAddress?.address.toLowerCase()),property.addressParts.displayAddress.toLowerCase(),isAddress?.address.toLowerCase())
+        return (
+          
+          property.addressParts.suburb.toLowerCase() == isAddress?.suburb?.toLowerCase() &&
+          property.addressParts.postcode == isAddress?.postcode &&
+          property.addressParts.displayAddress.toLowerCase()?.includes(isAddress?.address.toLowerCase())
+        )
+      })
+      // @ts-ignore
+      property?.agentInfo?.map((agent) => {
+        axiosInstance.post('/api/send-email', {
+          to: agent.email,
+          subject: `${property.addressParts.displayAddress} has been searched`,
+          text: `Hello ${agent.name}, ${property.addressParts.displayAddress} has been searched.`
+        })
+      })
+    }
       if (intent?.response) {
         const { redirect = '/', prompt: extractedPrompt,response } = JSON.parse(intent?.response)
         if (extractedPrompt && extractedPrompt !== prompt){
-            setFetchedProperties([])
           const getStoredMessages = localStorage.getItem(extractedPrompt)
           if (getStoredMessages) {
             const storedMessages = JSON.parse(getStoredMessages)
@@ -590,6 +621,7 @@ const ChatBot = ({
         // }
       }
     }
+
     if (!indexPage && !redirecting) {
       const body: {
         objective?: string
@@ -605,33 +637,15 @@ const ChatBot = ({
       }
       try {
         let storedProperties = fetchedProperties || []
-
-        if (storedProperties.length === 0) {
-          const response = await axiosInstance.post('/api/domain/listings', {
-            extractedInfo: body
-          })
-          if (response.data.success) {
-            const properties = response.data.data
-            if (properties.length > 0) {
-              setFetchedProperties(() => {
-                const updatedProperties = properties
-                return updatedProperties
-              })
-              storedProperties = properties
-            }
-            // else{
-            //   setMessages((prevMessages) => {
-            //     const newMessage = {
-            //       role: "system",
-            //       content:
-            //         "Unable to find any properties that match your criteria. But you can always provide more information to help us find the right property for you.",
-            //     };
-            //     const updatedMessages = [...prevMessages, newMessage];
-            //     return updatedMessages;
-            //   });
-            // }
+        storedProperties = storedProperties.filter((property) => {
+          if(body.objective && property.objective !== body.objective){
+            return false
           }
-        }
+          if(body.saleMode && property.saleMode !== body.saleMode){
+            return false
+          }
+          return true
+        })
         if (title === 'LOOKING TO BUY') {
           data = await handleBuyingChat(
             userInput,

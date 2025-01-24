@@ -68,7 +68,8 @@ interface IAgent extends Document {
 
   // Service Areas
   suburbs: Suburb[];
-
+  accessToken: string;
+  refreshToken: string;
 
   // Metadata
   createdAt: Date;
@@ -139,7 +140,8 @@ const AgentSchema = new Schema<IAgent>(
       state: { type: String },
       postcode: { type: String },
     }],
-
+    accessToken: { type: String },
+    refreshToken: { type: String },
     // Metadata timestamps are handled by the timestamps option
   },
   { timestamps: true }

@@ -1732,12 +1732,13 @@ Please find enclosed Information for the property at ${property.address}`,
 }
 
 const PropertyContainer = ({
-  property: initialProperty, setPropertyForm,setQuickSearch
-  
+  property: initialProperty, setPropertyForm,setQuickSearch,address, availableAgents
 }: {
   property: any,
   setPropertyForm:any,
-  setQuickSearch:any
+  setQuickSearch:any,
+  address:any,
+  availableAgents:any
 }) => {
   const [formData, setFormData] = useState(initialProperty)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -1757,10 +1758,9 @@ const PropertyContainer = ({
     // Update the form data if the initial property changes
     setFormData(initialProperty)
   }, [initialProperty])
-
   return (
     <>
-    <BookingOverlay isOpen={isOverlayOpen} onClose={() => setIsOverlayOpen(false)} />
+    <BookingOverlay isOpen={isOverlayOpen} onClose={() => setIsOverlayOpen(false)} address={address} agent={null} availableAgents={availableAgents}/>
     <div className='w-full'>
       <p className='text-[16px] font-light p-0 m-0'>
         The provided information may not be fully accurate. For a more precise assessment please consult with an agent.
@@ -1783,6 +1783,7 @@ const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData}
   const [error, setError] = useState(null)
   const [autocomplete, setAutocomplete] = useState(null)
   const [address, setAddress] = useState('')
+  const [availableAgents, setAvailableAgents] = useState([])
   const handleLoad = (
     autocompleteInstance: google.maps.places.Autocomplete
   ) => {
@@ -1820,12 +1821,14 @@ const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData}
             name:string
           }
         }) => {
+          console.log(property.addressParts.suburb.toLowerCase(), suburb?.toLowerCase(), property.addressParts.postcode, postcode, property.addressParts.displayAddress.toLowerCase(), shortAddress.toLowerCase())
           return (
             property.addressParts.suburb.toLowerCase() == suburb?.toLowerCase() &&
             property.addressParts.postcode == postcode &&
             property.addressParts.displayAddress.toLowerCase()?.includes(shortAddress.toLowerCase())
           )
         })
+        console.log(property)
         // @ts-ignore
         property?.agentInfo?.map((agent) => {
           axiosInstance.post('/api/send-email', {
@@ -1834,7 +1837,8 @@ const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData}
             text: `Hello ${agent.name}, ${property.addressParts.displayAddress} has been searched.`
           })
         })
-        
+        console.log(property?.agentInfo)
+        setAvailableAgents(property?.agentInfo || [])
         return response.data.data
       }
     } catch (error: any) {
@@ -1960,6 +1964,8 @@ setPropertyForm(true)
         <PropertyContainer property={property} 
         setPropertyForm={setPropertyForm}
         setQuickSearch={setQuickSearch}
+        address={address}
+        availableAgents={availableAgents}
         />
       </div>
     )

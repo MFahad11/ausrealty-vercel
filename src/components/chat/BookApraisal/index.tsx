@@ -571,7 +571,9 @@ const BookAppraisalList = ({
 
 const BookAppraisal = ({ property
   , setStep,step,onClose,
-  agent
+  agent,
+  address:searchedAddress,
+  availableAgents
  }:{
     property:{
         address: string
@@ -582,7 +584,9 @@ const BookAppraisal = ({ property
     step: number
     , setStep: (arg0: number) => void,
     onClose: () => void
-    agent: any
+    agent: any,
+    address?: string
+    availableAgents: any[]
 }) => {
   const [vendors, setVendors] = useState([{ id: 1 }]);
   const [bookings, setBookings] = useState(false);
@@ -598,10 +602,11 @@ const BookAppraisal = ({ property
   const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
-  const [address, setAddress] = useState('')
+  const [address, setAddress] = useState(searchedAddress || '');
   const [timeSlots, setTimeSlots] = useState([]);
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState(agent || null);
   const [timeSlotsLoading, setTimeSlotsLoading] = useState(false);
   const handleDateChange = async (date:Date) => {
     setSelectedDate(date);
@@ -695,6 +700,7 @@ const BookAppraisal = ({ property
     form_8: string
     form_9: string
     form_10: string
+    agent: string
   }>({
     defaultValues: {
       propertyType: property?.propertyType || "",
@@ -918,7 +924,13 @@ const BookAppraisal = ({ property
     // @ts-ignore
     setEndTimes(newEndTimes);
   };
-
+  const handleAgentChange=(e:any)=>{
+    const selectedAgentId = e.target.value;
+    const selectedAgent = availableAgents.find(
+      (agent) => agent._id === selectedAgentId
+    );
+    setSelectedAgent(selectedAgent);
+  }
   const tileDisabled = ({ date, view }:{
     date: Date
     view: string
@@ -933,7 +945,6 @@ const BookAppraisal = ({ property
     return false; // Do not disable other views
   };
 
-
   return (
     <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center text-center space-y-2 px-4 booking-form">
       
@@ -941,7 +952,70 @@ const BookAppraisal = ({ property
       <div className="flex flex-col w-full">
         <form onSubmit={handleSubmit(onSubmit)} className="w-full  text-start">
           
+        {step===0 && (
+            <div className="flex flex-col w-full">
+            <div className="text-start py-2">
+              <label className="form-label">
+                Available Agents
+              </label>
+              {availableAgents.length === 0 ? (
+                <p>
+                  No available agents. Please try again later or contact support.
+                </p>
+              ) : (
+                <select
+                  className={`form-select border ${
+                    errors.agent
+                      ? "border-red-500"
+                      : "border-mediumgray"
+                  }`}
+                  {...register("agent")}
+                  onChange={handleAgentChange}
+                >
+                  <option value="">
+                    Select Agent
+                  </option>
+                  {availableAgents.map((agent, index) => (
+                    <option key={index} value={agent._id}>
+                      {agent.firstName} {agent.lastName}
+                    </option>
+                  ))}
+                </select>
+              )}
+              {errors.agent && (
+                <span className="form-error-message">
+                  {errors.agent.message}
+                </span>
+              )}
+            </div>
 
+            {/* <div className="text-start py-2">
+              <label className="form-label">End Time</label>
+              <select
+                className={`form-select border ${
+                  errors.endtime ? "border-red-500" : "border-mediumgray"
+                }`}
+                {...register("endtime", {
+                  required: "End time selection is required",
+                })}
+                disabled={!selectedStartTime}
+              >
+                <option value="">Select End Time</option>
+                {endTimes.map((time, index) => (
+                  <option key={index} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </select>
+              {errors.endtime && (
+                <span className="form-error-message">
+                  {errors.endtime.message}
+                </span>
+              )}
+            </div> */}
+          </div>
+          ) 
+          }
           
           {step===1 && (
             <>
@@ -1099,9 +1173,9 @@ const BookAppraisal = ({ property
                 // endTime: formData?.endtime,
                 email: email,
                 name: name,
-                agentEmail: agent.email,
-                agentName: agent.name,
-                agentId: agent._id,
+                agentEmail: selectedAgent.email,
+                agentName: selectedAgent.name,
+                agentId: selectedAgent._id,
                 address: address,
                 
               }}

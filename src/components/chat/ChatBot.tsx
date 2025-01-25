@@ -25,7 +25,7 @@ import {
 } from '@/utils/openai'
 import {
   LuChevronDown,
-  LuLoader2,
+  LuLoader,
   LuMic,
   LuMicOff,
   LuRotateCcw

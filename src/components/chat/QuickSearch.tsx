@@ -1732,7 +1732,7 @@ Please find enclosed Information for the property at ${property.address}`,
 }
 
 const PropertyContainer = ({
-  property: initialProperty, setPropertyForm,setQuickSearch,address, availableAgents
+  property: initialProperty, setPropertyForm,setQuickSearch,address,availableAgents
 }: {
   property: any,
   setPropertyForm:any,
@@ -1760,7 +1760,6 @@ const PropertyContainer = ({
   }, [initialProperty])
   return (
     <>
-    <BookingOverlay isOpen={isOverlayOpen} onClose={() => setIsOverlayOpen(false)} address={address} agent={null} availableAgents={availableAgents}/>
     <div className='w-full'>
       <p className='text-[16px] font-light p-0 m-0'>
         The provided information may not be fully accurate. For a more precise assessment please consult with an agent.
@@ -1777,13 +1776,13 @@ const PropertyContainer = ({
   )
 }
 
-const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData}:{setQuickSearch:any, propertyForm:any, setPropertyForm:any,propertyData:any}) => {
+const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData,availableAgents, setAvailableAgents,address, setAddress}:{setQuickSearch:any, propertyForm:any, setPropertyForm:any,propertyData:any,
+  availableAgents:any, setAvailableAgents:any,
+  address:any, setAddress:any}) => {
   const [property, setProperty] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [autocomplete, setAutocomplete] = useState(null)
-  const [address, setAddress] = useState('')
-  const [availableAgents, setAvailableAgents] = useState([])
   const handleLoad = (
     autocompleteInstance: google.maps.places.Autocomplete
   ) => {

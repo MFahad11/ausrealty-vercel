@@ -120,6 +120,9 @@ const ChatBot = ({
   const isMessage=useIsMessageStore((state) => state.isMessage);
   const [propertyForm, setPropertyForm] = useState(false)
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
+  const [availableAgents, setAvailableAgents] = useState([])
+  const [address, setAddress] = useState('')
+
   const [agent,setAgent]=useState('')
   const [agents,setAgents]=useState([])
   useEffect(() => {
@@ -1110,6 +1113,8 @@ const ChatBot = ({
                               setIsOverlayOpen={setIsOverlayOpen}
                               setAgent={setAgent}
                               agent={agent}
+                              availableAgents={availableAgents}
+                              address={address}
                               />
                             )}
                           </div>
@@ -1165,6 +1170,10 @@ const ChatBot = ({
                           setPropertyForm={setPropertyForm}
                           propertyForm={propertyForm}
                           propertyData={fetchedProperties}
+                          setAvailableAgents={setAvailableAgents}
+                          availableAgents={availableAgents}
+                          address={address}
+                          setAddress={setAddress}
                           />
                 }
                 

@@ -392,11 +392,7 @@ select {
   }
 }
 /* specifically for start campaign page only */
-/* .pac-container.pac-logo {
-  position: absolute !important;
-  bottom: 180px !important;
-  top: auto !important;
-} */
+
 
 .form-label {
   display: block;

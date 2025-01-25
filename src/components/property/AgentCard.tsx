@@ -26,7 +26,7 @@ const AgentCard = ({
   index,
   showLinks = true,
   emblaMainRef,
-  isOverlayOpen, setIsOverlayOpen,totalAgents
+  isOverlayOpen, setIsOverlayOpen,totalAgents,setAgent
 }: {
   agent: any
   index: number
@@ -35,6 +35,7 @@ const AgentCard = ({
   isOverlayOpen: boolean
   setIsOverlayOpen: any
   totalAgents: number
+  setAgent: any
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
@@ -183,6 +184,8 @@ const AgentCard = ({
       <Button
         onClick={() => {
           setIsOverlayOpen(true)
+          console.log(agent)
+          setAgent(agent)
         }}
         className='gray-button flex w-full max-w-[22rem] md:max-w-[30rem] mx-auto justify-center items-center font-abchanel'
         aria-label='Reset search'

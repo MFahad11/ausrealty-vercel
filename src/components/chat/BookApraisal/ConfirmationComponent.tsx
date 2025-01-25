@@ -4,9 +4,11 @@ interface BookingDetails {
   startTime: string
   // endTime: string
   email: string
+  name:string
   agentName: string
   agentEmail: string
-  agentIds: string[]
+  agentId: string
+  address: string
 }
 
 interface ConfirmationComponentProps {
@@ -62,7 +64,14 @@ export default function ConfirmationComponent({
             <h4 className="text-sm text-gray-500 mb-1">YOUR EMAIL</h4>
             <p >{details.email}</p>
           </div>
-
+          <div className="border-b pb-4">
+            <h4 className="text-sm text-gray-500 mb-1">YOUR NAME</h4>
+            <p >{details.name}</p>
+          </div>
+          <div className="border-b pb-4">
+            <h4 className="text-sm text-gray-500 mb-1">PROPERTY ADDRESS</h4>
+            <p >{details.address}</p>
+          </div>
           <div className="border-b pb-0">
             <h4 className="text-sm text-gray-500 mb-1">AGENT</h4>
             <p >{details.agentName}</p>

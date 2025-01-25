@@ -70,7 +70,7 @@ interface IAgent extends Document {
   suburbs: Suburb[];
   accessToken: string;
   refreshToken: string;
-
+  googleId: string,
   // Metadata
   createdAt: Date;
   updatedAt: Date;
@@ -142,8 +142,10 @@ const AgentSchema = new Schema<IAgent>(
     }],
     accessToken: { type: String },
     refreshToken: { type: String },
+    googleId: { type: String, required: true, unique: true },
     // Metadata timestamps are handled by the timestamps option
   },
+  
   { timestamps: true }
 );
 

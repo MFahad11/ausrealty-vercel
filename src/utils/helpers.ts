@@ -196,3 +196,4 @@ export const createOTP = async (email: string): Promise<string> => {
   const expiresAt = new Date(Date.now() + 2 * 60 * 1000); // 2 minutes from now
   return otp;
 };
+

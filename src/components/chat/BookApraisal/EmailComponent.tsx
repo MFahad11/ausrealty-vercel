@@ -1,3 +1,4 @@
+import GooglePlacesAutocomplete from '@/components/GooglePlacesAutoComplete'
 import Button from '@/components/ui/Button'
 import { showToast } from '@/components/ui/toast'
 import axiosInstance from '@/utils/axios-instance'
@@ -9,10 +10,17 @@ interface EmailComponentProps {
     email: string
     setEmail: any
     setStep: any
+    name: string
+    setName: any
+    setAddress: any
+    address: string
 }
 
-export default function EmailComponent({  onBack,email, setEmail,setStep }: EmailComponentProps) {
-  const [error, setError] = useState('')
+export default function EmailComponent({  onBack,email, setEmail,setStep,
+  name,setName,setAddress,address
+}: EmailComponentProps) {
+  const [mailError, setMailError] = useState('')
+  const [nameError,setNameError]=useState('')
   const [loading, setLoading] = useState(false)
   const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -20,38 +28,41 @@ export default function EmailComponent({  onBack,email, setEmail,setStep }: Emai
   }
 
   const handleSubmit = async () => {
-    setError('')
+    setMailError('')
+    setNameError('')
     
     if (!email) {
-      setError('Email is required')
+      setMailError('Email is required')
       return
     }
 
     if (!validateEmail(email)) {
-      setError('Please enter a valid email')
+      setMailError('Please enter a valid email')
       return
     }
-// setLoading(true)
-//     try {
-//       const response= await axiosInstance.post('/api/auth/sendOtp', { email })
-//       if(response?.data?.success){
-//         setLoading(false)
-//         setStep(4)
-//         showToast('success','OTP sent successfully')
-//       }
-//     } catch (error) {
-//       showToast('error','Error sending OTP. Please try again')
-//       setLoading(false)
-//       setError('Error sending OTP. Please try again')
-//     }
+    if (!name) {
+      setNameError('Name is required')
+      return
+    }
+
+
 setStep(4)
   }
 
   return (
     <div className="w-full">
-        <h4>Enter your email</h4>
-        <p>We'll send you an OTP to verify your email</p>
+       
       <form className="space-y-4 mt-2">
+          <div>
+            <input
+              type="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+              className="form-input border border-darkgray w-full"
+            />
+            {nameError && <span className="text-red-500 text-sm mt-1">{nameError}</span>}
+          </div>
           <div>
             <input
               type="email"
@@ -60,7 +71,17 @@ setStep(4)
               placeholder="Enter your email"
               className="form-input border border-darkgray w-full"
             />
-            {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+            {mailError && <span className="text-red-500 text-sm mt-1">{mailError}</span>}
+          </div>
+          <div
+          className='booking'
+          >
+            <GooglePlacesAutocomplete
+              onSelectAddress={setAddress}
+              address={address}
+              setAddress={setAddress}
+              placeholder="Enter your address"
+            />
           </div>
 
           <div className="flex justify-end space-x-3">

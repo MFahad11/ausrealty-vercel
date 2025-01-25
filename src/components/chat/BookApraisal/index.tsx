@@ -54,7 +54,7 @@ const BookAppraisalList = ({
 
   const [limitBooking, setLimitBooking] = useState(false);
   const [loading, setLoading] = useState(false);
-
+ 
   const handleChangeBookingView = () => {
     // Count the number of active bookings
     const activeBookingsCount = bookAppraisalData.filter(
@@ -570,7 +570,8 @@ const BookAppraisalList = ({
 };
 
 const BookAppraisal = ({ property
-  , setStep,step,onClose
+  , setStep,step,onClose,
+  agent
  }:{
     property:{
         address: string
@@ -581,6 +582,7 @@ const BookAppraisal = ({ property
     step: number
     , setStep: (arg0: number) => void,
     onClose: () => void
+    agent: any
 }) => {
   const [vendors, setVendors] = useState([{ id: 1 }]);
   const [bookings, setBookings] = useState(false);
@@ -595,10 +597,30 @@ const BookAppraisal = ({ property
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
   const [email, setEmail] = useState('')
-
+  const [name, setName] = useState('')
+  const [address, setAddress] = useState('')
+  const [timeSlots, setTimeSlots] = useState([]);
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [timeSlotsLoading, setTimeSlotsLoading] = useState(false);
+  const handleDateChange = async (date:Date) => {
+    setSelectedDate(date);
+    setTimeSlotsLoading(true);
+ try {
+            const response = await axiosInstance.post('/api/agent/calendar/availability', {
+              agentId: agent._id, 
+              date: date.toISOString()
+            })
+            if(response?.data?.success){
+                setTimeSlots(response.data.data)
+                setStep(2);
+            }
+        } catch (error:any) {
+            console.error('Error fetching time slots:', error.message);
+        }finally{
+            setTimeSlotsLoading(false);
+        }
+};
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -829,78 +851,23 @@ const BookAppraisal = ({ property
     ]);
   };
 
-  // Delete a vendor by id
-  // const deleteVendor = (id) => {
-  //   if (vendors.length > 1) {
-  //     unregister(`form_${id}`);
-  //     setVendors((prevVendors) =>
-  //       prevVendors.filter((vendor) => vendor.id !== id)
-  //     );
-  //   }
-  // };
-
-  const confirmDate = () => {
-    setSelectedDate(date);
-    setStep(2);
+  const  confirmDate = () => {
+    handleDateChange(date);
+    
     // setShowDiv(false);
   };
-
+  useEffect(() => {
+    console.log('Current Step:', step===1);
+}, [step]);
   const backBookingHandle = () => {
     // setShowDiv(true);
     setStep(1);
   };
-    // @ts-ignore
+ 
 
-  const generateTimes = (startHour, endHour, selectedDate) => {
-    const times = [];
-    const now = new Date();
-    const isToday = selectedDate.toDateString() === now.toDateString();
-    let currentTime = new Date(selectedDate);
 
-    if (isToday) {
-      // Round up to the next 15-minute interval
-      currentTime.setHours(now.getHours());
-      currentTime.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
-      currentTime.setSeconds(0);
-      currentTime.setMilliseconds(0);
 
-      // If minutes roll over to 60, adjust the hour and reset minutes to 0
-      if (currentTime.getMinutes() === 60) {
-        currentTime.setHours(currentTime.getHours() + 1);
-        currentTime.setMinutes(0);
-      }
-
-      // Ensure the current time is not before the startHour
-      if (currentTime.getHours() < startHour) {
-        currentTime.setHours(startHour);
-        currentTime.setMinutes(0);
-      }
-    } else {
-      // Set to the start of the available time
-      currentTime.setHours(startHour, 0, 0, 0);
-    }
-
-    const endTime = new Date(selectedDate);
-    endTime.setHours(endHour, 0, 0, 0);
-
-    while (currentTime <= endTime) {
-      times.push(
-        currentTime.toLocaleTimeString("en-AU", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        })
-      );
-      currentTime.setMinutes(currentTime.getMinutes() + 15);
-    }
-
-    return times;
-  };
-
-  const startTimes = generateTimes(6, 21, selecteddate);
-    // @ts-ignore
-
-  const handleStartTimeChange = (e) => {
+  const handleStartTimeChange = (e:any) => {
     const selectedTime = e.target.value;
     setSelectedStartTime(selectedTime);
 
@@ -966,101 +933,6 @@ const BookAppraisal = ({ property
     return false; // Do not disable other views
   };
 
-  const [autocomplete, setAutocomplete] = useState(null);
-  const [address, setAddress] = useState("");
-
-  if (bookings && bookAppraisalData.length > 0) {
-    return (
-      <BookAppraisalList
-        bookAppraisalData={bookAppraisalData}
-        setBookAppraisalData={setBookAppraisalData}
-        onUpdateBookingView={handleBookingView}
-      />
-    );
-  }
-
-  if (bookingConfirmationScreen && bookingDetails) {
-    return (
-      <div className="w-full max-w-4xl mx-auto text-center">
-        <div className="relative">
-          <i
-            className="fas fa-chevron-left absolute top-1 left-2 cursor-pointer"
-            onClick={() => {
-              setBookingConfirmationScreen(false);
-              setBookings(true);
-            }}
-          ></i>
-
-          <div className="max-w-md mx-auto space-y-16">
-            <h4>BOOKING CONFIRMATION</h4>
-{/* 
-            {bookingDetails.vendorData.map((vendor, index) => (
-              <div
-                key={index}
-                className="border p-4 rounded-lg space-y-2 text-sm"
-              > */}
-                {/* Client Name */}
-                {/* <div className="flex items-center space-x-3">
-                  <i className="fas fa-user text-darkgray"></i>
-                  <span>
-                    {vendor.firstName} {vendor.lastName}
-                  </span>
-                </div> */}
-
-                {/* Booking Time */}
-                {/* <div className="flex space-x-3">
-                  <i className="fas fa-calendar-alt text-darkgray"></i>
-                  <div className="flex flex-col items-start">
-                    <span>
-                      Time: {bookingDetails.showstarttime} -{" "}
-                      {bookingDetails.showendtime}
-                    </span>
-                    <span>Date: {bookingDetails.date}</span>
-                  </div>
-                </div> */}
-
-                {/* Property Address */}
-                {/* <div className="flex items-center space-x-3">
-                  <i className="fas fa-map-marker-alt text-darkgray"></i>
-                  <span>{bookingDetails.propertyAddress}</span>
-                </div> */}
-              {/* </div>
-            ))} */}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // const onTagsChange = (tags) => {
-  //   setValue("followers", tags); // Update the followers field in the form
-  // };
-
-  // const handleLoad = (autocompleteInstance) => {
-  //   setAutocomplete(autocompleteInstance);
-  // };
-
-  // const handlePlaceChanged = async () => {
-  //   if (autocomplete) {
-  //     const place = autocomplete.getPlace();
-
-  //     if (place && place.address_components && place.geometry) {
-  //       let fullAddress = place.formatted_address;
-
-  //       // Check if the address contains 'NSW'
-  //       if (!fullAddress.includes("NSW")) {
-  //         showToast("error", "Only NSW properties are allowed.");
-  //         return;
-  //       }
-
-  //       // Set the final formatted address
-  //       setAddress(fullAddress);
-  //     } else {
-  //       // Logic when the input is cleared or invalid place selected
-  //       showToast("error", "Invalid place selected.");
-  //     }
-  //   }
-  // };
 
   return (
     <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center text-center space-y-2 px-4 booking-form">
@@ -1071,7 +943,7 @@ const BookAppraisal = ({ property
           
 
           
-          {step==1 && (
+          {step===1 && (
             <>
               <h5 className="text-center">DATE AND TIME</h5>
               <div className="flex flex-col items-center justify-center py-2">
@@ -1093,13 +965,15 @@ const BookAppraisal = ({ property
                     })}
                   </p>
 
-                  <button
+                  <Button
                     type="button"
                     onClick={confirmDate}
                     className="black-button"
+                    loading={timeSlotsLoading}
+                    disabled={timeSlotsLoading}
                   >
                     Select
-                  </button>
+                  </Button>
                 </div>
               </div>
             </>
@@ -1120,7 +994,7 @@ const BookAppraisal = ({ property
                   <div className="flex flex-col w-full">
                     <div className="text-start py-2">
                       <label className="form-label">Start Time</label>
-                      {startTimes.length === 0 ? (
+                      {timeSlots.length === 0 ? (
                         <p>
                           No available times for the selected date. Please choose
                           another date.
@@ -1138,7 +1012,7 @@ const BookAppraisal = ({ property
                           onChange={handleStartTimeChange}
                         >
                           <option value="">Select Start Time</option>
-                          {startTimes.map((time, index) => (
+                          {timeSlots.map((time, index) => (
                             <option key={index} value={time}>
                               {time}
                             </option>
@@ -1202,18 +1076,15 @@ const BookAppraisal = ({ property
               setStep={setStep}
               
               email={email}
+              setName={setName}
+              name={name}
               setEmail={setEmail}
+              setAddress={setAddress}
+              address={address}
               onBack={() => setStep(2)}
               />)
           }
-          {/* {
-            step===4 &&(<OTPComponent
-              email={email}
-              setStep={setStep}
-              onBack={() => setStep(3)}
-              onResend={() => {}}
-              />)
-          } */}
+          
           {
             step===4 && (
               <ConfirmationComponent
@@ -1227,9 +1098,11 @@ const BookAppraisal = ({ property
                 // @ts-ignore
                 // endTime: formData?.endtime,
                 email: email,
-                agentEmail:"test@test.com",
-                agentName:"Test Agent",
-                agentIds: ["1", "2", "3"],
+                name: name,
+                agentEmail: agent.email,
+                agentName: agent.name,
+                agentId: agent._id,
+                address: address,
                 
               }}
               />

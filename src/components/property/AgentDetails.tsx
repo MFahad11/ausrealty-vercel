@@ -42,6 +42,7 @@ export default function AgentsPage({agents}:{
   agents:any
 }) {
     const [isOverlayOpen, setIsOverlayOpen] = useState(false)
+    const [agentId, setAgentId] = useState('')
   return (
     <div className="container mx-auto px-4 py-12">
         <h1 className="tracking-wider text-center mb-12 uppercase">
@@ -57,6 +58,7 @@ export default function AgentsPage({agents}:{
               isOverlayOpen={isOverlayOpen}
               setIsOverlayOpen={setIsOverlayOpen}
               totalAgents={agents.length}
+              setAgentId={setAgentId}
               />
           ))}
         </div>

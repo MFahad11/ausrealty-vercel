@@ -120,6 +120,7 @@ const ChatBot = ({
   const isMessage=useIsMessageStore((state) => state.isMessage);
   const [propertyForm, setPropertyForm] = useState(false)
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
+  const [agent,setAgent]=useState('')
   const [agents,setAgents]=useState([])
   useEffect(() => {
     setMessages([])
@@ -1107,6 +1108,8 @@ const ChatBot = ({
                               <AgentCarousel agents={message?.agents || []} 
                               isOverlayOpen={isOverlayOpen}
                               setIsOverlayOpen={setIsOverlayOpen}
+                              setAgent={setAgent}
+                              agent={agent}
                               />
                             )}
                           </div>

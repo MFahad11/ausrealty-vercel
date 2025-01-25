@@ -11,6 +11,8 @@ type PropType = {
   stopPropagation?: (e: React.TouchEvent | React.MouseEvent) => void
   isOverlayOpen: boolean
   setIsOverlayOpen: (isOpen: boolean) => void
+  setAgent: any
+  agent: any
 }
 
 const AgentCarousel: React.FC<PropType> = props => {
@@ -20,7 +22,9 @@ const AgentCarousel: React.FC<PropType> = props => {
 
   return (
     <>
-    <BookingOverlay isOpen={props?.isOverlayOpen} onClose={() => props?.setIsOverlayOpen(false)} />
+    <BookingOverlay isOpen={props?.isOverlayOpen} onClose={() => props?.setIsOverlayOpen(false)} 
+      agent={props?.agent}
+      />
        <div className='agent'>
       <div className='embla'>
         <div
@@ -40,6 +44,7 @@ const AgentCarousel: React.FC<PropType> = props => {
                         isOverlayOpen={props?.isOverlayOpen}
                         setIsOverlayOpen={props?.setIsOverlayOpen}
                         totalAgents={props?.agents.length}
+                        setAgent={props?.setAgent}
                       />
                     </div>
                   </div>

@@ -16,6 +16,8 @@ const bookingSchema: Schema = new Schema(
   {
     agentIds: { type: [Number], required: true }, // Array of agent IDs
     userEmail: { type: String, required: true, match: /.+\@.+\..+/ }, // Email validation
+    userName: { type: String}, // User name
+    address: { type: String}, // Address
     date: { type: Date, required: true }, // Booking date
     startTime: { type: String, required: true }, // Start time
   },

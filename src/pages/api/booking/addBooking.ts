@@ -4,6 +4,65 @@ import dbConnect from '@/components/lib/db';
 import { sendEmail } from '@/utils/email';
 import dayjs from 'dayjs';
 import Booking from '@/models/booking';
+import { google } from 'googleapis';
+import Agent from '@/models/agent';
+
+async function createGoogleCalendarEvent({
+    agentAccessToken,
+    calendarId,
+    startTime,
+    endTime,
+    summary,
+    description,
+}:{
+    agentAccessToken: string;
+    calendarId: string;
+    startTime: string;
+    endTime: string;
+    summary: string;
+    description: string;
+}) {
+    
+    const event = {
+        summary,
+        description,
+        start: {
+            dateTime: startTime,
+            timeZone: "Australia/Sydney",
+        },
+        end: {
+            dateTime: endTime,
+            timeZone: "Australia/Sydney",
+        },
+    };
+
+    try {
+        const response = await fetch(
+            `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`,
+            {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${agentAccessToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(event),
+            }
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error creating Google Calendar event:", errorData);
+            throw new Error(`Failed to create Google Calendar event: ${errorData.error.message}`);
+        }
+
+        const createdEvent = await response.json();
+        console.log("Google Calendar event created successfully:", createdEvent);
+        return createdEvent;
+    } catch (error) {
+        console.error("Error creating Google Calendar event:", error);
+        throw error;
+    }
+}
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -12,99 +71,142 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       dbConnect();
       // Create a new booking
       const bookingData = req.body;
+      const agent=await Agent.findOne({email:bookingData.agentEmail});
       const booking = await Booking.create({
-        agentIds:bookingData.agentIds,
+        agentId:Array.isArray(bookingData.agentId)?bookingData.agentId:[bookingData.agentId],
         userEmail: bookingData.email,
         date: bookingData.date,
+        userName: bookingData.name,
+        address: bookingData.address,
         startTime: bookingData.startTime,
       });
      if(!booking){
         return res.status(400).json({ success: false });
      }
-sendEmail({to:bookingData.email,subject:'Booking Confirmation',text:`<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; line-height: 1.6; color: #333333; background-color: #f4f4f4;">
-    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+     console.log(bookingData.date, bookingData.startTime);
+
+const summary = `Appointment with ${bookingData.email}`;
+const description = `Booking confirmed for ${bookingData.email} at ${bookingData.startTime}`;
+
+// Extract the date part from bookingData.date
+const datePart = new Date(bookingData.date).toISOString().split("T")[0]; // Extracts YYYY-MM-DD
+
+// Parse the time part and combine it with the date
+const [time, meridian] = bookingData.startTime.split(" ");
+let [hours, minutes] = time.split(":").map(Number);
+if (meridian.toLowerCase() === "pm" && hours !== 12) hours += 12;
+if (meridian.toLowerCase() === "am" && hours === 12) hours = 0;
+
+// Combine date and time
+const startTime = new Date(`${datePart}T${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00`).toISOString();
+
+// Calculate the end time (30 minutes later)
+const endTime = new Date(new Date(startTime).getTime() + 30 * 60 * 1000).toISOString();
+
+await createGoogleCalendarEvent({
+    agentAccessToken: agent.accessToken,
+    calendarId: agent.email, // Use agent's Google ID as the calendarId
+    startTime: startTime,
+    endTime: endTime, // Include the calculated end time
+    summary,
+    description,
+});
+sendEmail({to:bookingData.email,subject:'Booking Confirmation',text:`<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <table style="width: 100%; border-collapse: collapse;">
         <tr>
-            <td style="padding: 40px 30px; background-color: #f8f9fa; text-align: center;">
-                <h1 style="margin: 0; color: #2c3e50; font-size: 24px; font-weight: bold;">Meeting Confirmation</h1>
+            <td style="background-color: #f4f4f4; padding: 20px; text-align: center;">
+                <h1 style="color: #2c3e50; margin: 0;">Listing Appointment Confirmation</h1>
             </td>
         </tr>
         <tr>
-            <td style="padding: 30px;">
-                <p style="margin: 0 0 20px 0;">Hello,</p>
-                
-                <p style="margin: 0 0 20px 0;">Your meeting has been confirmed with the following details:</p>
-                
-                <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 30px; border-collapse: collapse;">
+            <td style="padding: 20px;">
+                <p style="margin-bottom: 20px;">Dear <span style="font-weight: bold;">${bookingData.name}</span>,</p>
+                <p style="margin-bottom: 20px;">Your appointment has been confirmed with the following details:</p>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                     <tr>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0; width: 30%; font-weight: bold;">Date:</td>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${dayjs(bookingData.date).format('MMMM D, YYYY')}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>Date:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${dayjs(bookingData.date)}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Start Time:</td>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.startTime}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Agent Name:</td>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.agentName}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>Property Address:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${bookingData.address}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Agent Email:</td>
-                        <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.agentEmail}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>Agent Name:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${agent?.firstName} ${agent?.lastName}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>Agent Email:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${agent?.email}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>Start Time:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${dayjs(startTime)}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>End Time:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${dayjs(endTime)}</td>
                     </tr>
                 </table>
-                
-                <p style="margin: 0 0 20px 0;">Please add this meeting to your calendar. If you need to make any changes or have questions, please contact us.</p>
-                
+                <p style="margin-bottom: 20px;">Our agent will contact you shortly to discuss the details of your appointment.</p>
             </td>
         </tr>
         <tr>
-            <td style="padding: 20px 30px; background-color: #f8f9fa; text-align: center; font-size: 12px; color: #666666;">
-                <p style="margin: 0;">This is an automated message, please do not reply directly to this email.</p>
+            <td style="background-color: #f4f4f4; padding: 20px; text-align: center; font-size: 14px;">
+                <p style="margin: 0;">This is an automated email. Please do not reply directly to this message.</p>
             </td>
         </tr>
     </table>
 </body>`});
-sendEmail({to:bookingData.agentEmail,subject:'Booking Confirmation',text:`<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; line-height: 1.6; color: #333333; background-color: #f4f4f4;">
-  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
-      <tr>
-          <td style="padding: 40px 30px; background-color: #f8f9fa; text-align: center;">
-              <h1 style="margin: 0; color: #2c3e50; font-size: 24px; font-weight: bold;">Meeting Confirmation</h1>
-          </td>
-      </tr>
-      <tr>
-          <td style="padding: 30px;">
-              <p style="margin: 0 0 20px 0;">Hello,</p>
-              
-              <p style="margin: 0 0 20px 0;">Your meeting has been confirmed with the following details:</p>
-              
-              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 30px; border-collapse: collapse;">
-                  <tr>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0; width: 30%; font-weight: bold;">Date:</td>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${dayjs(bookingData.date).format('MMMM D, YYYY')}</td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">Start Time:</td>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.startTime}</td>
-                  </tr>
-                  
-                  <tr>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0; font-weight: bold;">User Name</td>
-                      <td style="padding: 10px; border: 1px solid #e0e0e0;">${bookingData.email}</td>
-                  </tr>
-                  
-              </table>
-              
-              <p style="margin: 0 0 20px 0;">Please add this meeting to your calendar. If you need to make any changes or have questions, please contact us.</p>
-              
-          </td>
-      </tr>
-      <tr>
-          <td style="padding: 20px 30px; background-color: #f8f9fa; text-align: center; font-size: 12px; color: #666666;">
-              <p style="margin: 0;">This is an automated message, please do not reply directly to this email.</p>
-          </td>
-      </tr>
-  </table>
+sendEmail({to:bookingData.agentEmail,subject:'Booking Confirmation',text:`<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="background-color: #f4f4f4; padding: 20px; text-align: center;">
+                <h1 style="color: #2c3e50; margin: 0;">Listing Appointment Confirmation</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px;">
+                <p style="margin-bottom: 20px;">Dear <span style="font-weight: bold;">${agent?.firstName} ${agent?.lastName}</span>,</p>
+                <p style="margin-bottom: 20px;">Your appointment has been confirmed with the following details:</p>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>Date:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${dayjs(bookingData.date)}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>Property Address:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${bookingData.address}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>User Name:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${bookingData.name}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>Start Time:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${dayjs(startTime)}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>End Time:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${dayjs(endTime)}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;"><strong>User Email:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${bookingData.email}</td>
+                    </tr>
+    
+                </table>
+                <p style="margin-bottom: 20px;">This event has been automatically added to your calendar.</p>
+                <p style="margin-bottom: 20px;">Thank you for using our service!</p>
+                <p style="margin-bottom: 0;">Best regards,<br>Your Listing Appointment Team</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color: #f4f4f4; padding: 20px; text-align: center; font-size: 14px;">
+                <p style="margin: 0;">This is an automated email. Please do not reply directly to this message.</p>
+            </td>
+        </tr>
+    </table>
 </body>`});
       res.status(201).json({
         success: true,

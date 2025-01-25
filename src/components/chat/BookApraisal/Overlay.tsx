@@ -5,9 +5,10 @@ import { RxCross2 } from "react-icons/rx";
 interface BookingOverlayProps {
   isOpen: boolean
   onClose: () => void
+  agent: any
 }
 
-export default function BookingOverlay({ isOpen, onClose }: BookingOverlayProps) {
+export default function BookingOverlay({ isOpen, onClose,agent }: BookingOverlayProps) {
 
   if (!isOpen) return null
 
@@ -30,6 +31,7 @@ export default function BookingOverlay({ isOpen, onClose }: BookingOverlayProps)
     setStep={setStep}
     step={step}
     onClose={onClose}
+    agent={agent}
     />
   </div>
 </div>

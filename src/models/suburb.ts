@@ -81,9 +81,6 @@ const SuburbSchema: Schema = new Schema(
   }
 );
 
-// Add index for the 'suburb' field
-SuburbSchema.index({ suburb: 1 });
-
 // Define the model
 const Suburb: Model<ISuburb> =
   mongoose.models?.Suburb || mongoose.model<ISuburb>('Suburb', SuburbSchema);

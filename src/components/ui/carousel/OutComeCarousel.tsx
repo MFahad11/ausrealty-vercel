@@ -14,8 +14,6 @@ type PropType = {
 
 const OutcomeCarousel: React.FC<PropType> = props => {
   const { outcomes, childEmblaRef } = props
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel({
     watchDrag: false,
   })

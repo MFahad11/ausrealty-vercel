@@ -78,20 +78,26 @@ const AgentCard = ({
         )}
 
         <div className='space-y-2'>
-          {agent.phone && (<div className="space-y-1">
-            <div className='flex items-center gap-2 text-sm'>
-              <LuPhone className='w-4 h-4' />
-              <a href={`tel:${agent.phone}`} className='hover:underline'>
-                {agent.phone}
-              </a>
-            </div>
-             <Link 
-             href={`https://wa.me/${agent.phone?.replace(/\s+/g, '')}`}
-             className="text-xs text-gray-600 hover:underline ml-6"
-           >
-             Message on WhatsApp
-           </Link></div>
-          )}
+        {agent.phone && (
+  <div className="space-y-1">
+    <div className="flex items-center gap-2 text-sm">
+      <LuPhone className="w-4 h-4" />
+      <a
+        href={`tel:${agent.phone.replace(/^\+92/, '+64')}`}
+        className="hover:underline"
+      >
+        {agent.phone.replace(/^\+92/, '+64')}
+      </a>
+    </div>
+    <Link
+      href={`https://wa.me/${agent.phone.replace(/^\+92/, '+64').replace(/\s+/g, '')}`}
+      className="text-xs text-gray-600 hover:underline ml-6"
+    >
+      Message on WhatsApp
+    </Link>
+  </div>
+)}
+
 
           {agent.email && (
             <div className='flex items-center gap-2 text-sm'>

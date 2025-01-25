@@ -96,27 +96,74 @@ export default function PropertyDetails({ property }: { property: PropertyType }
       <div className="mb-12">
         <h2 className="text-2xl font-bold tracking-tight mb-6">DESCRIPTION</h2>
         <div className="prose max-w-none text-gray-700 space-y-4">
-          {useMemo(() => {
-            const words = property.description?.split(' ') || [];
-            const shortDescription = words.slice(0, 50).join(' ');
-            const fullDescription = property.description || '';
-            return (
-              <>
-                <p className="leading-relaxed">
-                  {isExpanded ? fullDescription : shortDescription}
-                  {!isExpanded && words.length > 50 && '...'}
-                </p>
-                {words.length > 50 && (
-                  <button
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="mt-4 text-black font-medium"
-                  >
-                    {isExpanded ? 'Read Less' : 'Read More'}
-                  </button>
-                )}
-              </>
-            );
-          }, [property.description, isExpanded])}
+        {useMemo(() => {
+          const description = property.description || "";
+
+          // Split the description into lines
+          const lines = description.split("\n");
+
+          // Extract the main paragraph and identify bullet points
+          const mainParagraph:string[] = [];
+          const bulletPoints:string[] = [];
+          const otherSections:string[] = [];
+
+          lines.forEach((line) => {
+            const trimmedLine = line.trim();
+
+            if (trimmedLine.startsWith("-")) {
+              // Add to bullet points
+              bulletPoints.push(trimmedLine.replace(/^-\s*/, ""));
+            } else if (trimmedLine.toLowerCase().includes("disclaimer")) {
+              // Add disclaimers or other sections
+              otherSections.push(trimmedLine);
+            } else if (trimmedLine) {
+              // Add to the main paragraph
+              mainParagraph.push(trimmedLine);
+            }
+          });
+
+          // Shorten the main paragraph for "Read More" functionality
+          const words = mainParagraph.join(" ").split(" ");
+          const shortDescription = words.slice(0, 50).join(" ");
+          const fullDescription = mainParagraph.join(" ");
+
+          return (
+            <>
+              {/* Main Paragraph */}
+              <p className="leading-relaxed">
+                {isExpanded ? fullDescription : shortDescription}
+                {!isExpanded && words.length > 50 && "..."}
+              </p>
+
+              {/* Bullet Points */}
+              {isExpanded && bulletPoints.length > 0 && (
+                <ul className="list-disc pl-5 space-y-2">
+                  {bulletPoints.map((point, index) => (
+                    <li key={index}>{point}</li>
+                  ))}
+                </ul>
+              )}
+
+              {/* Other Sections (e.g., Disclaimers) */}
+              {isExpanded &&
+                otherSections.map((section, index) => (
+                  <p key={index} className="italic text-gray-600">
+                    {section}
+                  </p>
+                ))}
+
+              {/* Read More / Read Less Button */}
+              {words.length > 50 && (
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="mt-4 text-black font-medium"
+                >
+                  {isExpanded ? "Read Less" : "Read More"}
+                </button>
+              )}
+            </>
+          );
+        }, [property.description, isExpanded])}
         </div>
       </div>
 

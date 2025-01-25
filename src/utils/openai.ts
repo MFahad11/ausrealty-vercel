@@ -1134,9 +1134,10 @@ Responses should focus on guiding the user to provide information while maintain
         responseText = reply_to_user;
         // Filter agents logic (replace this with your actual filtering logic)
         filteredAgents = agents.filter((agent) =>
+          
           agent.suburbs.find((sub) => {
             console.log(sub?.suburb, suburb);
-            return sub?.suburb === suburb;
+            return sub?.suburb?.toLowerCase() === suburb?.toLowerCase();
           })
         );
 
@@ -1422,7 +1423,7 @@ Inside Ausrealty or About Us Inquiry: If the user wants to know about "Inside Au
   "redirect": "inside-ausrealty",
   "page": "chat"
 }
-Our People Inquiry: If the user wants to know about "Our People":
+Our People Inquiry: If the user wants to know about team, agents, people, and particular individuals:
 
 {
   "intent": "our-people",

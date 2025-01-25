@@ -613,7 +613,7 @@ const BookAppraisal = ({ property
     setTimeSlotsLoading(true);
  try {
             const response = await axiosInstance.post('/api/agent/calendar/availability', {
-              agentId: agent._id, 
+              agentId: selectedAgent._id, 
               date: date.toISOString()
             })
             if(response?.data?.success){
@@ -988,31 +988,18 @@ const BookAppraisal = ({ property
                 </span>
               )}
             </div>
+            <div className="flex flex-row justify-end gap-2">
+                  
+                  <Button
+                  onClick={() => {
+                    setStep(1)
+                  }}
+                  disabled={!selectedAgent}
 
-            {/* <div className="text-start py-2">
-              <label className="form-label">End Time</label>
-              <select
-                className={`form-select border ${
-                  errors.endtime ? "border-red-500" : "border-mediumgray"
-                }`}
-                {...register("endtime", {
-                  required: "End time selection is required",
-                })}
-                disabled={!selectedStartTime}
-              >
-                <option value="">Select End Time</option>
-                {endTimes.map((time, index) => (
-                  <option key={index} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </select>
-              {errors.endtime && (
-                <span className="form-error-message">
-                  {errors.endtime.message}
-                </span>
-              )}
-            </div> */}
+                  className="black-button">
+                    Next
+                  </Button>
+                </div>
           </div>
           ) 
           }

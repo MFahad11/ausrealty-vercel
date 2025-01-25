@@ -13,6 +13,8 @@ type PropType = {
   setIsOverlayOpen: (isOpen: boolean) => void
   setAgent: any
   agent: any
+  availableAgents?: any
+  address?: string
 }
 
 const AgentCarousel: React.FC<PropType> = props => {
@@ -23,7 +25,7 @@ const AgentCarousel: React.FC<PropType> = props => {
   return (
     <>
     <BookingOverlay isOpen={props?.isOverlayOpen} onClose={() => props?.setIsOverlayOpen(false)} 
-      agent={props?.agent}
+      agent={props?.agent} availableAgents={props?.availableAgents} address={props?.address}
       />
        <div className='agent'>
       <div className='embla'>

@@ -172,11 +172,10 @@ const ChatBot = ({
     }
   }
   useEffect(()=>{
-
-    if((title === 'SELL MY PROPERTY' || title === 'LEASE MY PROPERTY') && agents?.length==0){
+    if(agents?.length==0){
       fetchAgents()
     }
-  },[title])
+  },[])
 
   const startRecording = async () => {
     try {
@@ -480,8 +479,7 @@ const ChatBot = ({
       }
     }
   useEffect(() => {
-    getAllProperties()
-
+    if(fetchedProperties?.length==0){getAllProperties()}
   }, [])
   const handleSend = async (inputValue: string) => {
     if (!inputValue.trim()) {
@@ -1252,7 +1250,7 @@ const ChatBot = ({
                 onClick={() => {
                   scrollToElement(messagesEndRef)
                 }}
-                className='p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-[82%] -translate-y-[82%] bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none'
+                className='p-2 text-black transition-colors duration-200 rounded-full fixed right-2 top-[78%] -translate-y-[78%] bg-white hover:bg-gray-100 shadow-md border border-gray-200 focus:outline-none'
                 aria-label='Scroll to bottom'
               >
                 <LuChevronDown className='w-6 h-6' />

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import BookAppraisal from './index'
 import { RxCross2 } from "react-icons/rx";
 
@@ -12,9 +12,15 @@ interface BookingOverlayProps {
 
 export default function BookingOverlay({ isOpen, onClose,agent,address,availableAgents }: BookingOverlayProps) {
 
-  if (!isOpen) return null
+ 
   // if available agents are not provided, show the first step otherwise show the zeroth step
-  const [step, setStep] = useState(availableAgents?.length>=1?0:1)
+  const [step, setStep] = useState(0)
+  useEffect(() => {
+    if (isOpen) {
+      setStep(availableAgents?.length>=1?0:1)
+    }
+  }, [isOpen])
+  if (!isOpen) return null
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[10000]">
   <div className="bg-white rounded-lg p-4 md:p-6 w-full max-w-[95vw] md:max-w-md mx-auto relative">
@@ -35,11 +41,10 @@ export default function BookingOverlay({ isOpen, onClose,agent,address,available
     onClose={onClose}
     agent={agent}
     address={address}
-    availableAgents={availableAgents}
+    availableAgents={availableAgents || []}
     />
   </div>
 </div>
 
   )
 }
-

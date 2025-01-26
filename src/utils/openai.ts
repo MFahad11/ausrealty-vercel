@@ -1,3 +1,4 @@
+import { OUR_TEAM_DATA } from "@/constants/our-team";
 import { OpenAI } from "openai";
 
 type ProcessedResponse = {
@@ -1912,4 +1913,52 @@ export async function checkIsAddress(text: string) {
     console.error("Error checking address:", error);
     throw new Error("Failed to check the address. Please try again later.");
   }
+}
+type AgentKey = keyof typeof OUR_TEAM_DATA[0];
+
+function findAgent(key: AgentKey, value: string) {
+  return OUR_TEAM_DATA.find((agent) => {
+    const agentValue = agent[key];
+    if (typeof agentValue === 'string') {
+      return agentValue.toLowerCase() === value.toLowerCase();
+    }
+    return false;
+  });
+}
+export async function handleUserQuery(userInput:string) {
+  const functions = [
+    {
+      name: "find_agent",
+      description: "Finds an agent based on the provided key and value.",
+      parameters: {
+        type: "object",
+        properties: {
+          key: { type: "string", description: "The field to search by (e.g., name, email, contact)." },
+          value: { type: "string", description: "The value to search for." },
+        },
+        required: ["key", "value"],
+      },
+    },
+  ];
+
+  const response: OpenAI.Chat.ChatCompletion
+   = await openai.chat.completions.create({
+    model: "gpt-4-0613",
+    messages: [
+      { role: "system", content: "You are a helpful assistant that helps find agent details." },
+      { role: "user", content: userInput },
+    ],
+    functions,
+    function_call: "auto", // Let the model decide when to call the function
+  });
+
+  const functionCall = response.choices[0].message.function_call;
+
+  if (functionCall) {
+    const { key, value } = JSON.parse(functionCall.arguments);
+    const result = findAgent(key, value);
+    return result || { error: "No matching agent found." };
+  }
+
+  return { error: "Could not process the query." };
 }

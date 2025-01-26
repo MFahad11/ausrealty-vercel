@@ -9,15 +9,19 @@ import AusrealtyModal from './AusrealtyModal'
 export default function ImageGrid(
   {data,className = 'grid-cols-3',
     isInsideAusrealty = false,
-    isLocation = false
+    isLocation = false,
+    selectedMedia, setSelectedMedia, isOpen, setIsOpen
   }: {data: any[],
   className?: string
   isInsideAusrealty?: boolean
   isLocation?: boolean
+  selectedMedia: any
+  setSelectedMedia: any
+  isOpen: boolean
+  setIsOpen: any
 }
 ) {
-  const [selectedMedia, setSelectedMedia] = useState<any>(null)
-  const [isOpen, setIsOpen] = useState(false)
+
 
   return (
     <>

@@ -21,7 +21,8 @@ import {
   handleLeasingChat,
   handleRenChat,
   handleSellingChat,
-  handleTranscription
+  handleTranscription,
+  handleUserQuery
 } from '@/utils/openai'
 import {
   LuChevronDown,
@@ -122,7 +123,8 @@ const ChatBot = ({
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   const [availableAgents, setAvailableAgents] = useState([])
   const [address, setAddress] = useState('')
-
+  const [selectedMedia, setSelectedMedia] = useState<any>(null)
+  const [isOpen, setIsOpen] = useState(false)
   const [agent,setAgent]=useState('')
   const [agents,setAgents]=useState([])
   useEffect(() => {
@@ -496,9 +498,6 @@ const ChatBot = ({
     setInputValue('')
 
     try {
-
-
-      // user input to api
       searchData(userMessage?.content)
     } catch (error: any) {
       const errorMessage =
@@ -547,79 +546,79 @@ const ChatBot = ({
         })
       })
     }
-      if (intent?.response) {
-        const { redirect = '/', prompt: extractedPrompt,response } = JSON.parse(intent?.response)
-        if (extractedPrompt && extractedPrompt !== prompt){
-          const getStoredMessages = localStorage.getItem(extractedPrompt)
-          if (getStoredMessages) {
-            const storedMessages = JSON.parse(getStoredMessages)
-            localStorage.setItem(
-              extractedPrompt,
-              JSON.stringify([
-                ...storedMessages,
-                { role: 'user', content: userInput }
-              ])
-            )
-          } else {
-            const messages = [{ role: 'user', content: userInput }]
-            localStorage.setItem(extractedPrompt, JSON.stringify(messages))
-          }
-          // remove the last message from the messages array for the current prompt
-          const currentPromptMessages = localStorage.getItem(prompt)
-          if (currentPromptMessages) {
-            const messages = JSON.parse(currentPromptMessages)
-            if(messages.length > 1){
-              messages.pop()
-            }
-            
-            localStorage.setItem(prompt, JSON.stringify(messages))
-            setMessages(messages)
-          }
-          localStorage.setItem(`${extractedPrompt}_send_message`, 'true')
-          setIntentExtracting(false)
-          redirecting = true
-          router.push(`/chat/${redirect}`)
-          
-          
-          
-
-          // searchData(userInput);
+    if (intent?.response) {
+      const { redirect = '/', prompt: extractedPrompt,response } = JSON.parse(intent?.response)
+      if (extractedPrompt && extractedPrompt !== prompt){
+        const getStoredMessages = localStorage.getItem(extractedPrompt)
+        if (getStoredMessages) {
+          const storedMessages = JSON.parse(getStoredMessages)
+          localStorage.setItem(
+            extractedPrompt,
+            JSON.stringify([
+              ...storedMessages,
+              { role: 'user', content: userInput }
+            ])
+          )
+        } else {
+          const messages = [{ role: 'user', content: userInput }]
+          localStorage.setItem(extractedPrompt, JSON.stringify(messages))
         }
+        // remove the last message from the messages array for the current prompt
+        const currentPromptMessages = localStorage.getItem(prompt)
+        if (currentPromptMessages) {
+          const messages = JSON.parse(currentPromptMessages)
+          if(messages.length > 1){
+            messages.pop()
+          }
+          
+          localStorage.setItem(prompt, JSON.stringify(messages))
+          setMessages(messages)
+        }
+        localStorage.setItem(`${extractedPrompt}_send_message`, 'true')
+        setIntentExtracting(false)
+        redirecting = true
+        router.push(`/chat/${redirect}`)
         
-        else if(indexPage && prompt==='INDEX_PROMPT' && response){
+        
+        
 
-          setMessages((prevMessages) => {
-            const userMessage = {
-              role: "user",
-              content: userInput,
-            }
-            const newMessages = [...prevMessages, userMessage];
-            return newMessages;
-          })
-          setIntentExtracting(false)
-          setMessages((prevMessages) => {
-            const newMessage = {
-              role: "system",
-              content: response
-
-            };
-            const updatedMessages = [...prevMessages, newMessage];
-            typewriterEffect(response, updatedMessages.length - 1);
-            return updatedMessages;
-          });
-        }
-        else if (indexPage && prompt==='INDEX_PROMPT' &&redirect) {
-          router.push(`/chat/${redirect}`)
-          setIntentExtracting(false)
-          setBotThinking(false)
-
-        }
-        // if the
-        // else{
-        //   setIntentExtracting(false);
-        //   setBotThinking(false);
-        // }
+        // searchData(userInput);
       }
+      
+      else if(indexPage && prompt==='INDEX_PROMPT' && response){
+
+        setMessages((prevMessages) => {
+          const userMessage = {
+            role: "user",
+            content: userInput,
+          }
+          const newMessages = [...prevMessages, userMessage];
+          return newMessages;
+        })
+        setIntentExtracting(false)
+        setMessages((prevMessages) => {
+          const newMessage = {
+            role: "system",
+            content: response
+
+          };
+          const updatedMessages = [...prevMessages, newMessage];
+          typewriterEffect(response, updatedMessages.length - 1);
+          return updatedMessages;
+        });
+      }
+      else if (indexPage && prompt==='INDEX_PROMPT' &&redirect) {
+        router.push(`/chat/${redirect}`)
+        setIntentExtracting(false)
+        setBotThinking(false)
+
+      }
+      // if the
+      // else{
+      //   setIntentExtracting(false);
+      //   setBotThinking(false);
+      // }
+    }
     }
 
     if (!indexPage && !redirecting) {
@@ -730,6 +729,14 @@ const ChatBot = ({
             })),
             agents
           )
+        } else if(title === 'OUR PEOPLE'){
+          data = await handleUserQuery(userInput)
+          console.log(data)
+          if(data){
+            setSelectedMedia(data)
+          setIsOpen(true)
+          }
+          
         }
         if (data?.extractedInfo) {
           setMessages(prevMessages => {
@@ -1180,11 +1187,17 @@ const ChatBot = ({
             </>
           )}
           {title === 'INSIDE AUSREALTY' && (
-            <ImageGrid data={INSIDE_AUSREALTY} isInsideAusrealty={true} />
+            <ImageGrid data={INSIDE_AUSREALTY} isInsideAusrealty={true} 
+            selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia} setIsOpen={setIsOpen} isOpen={isOpen}
+            />
           )}
-          {title === 'OUR PEOPLE' && <ImageGrid data={OUR_TEAM_DATA} />}
+          {title === 'OUR PEOPLE' && <ImageGrid data={OUR_TEAM_DATA} 
+          selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia} setIsOpen={setIsOpen} isOpen={isOpen}
+          />}
           {title === 'LOCATIONS' && (
-            <ImageGrid data={LOOKING_TO_RENT} isLocation={true} />
+            <ImageGrid data={LOOKING_TO_RENT} isLocation={true} 
+            selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia} setIsOpen={setIsOpen} isOpen={isOpen}
+            />
           )}
         </div>
       </div>

@@ -1957,8 +1957,8 @@ export async function handleUserQuery(userInput:string) {
   if (functionCall) {
     const { key, value } = JSON.parse(functionCall.arguments);
     const result = findAgent(key, value);
-    return result || { error: "No matching agent found." };
+    return result
+  } else {
+    return null;
   }
-
-  return { error: "Could not process the query." };
 }

@@ -226,7 +226,7 @@ export default function ImageGallery({ id,
         }
         
 
-      <div className="pl-4 py-4 fixed top-[4.4rem] z-50 bg-white overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth w-full">
+      <div className="pl-2 py-2 fixed top-[4.4rem] z-50 bg-white overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth w-full">
           <TabGroup
             tabs={[
               {
@@ -261,7 +261,7 @@ export default function ImageGallery({ id,
             route="buy"
           />
         </div>
-        <div className="mt-40 mb-6 container mx-auto px-1 pb-24 pt-0">
+        <div className="mt-32 mb-6 container mx-auto px-1 pb-24 pt-0">
           {
             activeTab === 'details' && (
               // <div className="p-4">

@@ -1138,7 +1138,10 @@ Responses should focus on guiding the user to provide information while maintain
             return sub?.suburb?.toLowerCase()?.includes(suburb?.toLowerCase()) || suburb?.toLowerCase()?.includes(sub?.suburb?.toLowerCase());
           })
         );
-
+        if(filteredAgents.length === 0){
+          
+          filteredAgents = agents?.filter((agent) => agent._id === "6791b0dd8092f11849a81e58" || agent._id === "6791b0e38092f11849a81e70");
+        }
       }
     }
     const data = processResponse(responseText);
@@ -1301,6 +1304,10 @@ Responses should focus on guiding the user to provide information while maintain
             return sub?.suburb?.toLowerCase()?.includes(suburb?.toLowerCase()) || suburb?.toLowerCase()?.includes(sub?.suburb?.toLowerCase());
           })
         );
+        if(filteredAgents.length === 0){
+          
+          filteredAgents = agents?.filter((agent) => agent._id === "6791b0dd8092f11849a81e58" || agent._id === "6791b0e38092f11849a81e70");
+        }
       }
     }
     const data = processResponse(responseText);

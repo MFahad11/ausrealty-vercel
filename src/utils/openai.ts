@@ -6,6 +6,7 @@ type ProcessedResponse = {
   internalProcessing: any;
 };
 interface Agent {
+  _id?: string;
   dateUpdated?: string;
   agencyId?: number;
   agentId?: number;

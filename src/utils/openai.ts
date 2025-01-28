@@ -1299,14 +1299,22 @@ Responses should focus on guiding the user to provide information while maintain
       if (name === "reply_text_and_filter_agents") {
         let { suburb, reply_to_user } = JSON.parse(functionArguments);
         responseText = reply_to_user;
-        // Filter agents logic (replace this with your actual filtering logic)
         filteredAgents = agents.filter((agent) =>
-          agent.suburbs.find((sub) => {
-            return sub?.suburb?.toLowerCase()?.includes(suburb?.toLowerCase()) || suburb?.toLowerCase()?.includes(sub?.suburb?.toLowerCase());
-          })
+          agent.suburbs.some(
+            (sub) =>
+              sub?.suburb &&
+              suburb &&
+              (sub.suburb.toLowerCase().includes(suburb.toLowerCase()) ||
+                suburb.toLowerCase().includes(sub.suburb.toLowerCase())) &&
+              agent.title === 'Business Development Manager'
+          )
         );
+        
+        if (filteredAgents.length === 0) {
+          // Fallback: Select all agents with title 'Business Development Manager'
+          filteredAgents = agents.filter((agent) => agent.title === 'Business Development Manager');
+        }
         if(filteredAgents.length === 0){
-          
           filteredAgents = agents?.filter((agent) => agent._id === "6791b0dd8092f11849a81e58" || agent._id === "6791b0e38092f11849a81e70");
         }
       }

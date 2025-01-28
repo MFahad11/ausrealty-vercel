@@ -1130,15 +1130,12 @@ Responses should focus on guiding the user to provide information while maintain
       console.log(name, functionArguments);
       if (name === "reply_text_and_filter_agents") {
         let { suburb, reply_to_user } = JSON.parse(functionArguments);
-        // convert suburb to camel case
-        suburb = suburb.replace(/\b\w/g, (char: string) => char.toUpperCase());
         responseText = reply_to_user;
         // Filter agents logic (replace this with your actual filtering logic)
         filteredAgents = agents.filter((agent) =>
           
           agent.suburbs.find((sub) => {
-            console.log(sub?.suburb, suburb);
-            return sub?.suburb?.toLowerCase() === suburb?.toLowerCase();
+            return sub?.suburb?.toLowerCase()?.includes(suburb?.toLowerCase()) || suburb?.toLowerCase()?.includes(sub?.suburb?.toLowerCase());
           })
         );
 
@@ -1297,14 +1294,11 @@ Responses should focus on guiding the user to provide information while maintain
       console.log(name, functionArguments);
       if (name === "reply_text_and_filter_agents") {
         let { suburb, reply_to_user } = JSON.parse(functionArguments);
-        // convert suburb to camel case
-        suburb = suburb.replace(/\b\w/g, (char: string) => char.toUpperCase());
         responseText = reply_to_user;
         // Filter agents logic (replace this with your actual filtering logic)
         filteredAgents = agents.filter((agent) =>
           agent.suburbs.find((sub) => {
-            console.log(sub?.suburb, suburb);
-            return sub?.suburb === suburb;
+            return sub?.suburb?.toLowerCase()?.includes(suburb?.toLowerCase()) || suburb?.toLowerCase()?.includes(sub?.suburb?.toLowerCase());
           })
         );
       }

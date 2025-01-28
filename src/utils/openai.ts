@@ -11,6 +11,7 @@ interface Agent {
   agencyId?: number;
   agentId?: number;
   email?: string;
+  title?: string;
   firstName?: string;
   mobile?: string;
   photo?: string;

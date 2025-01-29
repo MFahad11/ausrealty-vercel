@@ -56,7 +56,6 @@ async function createGoogleCalendarEvent({
         }
 
         const createdEvent = await response.json();
-        console.log("Google Calendar event created successfully:", createdEvent);
         return createdEvent;
     } catch (error) {
         console.error("Error creating Google Calendar event:", error);
@@ -83,7 +82,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
      if(!booking){
         return res.status(400).json({ success: false });
      }
-     console.log(bookingData.date, bookingData.startTime);
+    
 
 const summary = `Appointment with ${bookingData.email}`;
 const description = `Booking confirmed for ${bookingData.email} at ${bookingData.startTime}`;

@@ -82,7 +82,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // Perform bulk write
     const result = await Agent.bulkWrite(bulkOps);
-    console.log("Bulk operation result:", result);
+    
 
     res.status(200).json({
       message: "Agents synchronized successfully",

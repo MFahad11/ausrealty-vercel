@@ -1129,7 +1129,7 @@ Responses should focus on guiding the user to provide information while maintain
       // @ts-ignore
       const toolCall = completion.choices[0].message.function_call;
       const { name, arguments: functionArguments } = toolCall;
-      console.log(name, functionArguments);
+
       if (name === "reply_text_and_filter_agents") {
         let { suburb, reply_to_user } = JSON.parse(functionArguments);
         responseText = reply_to_user;
@@ -1296,7 +1296,7 @@ Responses should focus on guiding the user to provide information while maintain
       // @ts-ignore
       const toolCall = completion.choices[0].message.function_call;
       const { name, arguments: functionArguments } = toolCall;
-      console.log(name, functionArguments);
+
       if (name === "reply_text_and_filter_agents") {
         let { suburb, reply_to_user } = JSON.parse(functionArguments);
         responseText = reply_to_user;
@@ -1314,7 +1314,7 @@ Responses should focus on guiding the user to provide information while maintain
         if (filteredAgents.length === 0) {
           // Fallback: Select all agents with title 'Business Development Manager'
           filteredAgents = agents.filter((agent) => {
-            console.log(agent.title, 'Business Development Manager', agent.title === 'Business Development Manager');
+
             return agent.title === 'Business Development Manager';
           });
         }
@@ -1575,7 +1575,7 @@ Impotant Notes:
 
     // Extract the response text
     const responseText = completion.choices[0].message?.content || "";
-    console.log(responseText);
+
     return { response: responseText };
   } catch (error) {
     console.error("Error interacting with OpenAI API:", error);
@@ -1718,7 +1718,7 @@ export async function handleGeneralWithReponse(
       await openai.chat.completions.create(params);
     
     const responseText=  completion.choices[0].message?.content || "";
-    console.log(responseText);
+
     return responseText;
   } catch (error) {
     console.error("Error interacting with OpenAI API:", error);
@@ -1731,7 +1731,6 @@ export async function handlePropertyDetailChat(
   conversationHistory: { role: string; content: string }[],
   properties: any[],
 ) {
-  console.log(properties[0]?.agentInfo)
   try {
     // Add the user's input to the conversation history
     conversationHistory.push({

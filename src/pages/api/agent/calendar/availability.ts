@@ -41,7 +41,7 @@ export const refreshAccessToken = async (refreshToken: string) => {
             }
         });
 
-        console.log('Full response:', JSON.stringify(response.data, null, 2));
+        
         
         const busySlots = response.data.calendars?.[agentGoogleId]?.busy || [];
         return busySlots;
@@ -66,7 +66,7 @@ const handler = async (req:NextApiRequest, res:NextApiResponse) => {
         }
 
         let { accessToken, refreshToken, googleId } = agent;
-        console.log(accessToken, refreshToken, agent);
+       
         // Refresh the access token if needed
         try {
             accessToken = await refreshAccessToken(refreshToken);

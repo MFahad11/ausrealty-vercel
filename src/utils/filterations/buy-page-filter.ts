@@ -71,19 +71,19 @@ function filterProperties(properties: Property[], filter: Filter): Property[] {
 
     // Match objective
     if (filter.objective && property.objective !== filter.objective) {
-      console.log('objective', matchesSuburb)
+
       return false;
     }
 
     // Match saleMode
     if (filter.saleMode && property.saleMode !== filter.saleMode) {
-      console.log('saleMode', matchesSuburb)
+
       return false;
     }
 
     // Match channel
     if (filter.channel && property.channel !== filter.channel) {
-      console.log('channel', matchesSuburb)
+
       return false;
     }
 
@@ -93,25 +93,25 @@ function filterProperties(properties: Property[], filter: Filter): Property[] {
       filter.propertyTypes.length > 0 &&
       !filter.propertyTypes.some((type) => property.propertyTypes.includes(type))
     ) {
-      console.log('propertyTypes', matchesSuburb)
+
       return false;
     }
 
     // Match bedrooms
     if (filter.bedrooms && property.bedrooms !== filter.bedrooms) {
-      console.log('bedrooms', matchesSuburb)
+
       return false;
     }
 
     // Match bathrooms
     if (filter.bathrooms && property.bathrooms !== filter.bathrooms) {
-      console.log('bathrooms', matchesSuburb)
+
       return false;
     }
 
     // Match carspaces
     if (filter.carspaces && property.carspaces !== filter.carspaces) {
-      console.log('carspaces', matchesSuburb)
+
       return false;
     }
 
@@ -121,11 +121,11 @@ function filterProperties(properties: Property[], filter: Filter): Property[] {
       property.priceDetails?.displayPrice &&
       !matchesRange(parseFloat(property.priceDetails.displayPrice.replace(/[^0-9.]/g, "")), filter.priceRange)
     ) {
-      console.log('priceRange', matchesSuburb)
+
       return false;
     }
     
-    console.log('outside', matchesSuburb)
+
 
     return true; // Property matches all filters
   });

@@ -17,7 +17,7 @@ export default async function handler(
       dateUpdatedSince,
       listingStatusFilter,
     };
-    console.log(params);
+    
     const response = await axios.get(
       `https://api.domain.com.au/v1/listings/${id}`,
       {
@@ -53,7 +53,7 @@ export default async function handler(
                 }
             });
         });
-    console.log(property);
+   
     res.status(200).json({
       data: property,
       success: true,

@@ -127,6 +127,7 @@ const ChatBot = ({
   const [isOpen, setIsOpen] = useState(false)
   const [agent,setAgent]=useState('')
   const [agents,setAgents]=useState([])
+  const [isPageLoading, setIsPageLoading] = useState(false)
   useEffect(() => {
     setMessages([])
     setFetchedProperties([])
@@ -902,6 +903,9 @@ const ChatBot = ({
     localStorage.removeItem(prompt)
     initializeChat()
   }
+  if(isPageLoading){
+    return <PageLoader />
+  }
   return (
     <div className='w-full h-full flex flex-col justify-between'>
       <ToastContainer />
@@ -1015,9 +1019,11 @@ const ChatBot = ({
                                     className='bg-white shadow-sm p-0 border-lightgray border w-full  cursor-pointer'
                                     onClick={() => {
                                       if(title === 'LOOKING TO BUY'){
+                                        setIsPageLoading(true)
                                         router.push(`/property/buy/${property?.id}/media/images`)
                                       }
                                       else if(title === 'LOOKING TO RENT'){
+                                        setIsPageLoading(true)
                                         router.push(`/property/rent/${property?.id}/media/images`)
 
                                       }

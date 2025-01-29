@@ -143,7 +143,7 @@ export default function ImageGallery({ id,
         .then(() => console.log("Successful share"))
         .catch((error) => console.log("Error sharing", error));
     } else {
-      console.log("Web share not supported");
+
     }
   }
   if (!initialPropertyData) {

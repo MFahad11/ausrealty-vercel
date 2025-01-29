@@ -525,7 +525,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const prompt = await Prompt.findOne({
         name: "POSTLIST_PROMPT_ENGAGED_PURCHASER",
       });
-      console.log("prompt", prompt);
+     
     //   const engagedPurchaser = await handleGeneralWithReponse(
     //     prompt?.description || "",
     //     `Here is the property:

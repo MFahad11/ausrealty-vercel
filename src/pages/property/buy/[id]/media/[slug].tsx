@@ -149,6 +149,9 @@ export default function ImageGallery({ id,
   if (!initialPropertyData) {
     return <PageLoader />;
   }
+  if(router.isFallback){
+    return <PageLoader />
+  }
   return (
     <>
     
@@ -427,15 +430,7 @@ export default function ImageGallery({ id,
     </>
   );
 }
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true,
-  };
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetStaticProps = async ({ params }) => {
   if (!params || !params.id) {
     return {
       notFound: true,
@@ -460,7 +455,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         // Ensure image URL is absolute
         imageUrl: propertyData?.media[0]?.url
       },
-      revalidate: 60, // Revalidate pages every 60 seconds
     };
   } catch (error) {
     console.error('Error fetching property:', error);
@@ -468,4 +462,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       notFound: true,
     };
   }
-};
+}

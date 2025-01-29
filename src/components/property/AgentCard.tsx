@@ -50,7 +50,7 @@ const AgentCard = ({
           src={agent.picture || '/placeholder.svg'}
           alt={`${agent.firstName} ${agent.lastName}`}
           //   fill
-          className='object-cover w-full h-full'
+          className={` w-full ${(router?.query?.tab=='sell-my-property' || router?.query?.tab=='lease-my-property') ? 'h-96 object-cover' : 'h-full object-cover'}`}
         />
         {!showLinks && (
           <div className='absolute top-4 right-4 bg-black text-white backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1'>

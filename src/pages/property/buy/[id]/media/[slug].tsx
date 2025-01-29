@@ -156,27 +156,43 @@ export default function ImageGallery({ id,
     <>
     
 <Head>
-        <title>{initialPropertyData?.headline || "Property"} | Ausrealty</title>
-        <meta name="description" content={initialPropertyData?.details || "Find your dream home with Ausrealty"} />
-        <meta property="og:title" content={initialPropertyData?.headline || "Property | Ausrealty"} />
+        <title key={'title'}>{initialPropertyData?.headline || "Property"} | Ausrealty</title>
+        <meta name="description" content={initialPropertyData?.details || "Find your dream home with Ausrealty"} 
+        key={'description'}
+        />
+        <meta property="og:title" content={initialPropertyData?.headline || "Property | Ausrealty"} 
+        key={'ogTitle'}
+        />
         <meta
           property="og:description"
           content={initialPropertyData?.details || "Find your dream home with Ausrealty"}
+          key={'ogDescription'}
         />
         <meta
           property="og:image"
           content={
             initialPropertyData?.media[0]?.url ||
             "https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"
+
           }
+          key={'ogImage'}
         />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={initialPropertyData?.headline || "Property | Ausrealty"} />
+        <meta property="og:url" content={canonicalUrl} 
+        key={'ogUrl'}
+        />
+        <meta property="og:type" content="website" 
+        key={'ogType'}
+        />
+        <meta name="twitter:card" content="summary_large_image" 
+        key={'twitterCard'}
+        />
+        <meta name="twitter:title" content={initialPropertyData?.headline || "Property | Ausrealty"}
+        key={'twitterTitle'}
+        />
         <meta
           name="twitter:description"
           content={initialPropertyData?.details || "Find your dream home with Ausrealty"}
+          key={'twitterDescription'}
         />
         <meta
           name="twitter:image"
@@ -184,6 +200,7 @@ export default function ImageGallery({ id,
             initialPropertyData?.media[0]?.url ||
             "https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"
           }
+          key={'twitterImage'}
         />
       </Head>
     
@@ -430,6 +447,9 @@ export default function ImageGallery({ id,
     </>
   );
 }
+
+
+
 export const getServerSideProps: GetStaticProps = async ({ params }) => {
   if (!params || !params.id) {
     return {

@@ -20,11 +20,24 @@ useEffect(() => {
 }, [])
   return (
     <>
-    <Head>
-    <title>
-      Ausrealty
-    </title>
-    </Head>
+      <Head>
+           <title>{`Ausrealty`}</title>
+           <meta name="twitter:image" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
+           <meta name="twitter:card" content={'Find your dream home with Ausrealty'} />
+           <meta name="twitter:title" content={`Ausrealty`} />
+           <meta name="twitter:description" content='Find your dream home with Ausrealty' />
+           <meta name="description" content='Find your dream home with Ausrealty' />
+           <meta property="og:image" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
+           <meta property="og:site_name" content="Ausrealty"></meta>
+           <meta property="og:title" content={`Ausrealty`} />
+           <meta property="og:description" content='Find your dream home with Ausrealty' />
+           <meta property="og:url" content={'https://devausrealty.vercel.app/'} />
+           <link rel="canonical" href={'https://devausrealty.vercel.app/'} />
+           <meta property="description" content="Find your dream home with Ausrealty" />
+           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+           <meta property="og:type" content="website" />
+           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        </Head>
     {
       !isMessage ? (<div className="max-w-md mx-auto px-4 flex flex-col items-center md:mt-4">
 <div className="relative w-full max-w-[417px] h-[656px] md:h-[670px] flex-shrink-0">

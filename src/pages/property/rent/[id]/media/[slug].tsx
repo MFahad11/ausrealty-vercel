@@ -149,30 +149,49 @@ export default function ImageGallery({ id,
   if (!initialPropertyData) {
     return <PageLoader />;
   }
+  if(router.isFallback){
+    return <PageLoader />
+  }
   return (
     <>
 <Head>
-        <title>{initialPropertyData?.headline || "Property"} | Ausrealty</title>
-        <meta name="description" content={initialPropertyData?.details || "Find your dream home with Ausrealty"} />
-        <meta property="og:title" content={initialPropertyData?.headline || "Property | Ausrealty"} />
+        <title key={'title'}>{initialPropertyData?.headline || "Property"} | Ausrealty</title>
+        <meta name="description" content={initialPropertyData?.details || "Find your dream home with Ausrealty"} 
+        key={'description'}
+        />
+        <meta property="og:title" content={initialPropertyData?.headline || "Property | Ausrealty"} 
+        key={'ogTitle'}
+        />
         <meta
           property="og:description"
           content={initialPropertyData?.details || "Find your dream home with Ausrealty"}
+          key={'ogDescription'}
         />
         <meta
           property="og:image"
           content={
             initialPropertyData?.media[0]?.url ||
             "https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"
+
           }
+          key={'ogImage'}
         />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={initialPropertyData?.headline || "Property | Ausrealty"} />
+        <meta property="og:url" content={canonicalUrl} 
+        key={'ogUrl'}
+        />
+        <meta property="og:type" content="website" 
+        key={'ogType'}
+        />
+        <meta name="twitter:card" content="summary_large_image" 
+        key={'twitterCard'}
+        />
+        <meta name="twitter:title" content={initialPropertyData?.headline || "Property | Ausrealty"}
+        key={'twitterTitle'}
+        />
         <meta
           name="twitter:description"
           content={initialPropertyData?.details || "Find your dream home with Ausrealty"}
+          key={'twitterDescription'}
         />
         <meta
           name="twitter:image"
@@ -180,6 +199,7 @@ export default function ImageGallery({ id,
             initialPropertyData?.media[0]?.url ||
             "https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"
           }
+          key={'twitterImage'}
         />
       </Head>
     
@@ -430,20 +450,13 @@ export default function ImageGallery({ id,
   );
 }
 
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true,
-  };
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetStaticProps = async ({ params }) => {
   if (!params || !params.id) {
     return {
       notFound: true,
     };
   }
-
+  
   try {
     // Fetch the property data at build time
     const response = await axiosInstance.get(`/api/domain/listings/${params.id}`);
@@ -462,7 +475,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         // Ensure image URL is absolute
         imageUrl: propertyData?.media[0]?.url
       },
-      revalidate: 60, // Revalidate pages every 60 seconds
     };
   } catch (error) {
     console.error('Error fetching property:', error);
@@ -470,6 +482,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       notFound: true,
     };
   }
-};
-
-
+}

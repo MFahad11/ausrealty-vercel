@@ -552,13 +552,7 @@ export async function handleRenChat(
   };
 }> {
   try {
-    // Add the user's input to the conversation history
-    // conversationHistory.push({
-    //   role: "user",
-    //   content: userInput,
-    // });
 
-    // Define the system-level prompt for the "Renting" use case
     const systemPrompt = `You are an experienced, knowledgeable, professional human property agent specializing exclusively in property renting. You have access to the following data:
     - A conversation history with the client
     - Their latest message

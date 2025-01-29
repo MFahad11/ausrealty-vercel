@@ -64,7 +64,7 @@ export function TabGroup({ tabs, defaultTab,activeTab, setActiveTab,handleShare,
               
     // </div>
     <div className="bg-white p-1 w-full flex justify-center">
-        <div className="max-w-4xl mx-auto flex overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth my-scroll-container">
+        <div className="max-w-4xl flex overflow-x-auto whitespace-nowrap box-scrollbar scroll-smooth my-scroll-container">
           {tabs.map((tab, index) => (
             <div
               key={index}

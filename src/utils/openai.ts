@@ -516,7 +516,7 @@ Return only primary suburb results when more options exist nearby
       // @ts-ignore
       messages,
       model: "gpt-4o",
-      temperature: 0.7, // Add this for better consistency
+      temperature: 0.5, // Add this for better consistency
       presence_penalty: 0.0, // Add this to maintain focus
       frequency_penalty: 0.0, // Add this to prevent repetition
     };
@@ -965,7 +965,7 @@ Return only primary suburb results when more options exist nearby
       // @ts-ignore
       messages,
       model: "gpt-4o",
-      temperature: 0.7, // Add this for better consistency
+      temperature: 0.5, // Add this for better consistency
       presence_penalty: 0.0, // Add this to maintain focus
       frequency_penalty: 0.0, // Add this to prevent repetition
     };

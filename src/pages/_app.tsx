@@ -12,6 +12,7 @@ import SEO from '../../next-seo.config';
 import Script from "next/script";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 export default function App({ Component, pageProps }: AppProps) {
   const GA_TRACKING_ID = "G-HJ4Y2HZ69J";
   const { isLoaded, loadError } = useJsApiLoader({
@@ -37,6 +38,24 @@ export default function App({ Component, pageProps }: AppProps) {
   if (loadError) return <div></div>;
   if (!isLoaded) return <ProgressLoader/>;
   return <>
+    <Head>
+           <title>{`Ausrealty`}</title>
+           <meta name="twitter:image" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
+           <meta name="twitter:card" content={'Find your dream home with Ausrealty'} />
+           <meta name="twitter:title" content={`Ausrealty`} />
+           <meta name="twitter:description" content='Find your dream home with Ausrealty' />
+           <meta name="description" content='Find your dream home with Ausrealty' />
+           <meta property="og:image" content={'https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg'} />
+           <meta property="og:site_name" content="Ausrealty"></meta>
+           <meta property="og:title" content={`Ausrealty`} />
+           <meta property="og:description" content='Find your dream home with Ausrealty' />
+           <meta property="og:url" content={'https://devausrealty.vercel.app/'} />
+           <link rel="canonical" href={'https://devausrealty.vercel.app/'} />
+           <meta property="description" content="Find your dream home with Ausrealty" />
+           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+           <meta property="og:type" content="website" />
+           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        </Head>
   <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
         strategy="afterInteractive"

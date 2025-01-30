@@ -818,12 +818,32 @@ const ChatBot = ({
                                             ? property?.propertyTypes?.join(',')
                                             : 'N/A'}
                                         </h4>
-                                        <p className='leading-7'>
-                                          Inspection{' '}
-                                          {dayjs(
-                                            property?.dateAvailable
-                                          )?.format('DD/MM/YYYY')}
-                                        </p>
+                                        {
+                //                           "inspections": [
+                //     {
+                //         "recurrence": "none",
+                //         "closingDateTime": "2025-01-30T05:30:00Z",
+                //         "openingDateTime": "2025-01-30T05:15:00Z"
+                //     }
+                // ],
+                                          property?.inspectionDetails?.inspections?.length>0 ? (
+                                            <p className='leading-7'>
+                                              Inspection{' '}
+                                              {dayjs(
+                                                property?.inspectionDetails?.inspections[0]?.openingDateTime
+                                              )?.format('DD/MM/YYYY')}
+                                            </p>
+                                          ):(
+                                            property?.inspectionDetails?.isByAppointmentOnly ? (
+                                              <p className='leading-7'>
+                                                Inspection by Appointment
+                                              </p>
+                                            ):(
+                                              null
+                                            )
+                                          )
+                                        }
+                                        
                                       </div>
                                     </div>
                                   </div>

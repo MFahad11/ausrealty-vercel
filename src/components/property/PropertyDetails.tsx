@@ -21,6 +21,15 @@ interface PropertyType {
   dateListed: string;
   inspectionDetails: {
     isByAppointmentOnly: boolean;
+    inspections: {
+      openingDateTime: string;
+      closingDateTime: string;
+    }[];
+    pastInspections: {
+      openingDateTime: string;
+      closingDateTime: string;
+    }[];
+
   };
   objective: string;
   saleMode: string;
@@ -91,7 +100,32 @@ export default function PropertyDetails({ property }: { property: PropertyType }
           </p>
         </div>
       )}
-
+<div className="space-y-4">
+            {property.inspectionDetails.inspections.length > 0 && (
+              <div>
+                <h4 className="font-medium mb-2">Upcoming Inspections:</h4>
+                <ul className="list-disc pl-5 space-y-1">
+                  {property.inspectionDetails.inspections.map((inspection, index) => (
+                    <li key={index}>{dayjs(inspection.openingDateTime).format("MMMM D, YYYY h:mm A")} - {dayjs(inspection.closingDateTime).format("h:mm A")}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {property.inspectionDetails.pastInspections.length > 0 && (
+              <div>
+                <h4 className="font-medium mb-2">Past Inspections:</h4>
+                <ul className="list-disc pl-5 space-y-1">
+                  {property.inspectionDetails.pastInspections.map((inspection, index) => (
+                    <li key={index}>{dayjs(inspection.openingDateTime).format("MMMM D, YYYY h:mm A")} - {dayjs(inspection.closingDateTime).format("h:mm A")}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {property.inspectionDetails.inspections.length === 0 &&
+              property.inspectionDetails.pastInspections.length === 0 && (
+                null
+              )}
+          </div>
       {/* Description Section */}
       <div className="mb-12">
         <h2 className="text-2xl font-bold tracking-tight mb-6">DESCRIPTION</h2>
@@ -153,7 +187,7 @@ export default function PropertyDetails({ property }: { property: PropertyType }
                 ))}
 
               {/* Read More / Read Less Button */}
-              {words.length > 50 && (
+              {words.length > 10 && (
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
                   className="mt-4 text-black font-medium"

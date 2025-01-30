@@ -7,7 +7,34 @@ import Agent from "@/models/agent";
 import dbConnect from "@/components/lib/db";
 import { AGENTS } from "@/constants/beleef.users";
 
+// List of agency IDs for Domain API
+const agencyIds = [26715,35860,38331,38511];
 
+// Fetch agents from Domain API
+const fetchAgentsFromDomain = async (agencyId: number) => {
+  try {
+    const response = await axios.get(`https://api.domain.com.au/v1/agencies/${agencyId}`, {
+      headers: {
+        accept: "application/json",
+        "X-Api-Key": 'key_99fd92ae5d6379b862a0f5b0ff40884a',
+        "X-Api-Call-Source": "live-api-browser",
+    },
+    });
+    return response.data.agents.map((agent: any) => ({
+      ...agent,
+      domainId: [agent.id],
+      agencyId,
+      suburb:[{
+        suburb:response.data.details.suburb,
+        state:response.data.details.state,
+        postcode:response.data.details.postcode,
+      }],
+    }));
+  } catch (error:any) {
+    console.error(`Error fetching agents for agencyId ${agencyId}:`, error.message);
+    return [];
+  }
+};
 
 
 const mergeAgents = (agents: any[]) => {
@@ -63,9 +90,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const allAgents: any[] = AGENTS;
 
+        // Fetch agents from Domain API
+        for (const agencyId of agencyIds) {
+          const domainAgents = await fetchAgentsFromDomain(agencyId);
+          allAgents.push(...domainAgents);
+        }
     // Merge agents to remove duplicates
+    console.log(allAgents);
     const uniqueAgents = mergeAgents(allAgents);
-
+    
     // Prepare bulk operations
     const bulkOps = uniqueAgents.map((agent) => {
       const updateAgent = { ...agent, beleefId: agent._id };
@@ -83,10 +116,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // Perform bulk write
     const result = await Agent.bulkWrite(bulkOps);
     
-
     res.status(200).json({
       message: "Agents synchronized successfully",
       count: uniqueAgents.length,
+      data:allAgents,
     });
   } catch (error: any) {
     console.error("Error syncing agents:", error.message);

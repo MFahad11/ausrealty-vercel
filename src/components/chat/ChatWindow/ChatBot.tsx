@@ -337,6 +337,23 @@ const ChatBot = ({
               </div>
             ))}
           </div>
+          {/* Privacy and Term & Condition links */}
+          <div className='flex flex-row items-center gap-4 justify-center w-full'>
+            <Link
+              href='/privacy'
+              // target='_blank'
+              className='text-xs text-darkergray underline'
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href='/terms'
+              // target='_blank'
+              className='text-xs text-darkergray underline'
+            >
+              Terms & Conditions
+            </Link>
+            </div>
         </div>
       </div>
     </div>

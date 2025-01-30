@@ -1901,7 +1901,20 @@ export async function checkIsAddress(text: string) {
     "suburb": "Suburb Name",
     "postcode": "Postcode"
   }
-  
+      
+  Important and Always Remember:
+  - Donot add any addition things in the response
+  - Donot add any extra things in the response object properties or values
+  - Retunr the address part correctly for example
+        Example:
+          - User Input: "22/3-7 Gover Street, Peakhurst NSW 2210"
+          - Response: {
+              "isAddress": true,
+              "address": "22/3-7 Gover Street", (Dont add any other thing like this "address": "Unit 22, 3-7 Gover Street")
+              "suburb": "Peakhurst",
+              "postcode": "2210"
+            }
+
   If the input is not a valid address, set isAddress to false and leave other fields empty.` },
     ]
     const params: OpenAI.Chat.ChatCompletionCreateParams = {

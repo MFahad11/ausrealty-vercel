@@ -245,11 +245,18 @@ const ChatBot = ({
       return
     }
     const userMessage = { role: 'user', content: inputValue }
+    console.log(indexPage,title,prompt)
     if (!indexPage) {
       setMessages([...messages, userMessage])
       // scrollToElement(messagesEndRef);
     } else {
-      setIntentExtracting(true)
+      if(isMessage){
+        setMessages([...messages, userMessage])
+      }
+      else{
+        setIntentExtracting(true)
+      }
+      
     }
     setInputValue('')
 
@@ -270,7 +277,6 @@ const ChatBot = ({
     let data: any
     let redirecting = false
     setBotThinking(true)
-    console.log(agents,fetchedProperties)
     if (extractIntent) {
       const intent = await handleIdentifyIntent(userInput)
       const isAddress = await checkIsAddress(userInput)
@@ -344,14 +350,16 @@ const ChatBot = ({
       
       else if(indexPage && prompt==='INDEX_PROMPT' && response){
 
-        setMessages((prevMessages) => {
-          const userMessage = {
-            role: "user",
-            content: userInput,
-          }
-          const newMessages = [...prevMessages, userMessage];
-          return newMessages;
-        })
+        if(!isMessage){
+          setMessages((prevMessages) => {
+            const userMessage = {
+              role: "user",
+              content: userInput,
+            }
+            const newMessages = [...prevMessages, userMessage];
+            return newMessages;
+          });
+        }
         setIntentExtracting(false)
         setMessages((prevMessages) => {
           const newMessage = {

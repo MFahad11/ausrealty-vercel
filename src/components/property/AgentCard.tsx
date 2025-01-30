@@ -47,7 +47,7 @@ const AgentCard = ({
     >
 <div className="relative w-full">
   <img
-    src={agent.picture || '/placeholder.svg'}
+    src={agent.picture}
     alt={`${agent.firstName} ${agent.lastName}`}
     className="w-full h-full aspect-square object-cover object-top"
   />

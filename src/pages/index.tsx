@@ -47,8 +47,6 @@ export default function Index({ data }: { data: any }) {
     if (agents?.length === 0 && !fetchingAgents) {
       fetchAgents();
     }
-  
-    console.log(fetchedProperties);
     if (fetchedProperties?.length === 0 && !fetchingProperties) {
       getAllProperties();
     }

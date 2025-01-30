@@ -1,7 +1,7 @@
 import Prompt from "@/models/prompt";
 import dbConnectBeleef from "@/utils/db";
 import { areaDynamics } from "@/utils/helpers";
-import { handleEstimateValue, handleGeneralWithReponse } from "@/utils/openai";
+import { handleEstimateValue, handleGeneralWithResponse } from "@/utils/openai";
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 function datePreviousYear() {
@@ -526,7 +526,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         name: "POSTLIST_PROMPT_ENGAGED_PURCHASER",
       });
      
-    //   const engagedPurchaser = await handleGeneralWithReponse(
+    //   const engagedPurchaser = await handleGeneralWithResponse(
     //     prompt?.description || "",
     //     `Here is the property:
         
@@ -582,7 +582,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // const prompt2 = await Prompt.findOne({
       //   name: "MICRO_POCKETS",
       // });
-      // const microPockets = await handleGeneralWithReponse(
+      // const microPockets = await handleGeneralWithResponse(
       //   prompt2?.description || "",
       //   `Address: ${property.address}\nSuburb: ${property.suburb}`,
       // );

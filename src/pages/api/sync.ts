@@ -95,8 +95,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           const domainAgents = await fetchAgentsFromDomain(agencyId);
           allAgents.push(...domainAgents);
         }
-    // Merge agents to remove duplicates
-    console.log(allAgents);
     const uniqueAgents = mergeAgents(allAgents);
     
     // Prepare bulk operations

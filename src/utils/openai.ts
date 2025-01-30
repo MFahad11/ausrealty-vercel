@@ -1432,19 +1432,25 @@ Inside Ausrealty or About Us Inquiry: If the user wants to know about "Inside Au
   "redirect": "inside-ausrealty",
   "page": "chat"
 }
-Our People Inquiry: If the user wants to know about team, agents, people, and particular individuals:
+Our People Inquiry: If the user wants to know about team, agents, people, and particular individuals in general terms not for specific property or address:
 
 {
   "intent": "our-people",
   "redirect": "our-people",
   "page": "chat"
 }
+Agent Inquiry: If the user wants to know about associate agents or a specific agent for an address:
 
-Images of a Property Inquiry: If the user wants to see images of a property:
+{
+  "intent": "contact",
+  "redirect": "",
+  "page": "property"
+}
+Images of a Property Inquiry or detail of a property: If the user wants to see images of a property:
 
 {
   "intent": "images",
-  "redirect": "images",
+  "redirect": "",
   "page": "property"
 }
 
@@ -1452,7 +1458,7 @@ Contact Inquiry: If the user wants to contact for the property:
 
 {
   "intent": "contact",
-  "redirect": "contact",
+  "redirect": "",
   "page": "property"
 }
 
@@ -1460,7 +1466,7 @@ Description Inquiry: If the user wants a description of the property:
 
 {
   "intent": "description",
-  "redirect": "description",
+  "redirect": "",
   "page": "property"
 }
 
@@ -1468,7 +1474,7 @@ Video Inquiry: If the user wants to see a video of the property:
 
 {
   "intent": "video",
-  "redirect": "video",
+  "redirect": "",
   "page": "property"
 }
 
@@ -1476,7 +1482,14 @@ Floor Plan Inquiry: If the user wants to see the floor plan of the property:
 
 {
   "intent": "floorplan",
-  "redirect": "floorplan",
+  "redirect": "",
+  "page": "property"
+}
+Generl Details/Query for the property: If the user wants to know general details about the property:
+
+{
+  "intent": "details",
+  "redirect": "",
   "page": "property"
 }
 Examples:
@@ -1686,7 +1699,7 @@ export async function handleEstimateValue(
   }
 }
 
-export async function handleGeneralWithReponse(
+export async function handleGeneralWithResponse(
   systemPrompt: string,
   userInput: string,
 ){

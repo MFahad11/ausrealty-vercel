@@ -245,7 +245,6 @@ const ChatBot = ({
       return
     }
     const userMessage = { role: 'user', content: inputValue }
-    console.log(indexPage,title,prompt)
     if (!indexPage) {
       setMessages([...messages, userMessage])
       // scrollToElement(messagesEndRef);
@@ -280,10 +279,10 @@ const ChatBot = ({
     if (extractIntent) {
       const intent = await handleIdentifyIntent(userInput)
       const isAddress = await checkIsAddress(userInput)
-      
+      let property:any;
     
     if(isAddress?.isAddress){
-      const property = fetchedProperties.find((property:{
+      property = fetchedProperties.find((property:{
         addressParts:{
           suburb:string,
           postcode:string,
@@ -296,8 +295,8 @@ const ChatBot = ({
       }) => {
         return (
           property.addressParts.suburb.toLowerCase() == isAddress?.suburb?.toLowerCase() &&
-          property.addressParts.postcode == isAddress?.postcode &&
-          property.addressParts.displayAddress.toLowerCase()?.includes(isAddress?.address.toLowerCase())
+          (property.addressParts.postcode == isAddress?.postcode ||
+          property.addressParts.displayAddress.toLowerCase()?.includes(isAddress?.address.toLowerCase()))
         )
       })
       // @ts-ignore
@@ -310,8 +309,12 @@ const ChatBot = ({
       })
     }
     if (intent?.response) {
-      const { redirect = '/', prompt: extractedPrompt,response } = JSON.parse(intent?.response)
-      if (extractedPrompt && extractedPrompt !== prompt){
+      const { redirect = '/', prompt: extractedPrompt,response,intent:returnedIntent,page } = JSON.parse(intent?.response)
+      if(property){
+        router.push(`/property/${property?.saleMode}/${property.id}/media/${returnedIntent || 'images'}`)
+        return
+      }
+      else if (extractedPrompt && extractedPrompt !== prompt && page?.trim('')!=='property'){
         const getStoredMessages = localStorage.getItem(extractedPrompt)
         if (getStoredMessages) {
           const storedMessages = JSON.parse(getStoredMessages)
@@ -348,7 +351,7 @@ const ChatBot = ({
         // searchData(userInput);
       }
       
-      else if(indexPage && prompt==='INDEX_PROMPT' && response){
+      else if(indexPage && prompt==='INDEX_PROMPT' && (response || (!response && !property))){
 
         if(!isMessage){
           setMessages((prevMessages) => {
@@ -364,7 +367,7 @@ const ChatBot = ({
         setMessages((prevMessages) => {
           const newMessage = {
             role: "system",
-            content: response
+            content: response || "Thanks for reaching out! I’m here to help, but I need a bit more detail to assist you better. Could you please tell me more about what you're looking for? Whether you're interested in buying, renting, selling, or something else, just let me know, and I’ll direct you to the right place!",
 
           };
           const updatedMessages = [...prevMessages, newMessage];
@@ -372,7 +375,8 @@ const ChatBot = ({
           return updatedMessages;
         });
       }
-      else if (indexPage && prompt==='INDEX_PROMPT' &&redirect) {
+      else if (indexPage && prompt==='INDEX_PROMPT' && redirect && page?.trim('')!=='property') {
+        
         router.push(`/chat/${redirect}`)
         setIntentExtracting(false)
         setBotThinking(false)
@@ -668,7 +672,9 @@ const ChatBot = ({
     initializeChat()
   }
   if(isPageLoading){
-    return <PageLoader />
+    return <PageLoader 
+    duration={2000}
+    />
   }
   return (
     <div className='w-full h-full flex flex-col justify-between'>

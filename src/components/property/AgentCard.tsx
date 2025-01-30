@@ -72,11 +72,11 @@ const AgentCard = ({
           )}
         </div>
 
-        {agent.profileText && (
+        {/* {agent.profileText && (
           <p className='text-sm text-gray-600 line-clamp-3'>
             {agent.profileText}
           </p>
-        )}
+        )} */}
 
         <div className='space-y-2'>
         {agent.phone && (

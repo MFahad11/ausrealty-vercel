@@ -9,11 +9,9 @@ import InstaGrid from './InstaGrid'
 import { OUR_TEAM_DATA } from '@/constants/our-team'
 import { INSIDE_AUSREALTY } from '@/constants/inside-ausrealty'
 import { LOOKING_TO_RENT } from '@/constants/looking-to-rent'
-import Link from 'next/link'
 import dayjs from 'dayjs'
 import axiosInstance from '@/utils/axios-instance'
 import ContentLoader from 'react-content-loader'
-import { RiVoiceprintFill } from 'react-icons/ri'
 import {
   checkIsAddress,
   handleBuyingChat,
@@ -21,24 +19,21 @@ import {
   handleLeasingChat,
   handleRenChat,
   handleSellingChat,
-  handleTranscription,
   handleUserQuery
 } from '@/utils/openai'
 import {
   LuChevronDown,
-  LuLoader,
-  LuMic,
-  LuMicOff,
+
   LuRotateCcw
 } from 'react-icons/lu'
 import PageLoader from '../ui/PageLoader'
-import { convertBlobToBase64, getSupportedMimeType } from '@/utils/helpers'
 import AgentCarousel from '../ui/carousel/AgentCarousel'
 import Button from '../ui/Button'
 import PropertyCarousel from '../ui/carousel/PropertyCarousel'
 import QuickSearch from './QuickSearch'
 import { useIsMessageStore } from '@/store/isMessageStore'
-
+import { usePropertyStore } from '@/store/propertyStore'
+import { useAgentStore } from '@/store/agentStore'
 const ChatBot = ({
   title,
   firstMessage,
@@ -96,29 +91,24 @@ const ChatBot = ({
   >([])
   const [intentExtracting, setIntentExtracting] = useState(false)
   const router = useRouter()
-  const [fetchedProperties, setFetchedProperties] = useState<any[]>([])
-  const [loading, setLoading] = useState(false)
+  const fetchedProperties=usePropertyStore((state) => state.propertyData);
+  const setFetchedProperties=usePropertyStore((state) => state.setPropertyData);
+
+
+  
   const [inputValue, setInputValue] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [botThinking, setBotThinking] = useState(false)
   const [quickSearch,setQuickSearch]= useState(false)
-  const [transcription, setTranscription] = useState('')
-  const [isRecording, setIsRecording] = useState(false)
-  const [isListening, setIsListening] = useState(false)
+
   const messagesContainerRef = useRef<HTMLDivElement | null>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
   const messagesEndRef = useRef(null)
   const botResponseRef = useRef(null)
-  const recognitionRef = useRef(null)
-  const mediaRecorderRef = useRef(null)
-  const audioChunksRef = useRef([])
-  const silenceTimeoutRef = useRef(null)
-  const audioContextRef = useRef(null)
-  const analyserRef = useRef(null)
-  const checkSilenceRef = useRef<boolean>(false)
   const setIsMessage=useIsMessageStore((state) => state.setIsMessage);
   const isMessage=useIsMessageStore((state) => state.isMessage);
+
   const [propertyForm, setPropertyForm] = useState(false)
   const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   const [availableAgents, setAvailableAgents] = useState([])
@@ -126,11 +116,12 @@ const ChatBot = ({
   const [selectedMedia, setSelectedMedia] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [agent,setAgent]=useState('')
-  const [agents,setAgents]=useState([])
+  const agents=useAgentStore((state) => state.agents);
+  const setAgents=useAgentStore((state) => state.setAgents);
   const [isPageLoading, setIsPageLoading] = useState(false)
   useEffect(() => {
     setMessages([])
-    setFetchedProperties([])
+    // setFetchedProperties([])
     const savedMessages = localStorage.getItem(prompt)
     if (savedMessages) {
       setMessages(JSON.parse(savedMessages))
@@ -180,239 +171,6 @@ const ChatBot = ({
     }
   },[])
 
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: false,
-          noiseSuppression: true,
-          sampleRate: 48000
-        }
-      })
-
-      // @ts-ignore
-
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)()
-      // @ts-ignore
-
-      const source = audioContextRef.current.createMediaStreamSource(stream)
-      // @ts-ignore
-
-      analyserRef.current = audioContextRef.current.createAnalyser()
-      // @ts-ignore
-
-      analyserRef.current.fftSize = 2048
-      source.connect(analyserRef.current)
-
-      const options = { mimeType: getSupportedMimeType() }
-
-      // @ts-ignore
-
-      mediaRecorderRef.current = new MediaRecorder(stream, options)
-      audioChunksRef.current = []
-      // @ts-ignore
-
-      mediaRecorderRef.current.ondataavailable = event => {
-        if (event.data.size > 0) {
-          // @ts-ignore
-
-          audioChunksRef.current.push(event.data)
-        }
-      }
-      // @ts-ignore
-
-      mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: options.mimeType
-        })
-        await processAudio(audioBlob)
-      }
-
-      // Set up silence detection
-      // @ts-ignore
-
-      const dataArray = new Float32Array(analyserRef.current.fftSize)
-      // @ts-ignore
-
-      let silenceStart = null
-      const SILENCE_DURATION = 2000 // 2 seconds
-
-      const checkSilence = () => {
-        if (!checkSilenceRef.current || !analyserRef.current) {
-          return
-        }
-
-        try {
-          const isSilent = detectSilence(analyserRef.current, dataArray)
-
-          if (isSilent) {
-            // @ts-ignore
-
-            if (!silenceStart) {
-              silenceStart = Date.now()
-            } else {
-              const silenceDuration = Date.now() - silenceStart
-
-              if (silenceDuration > SILENCE_DURATION) {
-                stopRecording()
-                return
-              }
-            }
-          } else {
-            // @ts-ignore
-
-            if (silenceStart) {
-            }
-            silenceStart = null
-          }
-          // @ts-ignore
-
-          silenceTimeoutRef.current = setTimeout(checkSilence, 100)
-        } catch (error) {}
-      }
-
-      // Start the recording
-      // @ts-ignore
-
-      mediaRecorderRef.current.start(1000)
-
-      setIsRecording(true)
-      setIsListening(true)
-      checkSilenceRef.current = true // Start silence detection
-
-      checkSilence() // Start the silence detection loop
-    } catch (error) {
-      console.error('Error starting recording:', error)
-      setIsListening(false)
-    }
-  }
-
-  const stopRecording = () => {
-    checkSilenceRef.current = false 
-    if (mediaRecorderRef.current) {
-      if (silenceTimeoutRef.current) {
-        clearTimeout(silenceTimeoutRef.current)
-      }
-      // @ts-ignore
-      mediaRecorderRef.current.stop()
-      setIsRecording(false)
-      setIsListening(false)
-      // @ts-ignore
-
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop())
-
-      if (audioContextRef.current) {
-        // @ts-ignore
-
-        audioContextRef.current.close().catch(error => {})
-      }
-
-      mediaRecorderRef.current = null
-    }
-  }
-
-  const detectSilence = (analyser: AnalyserNode, dataArray: Float32Array) => {
-    try {
-      analyser.getFloatTimeDomainData(dataArray)
-
-      let sum = 0
-      for (let i = 0; i < dataArray.length; i++) {
-        sum += dataArray[i] * dataArray[i]
-      }
-      const rms = Math.sqrt(sum / dataArray.length)
-      const db = 20 * Math.log10(rms)
-
-      // Only log every few iterations to avoid flooding
-      if (Math.random() < 0.1) {
-        // Log roughly 10% of the readings
-      }
-
-      return db < -45
-    } catch (error) {
-      return false
-    }
-  }
-  // @ts-ignore
-
-  // @ts-ignore
-  const processAudio = async audioBlob => {
-    try {
-      // Convert the audio blob to base64
-      const base64Audio = await convertBlobToBase64(audioBlob)
-
-      // Create a new Blob from the base64 data
-      const base64Response = await fetch(`data:audio/mp4;base64,${base64Audio}`)
-      const processedBlob = await base64Response.blob()
-
-      const transcribedText = await handleTranscription(processedBlob)
-      setTranscription(transcribedText)
-      handleSend(transcribedText.trim()) // Send final transcription to GPT
-    } catch (error) {
-      console.error('Error processing audio:', error)
-    } finally {
-    }
-  }
-  const [formData, setFormData] = useState({
-    suburb: '',
-    priceRange: '',
-    bedrooms: '',
-    mustHaves: ''
-  })
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-  }
-  const startListening = () => {
-    // @ts-ignore
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)()
-    recognition.lang = 'en-US'
-    recognition.interimResults = true
-    recognition.maxAlternatives = 1
-
-    let finalTranscript = ''
-    recognition.start()
-    setIsListening(true)
-
-    // recognition.onresult = (event:any) => {
-    //   const transcript = event.results[0][0].transcript;
-    //   setTranscription(transcript);
-    //   setIsListening(false);
-
-    //   recognition.stop();
-    //   handleSend(
-    //     transcript
-    //   );
-    // };
-
-    recognition.onresult = (event: any) => {
-      let interimTranscript = ''
-
-      // Combine interim and final results
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript
-        if (event.results[i].isFinal) {
-          finalTranscript += transcript + ' '
-        } else {
-          interimTranscript += transcript + ' '
-        }
-      }
-
-      // Update the transcription state
-      setTranscription(finalTranscript + interimTranscript)
-    }
-
-    recognition.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error)
-      setIsListening(false)
-    }
-
-    recognition.onend = () => {
-      setIsListening(false)
-      if (finalTranscript) {
-        handleSend(finalTranscript.trim()) // Send final transcription to GPT
-      }
-    }
-  }
 
   const initializeChat = async () => {
 
@@ -470,10 +228,7 @@ const ChatBot = ({
         if (response.data.success) {
           const properties = response.data.data
           if (properties.length > 0) {
-            setFetchedProperties(() => {
-              const updatedProperties = properties
-              return updatedProperties
-            })
+            setFetchedProperties(properties)
           }
         }
       } catch (error) {
@@ -515,6 +270,7 @@ const ChatBot = ({
     let data: any
     let redirecting = false
     setBotThinking(true)
+    console.log(agents,fetchedProperties)
     if (extractIntent) {
       const intent = await handleIdentifyIntent(userInput)
       const isAddress = await checkIsAddress(userInput)

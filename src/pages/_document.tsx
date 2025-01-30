@@ -39,15 +39,12 @@ export default function Document() {
            <meta property="description" content="Find your dream home with Ausrealty" 
            key={'description'}
            />
-           {/* <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" 
-           key={'viewport'}
-           /> */}
            <meta property="og:type" content="website" 
            key={'ogType'}
            />
-           {/* <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" 
+           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" 
            key={'viewport'}
-           /> */}
+           />
         </Head>
       <body className="antialiased">
         <Main />

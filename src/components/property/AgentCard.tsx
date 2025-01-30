@@ -45,21 +45,22 @@ const AgentCard = ({
       key={index}
       className='bg-white border border-darkgray rounded-md shadow-md pb-4'
     >
-      <div className={`relative w-full ${(router?.query?.tab=='sell-my-property' || router?.query?.tab=='lease-my-property') ? '' : 'sm:h-96 md:h-[400px] lg:h-[500px]'}`}>
-        <img
-          src={agent.picture || '/placeholder.svg'}
-          alt={`${agent.firstName} ${agent.lastName}`}
-          //   fill
-          className={`w-full ${(router?.query?.tab=='sell-my-property' || router?.query?.tab=='lease-my-property') ? 'h-96 object-cover' : 'h-full object-contain'}`}
-        />
-        {!showLinks && (
-          <div className='absolute top-4 right-4 bg-black text-white backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1'>
-            <span className='text-sm'>
-              {index + 1} of {totalAgents}
-            </span>
-          </div>
-        )}
-      </div>
+<div className="relative w-full">
+  <img
+    src={agent.picture || '/placeholder.svg'}
+    alt={`${agent.firstName} ${agent.lastName}`}
+    className="w-full h-full aspect-square object-cover object-top"
+  />
+  {!showLinks && (
+    <div className="absolute top-4 right-4 bg-black text-white backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+      <span className="text-sm">
+        {index + 1} of {totalAgents}
+      </span>
+    </div>
+  )}
+</div>
+
+
 
       <div className='p-6 space-y-4'>
         <div className='text-center'>
@@ -167,7 +168,7 @@ const AgentCard = ({
                 </span>
               )}
             </div> */}
-            <div className='flex items-center justify-between px-4 py-2 border-t border-b cursor-pointer' onClick={() => setIsOpen(!isOpen)}>
+            {/* <div className='flex items-center justify-between px-4 py-2 border-t border-b cursor-pointer' onClick={() => setIsOpen(!isOpen)}>
               
               <p className='text-sm text-gray-700 uppercase tracking-wider font-abchanel'>
                 Recent Maximum Outcomes
@@ -178,7 +179,7 @@ const AgentCard = ({
                   isOpen ? 'rotate-180' : ''
                 }`}
               />
-            </div>
+            </div> */}
           </>
       </div>
       {isOpen && (

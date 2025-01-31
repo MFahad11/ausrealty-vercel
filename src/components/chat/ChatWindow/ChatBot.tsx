@@ -7,9 +7,6 @@ import { IoSend } from 'react-icons/io5'
 import { LuShare2 } from 'react-icons/lu'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
-
-
 const ChatBot = ({
   title,
   firstMessage,

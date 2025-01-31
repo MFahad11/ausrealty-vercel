@@ -243,7 +243,7 @@ const ChatBot = ({
   return (
     <div className='w-full h-full flex flex-col justify-between'>
   <div
-        className='flex justify-center items-center gap-4 z-10 w-full fixed left-0 right-0 bottom-[10.5rem]'
+        className='flex justify-center items-center gap-4 z-10 w-full fixed left-0 right-0 bottom-[10.8rem]'
         
         >
         <Button

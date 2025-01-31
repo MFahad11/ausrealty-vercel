@@ -7,6 +7,9 @@ import { IoSend } from 'react-icons/io5'
 import { LuShare2 } from 'react-icons/lu'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 const ChatBot = ({
   title,
   firstMessage,
@@ -69,6 +72,8 @@ const ChatBot = ({
   const [inputValue, setInputValue] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
    const router=useRouter()
+  dayjs.extend(utc)
+  dayjs.extend(timezone)
   useEffect(() => {
     if (messages.length > 0) {
       localStorage.setItem(prompt, JSON.stringify(messages))

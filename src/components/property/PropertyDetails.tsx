@@ -149,7 +149,7 @@ export default function PropertyDetails({
           null}
       </div>
       {/* Description Section */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h2 className="text-2xl font-bold tracking-tight mb-6">DESCRIPTION</h2>
         <div className="prose max-w-none text-gray-700 space-y-4">
           {useMemo(() => {
@@ -224,7 +224,7 @@ export default function PropertyDetails({
       </div>
 
       {/* Property Details */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
         <div>
           <h3 className="text-lg font-semibold mb-4">Property Details</h3>
           <dl className="space-y-2">

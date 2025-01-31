@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
 import { useMemo, useState } from "react";
 
 interface PropertyType {
@@ -50,7 +51,7 @@ export default function PropertyDetails({
   if (!property) {
     return <div className="max-w-4xl mx-auto px-4 py-8">Loading...</div>;
   }
-
+  dayjs.extend(utc);
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">

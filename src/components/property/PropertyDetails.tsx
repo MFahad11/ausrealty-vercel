@@ -120,10 +120,8 @@ export default function PropertyDetails({
               {property.inspectionDetails.inspections.map(
                 (inspection, index) => (
                   <li key={index}>
-                    {dayjs.tz(inspection.openingDateTime, "Australia/Sydney").format(
-                      "MMMM D, YYYY h:mm A"
-                    )}{" "}
-                    - {dayjs.tz(inspection.closingDateTime, "Australia/Sydney").format("h:mm A")}
+                    {dayjs(inspection.openingDateTime).tz('Australia/Sydney').format("MMMM D, YYYY h:mm A")}{" "}
+                    - {dayjs(inspection.closingDateTime).tz('Australia/Sydney').format("h:mm A")}
                   </li>
                 )
               )}
@@ -136,11 +134,9 @@ export default function PropertyDetails({
             <ul className="list-disc pl-5 space-y-1">
               {property.inspectionDetails.pastInspections.map(
                 (inspection, index) => (
-                  <li key={index}>
-                    {dayjs.tz(inspection.openingDateTime, "Australia/Sydney").format(
-                      "MMMM D, YYYY h:mm A"
-                    )}{" "}
-                    - {dayjs.tz(inspection.closingDateTime, "Australia/Sydney").format("h:mm A")}
+                   <li key={index}>
+                    {dayjs(inspection.openingDateTime).tz('Australia/Sydney').format("MMMM D, YYYY h:mm A")}{" "}
+                    - {dayjs(inspection.closingDateTime).tz('Australia/Sydney').format("h:mm A")}
                   </li>
                 )
               )}

@@ -117,10 +117,10 @@ export default function PropertyDetails({
               {property.inspectionDetails.inspections.map(
                 (inspection, index) => (
                   <li key={index}>
-                    {dayjs(inspection.openingDateTime).format(
+                    {dayjs.utc(inspection.openingDateTime).format(
                       "MMMM D, YYYY h:mm A"
                     )}{" "}
-                    - {dayjs(inspection.closingDateTime).format("h:mm A")}
+                    - {dayjs.utc(inspection.closingDateTime).format("h:mm A")}
                   </li>
                 )
               )}
@@ -134,10 +134,10 @@ export default function PropertyDetails({
               {property.inspectionDetails.pastInspections.map(
                 (inspection, index) => (
                   <li key={index}>
-                    {dayjs(inspection.openingDateTime).format(
+                    {dayjs.utc(inspection.openingDateTime).format(
                       "MMMM D, YYYY h:mm A"
                     )}{" "}
-                    - {dayjs(inspection.closingDateTime).format("h:mm A")}
+                    - {dayjs.utc(inspection.closingDateTime).format("h:mm A")}
                   </li>
                 )
               )}

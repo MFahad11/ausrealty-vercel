@@ -109,7 +109,7 @@ export default function PropertyDetails({
           </p>
         </div>
       )}
-      <div className="space-y-4">
+      <div className="space-y-2 mb-6">
         {property.inspectionDetails.inspections.length > 0 && (
           <div>
             <h4 className="font-medium mb-2">Upcoming Inspections:</h4>
@@ -149,7 +149,7 @@ export default function PropertyDetails({
           null}
       </div>
       {/* Description Section */}
-      <div className="mb-12">
+      <div className="mb-8">
         <h2 className="text-2xl font-bold tracking-tight mb-6">DESCRIPTION</h2>
         <div className="prose max-w-none text-gray-700 space-y-4">
           {useMemo(() => {

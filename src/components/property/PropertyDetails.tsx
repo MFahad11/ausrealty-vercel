@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
+import timezone from "dayjs/plugin/timezone";
 import { useMemo, useState } from "react";
 
 interface PropertyType {
@@ -52,6 +53,7 @@ export default function PropertyDetails({
     return <div className="max-w-4xl mx-auto px-4 py-8">Loading...</div>;
   }
   dayjs.extend(utc);
+  dayjs.extend(timezone);
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -118,10 +120,10 @@ export default function PropertyDetails({
               {property.inspectionDetails.inspections.map(
                 (inspection, index) => (
                   <li key={index}>
-                    {dayjs.utc(inspection.openingDateTime).format(
+                    {dayjs.tz(inspection.openingDateTime, "Australia/Sydney").format(
                       "MMMM D, YYYY h:mm A"
                     )}{" "}
-                    - {dayjs.utc(inspection.closingDateTime).format("h:mm A")}
+                    - {dayjs.tz(inspection.closingDateTime, "Australia/Sydney").format("h:mm A")}
                   </li>
                 )
               )}
@@ -135,10 +137,10 @@ export default function PropertyDetails({
               {property.inspectionDetails.pastInspections.map(
                 (inspection, index) => (
                   <li key={index}>
-                    {dayjs.utc(inspection.openingDateTime).format(
+                    {dayjs.tz(inspection.openingDateTime, "Australia/Sydney").format(
                       "MMMM D, YYYY h:mm A"
                     )}{" "}
-                    - {dayjs.utc(inspection.closingDateTime).format("h:mm A")}
+                    - {dayjs.tz(inspection.closingDateTime, "Australia/Sydney").format("h:mm A")}
                   </li>
                 )
               )}

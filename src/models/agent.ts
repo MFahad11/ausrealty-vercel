@@ -80,7 +80,7 @@ interface IAgent extends Document {
 const AgentSchema = new Schema<IAgent>(
   {
     // Unique Identifiers
-    beleefId: { type: Schema.Types.ObjectId, unique: true, sparse: true },
+    beleefId: { type: Schema.Types.ObjectId},
     domainId: [{ type: Number }],
 
     // Personal Information
@@ -142,7 +142,7 @@ const AgentSchema = new Schema<IAgent>(
     }],
     accessToken: { type: String },
     refreshToken: { type: String },
-    googleId: { type: String, required: true, unique: true },
+    googleId: { type: String},
     // Metadata timestamps are handled by the timestamps option
   },
   
@@ -151,7 +151,7 @@ const AgentSchema = new Schema<IAgent>(
 
 // Index to prevent duplicate agents across unique fields
 AgentSchema.index(
-  { email: 1, beleefId: 1, domainId: 1},
+  { email: 1},
   { unique: true, sparse: true }
 );
 

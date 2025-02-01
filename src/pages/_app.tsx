@@ -12,31 +12,10 @@ import Script from "next/script";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { GoogleMapsProvider } from "@/providers/GoogleMapProvider";
 export default function App({ Component, pageProps }: AppProps) {
-  console.log("App -> pageProps", pageProps)
   const GA_TRACKING_ID = "G-HJ4Y2HZ69J";
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_MAPS_KEY || '', // Ensure this is correctly set
-    libraries:["places"], // Corrected libraries
-    version: "weekly",
-  });
-  const router = useRouter();
 
-  useEffect(() => {
-    const handleRouteChange = (url:string) => {
-      // @ts-ignore
-      window.gtag("config", GA_TRACKING_ID, {
-        page_path: url,
-      });
-    };
-
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router.events]);
-  if (loadError) return <div></div>;
-  if (!isLoaded) return <ProgressLoader/>;
   return <>
   <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
@@ -52,13 +31,13 @@ export default function App({ Component, pageProps }: AppProps) {
           });
         `}
       </Script>
-  <ToastContainer/>
+  
   <Head>
-        <title key={'title'}>{pageProps?.initialPropertyData?.addressParts?.displayAddress || "Property"} | Ausrealty</title>
+        <title key={'title'}>{pageProps?.initialPropertyData?.addressParts?.displayAddress || "Ausrealty"}</title>
         <meta name="description" content={pageProps?.initialPropertyData?.headline || "Find your dream home with Ausrealty"} 
         key={'description'}
         />
-        <meta property="og:title" content={pageProps?.initialPropertyData?.addressParts?.displayAddress || "Property | Ausrealty"} 
+        <meta property="og:title" content={pageProps?.initialPropertyData?.addressParts?.displayAddress || "Ausrealty"} 
         key={'ogTitle'}
         />
         <meta
@@ -80,7 +59,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="twitter:card" content={pageProps?.initialPropertyData?.media[0]?.url ||"https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"}
         key={'twitterCard'}
         />
-        <meta name="twitter:title" content={pageProps?.initialPropertyData?.addressParts?.displayAddress || "Property | Ausrealty"}
+        <meta name="twitter:title" content={pageProps?.initialPropertyData?.addressParts?.displayAddress || "Ausrealty"}
         key={'twitterTitle'}
         />
         <meta
@@ -97,5 +76,7 @@ export default function App({ Component, pageProps }: AppProps) {
           key={'twitterImage'}
         />
       </Head>
-  <Component {...pageProps} /></>
+      <GoogleMapsProvider>
+  <ToastContainer/>
+  <Component {...pageProps} /></GoogleMapsProvider></>
 }

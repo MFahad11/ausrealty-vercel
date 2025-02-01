@@ -18,7 +18,6 @@ import ChatWindow from "@/components/chat/ChatWindow/index";
 import ChatBotHandler from "@/components/chat/ChatBotHandler";
 import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
 import Head from "next/head";
-import { NextSeo } from 'next-seo';
 export default function ImageGallery({ id, 
   initialPropertyData,
   canonicalUrl,

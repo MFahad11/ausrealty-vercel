@@ -7,8 +7,7 @@ import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 import { useJsApiLoader } from "@react-google-maps/api";
 import ProgressLoader from "@/components/ui/ProgressLoader";
-import { DefaultSeo } from 'next-seo';
-import SEO from '../../next-seo.config';
+
 import Script from "next/script";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
@@ -51,7 +50,6 @@ export default function App({ Component, pageProps }: AppProps) {
           });
         `}
       </Script>
-  <DefaultSeo {...SEO} />
   <ToastContainer/>
 
   <Component {...pageProps} /></>

@@ -11,7 +11,9 @@ import ProgressLoader from "@/components/ui/ProgressLoader";
 import Script from "next/script";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 export default function App({ Component, pageProps }: AppProps) {
+  console.log("App -> pageProps", pageProps)
   const GA_TRACKING_ID = "G-HJ4Y2HZ69J";
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_MAPS_KEY || '', // Ensure this is correctly set
@@ -51,6 +53,53 @@ export default function App({ Component, pageProps }: AppProps) {
         `}
       </Script>
   <ToastContainer/>
+  <Head>
+        <title key={'title'}>{pageProps?.initialPropertyData?.addressParts?.displayAddress || "Property"} | Ausrealty</title>
+        <meta name="description" content={pageProps?.initialPropertyData?.details || "Find your dream home with Ausrealty"} 
+        key={'description'}
+        />
+        <meta property="og:title" content={pageProps?.initialPropertyData?.addressParts?.displayAddress || "Property | Ausrealty"} 
+        key={'ogTitle'}
+        />
+        <meta
+          property="og:description"
+          content={pageProps?.initialPropertyData?.details || "Find your dream home with Ausrealty"}
+          key={'ogDescription'}
+        />
+        <meta
+          property="og:image"
+          content={
+            pageProps?.initialPropertyData?.media[0]?.url ||
+            "https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"
 
+          }
+          key={'ogImage'}
+        />
+        <meta property="og:url" content={pageProps?.canonicalUrl} 
+        key={'ogUrl'}
+        />
+        <meta property="og:type" content="website" 
+        key={'ogType'}
+        />
+        <meta name="twitter:card" content="summary_large_image" 
+        key={'twitterCard'}
+        />
+        <meta name="twitter:title" content={pageProps?.initialPropertyData?.addressParts?.displayAddress || "Property | Ausrealty"}
+        key={'twitterTitle'}
+        />
+        <meta
+          name="twitter:description"
+          content={pageProps?.initialPropertyData?.details || "Find your dream home with Ausrealty"}
+          key={'twitterDescription'}
+        />
+        <meta
+          name="twitter:image"
+          content={
+            pageProps?.initialPropertyData?.media[0]?.url ||
+            "https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"
+          }
+          key={'twitterImage'}
+        />
+      </Head>
   <Component {...pageProps} /></>
 }

@@ -55,7 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
   <ToastContainer/>
   <Head>
         <title key={'title'}>{pageProps?.initialPropertyData?.addressParts?.displayAddress || "Property"} | Ausrealty</title>
-        <meta name="description" content={pageProps?.initialPropertyData?.details || "Find your dream home with Ausrealty"} 
+        <meta name="description" content={pageProps?.initialPropertyData?.headline || "Find your dream home with Ausrealty"} 
         key={'description'}
         />
         <meta property="og:title" content={pageProps?.initialPropertyData?.addressParts?.displayAddress || "Property | Ausrealty"} 
@@ -63,7 +63,7 @@ export default function App({ Component, pageProps }: AppProps) {
         />
         <meta
           property="og:description"
-          content={pageProps?.initialPropertyData?.details || "Find your dream home with Ausrealty"}
+          content={pageProps?.initialPropertyData?.headline || "Find your dream home with Ausrealty"}
           key={'ogDescription'}
         />
         <meta
@@ -81,7 +81,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta property="og:type" content="website" 
         key={'ogType'}
         />
-        <meta name="twitter:card" content="summary_large_image" 
+        <meta name="twitter:card" content={pageProps?.initialPropertyData?.media[0]?.url ||"https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/preview.jpg"}
         key={'twitterCard'}
         />
         <meta name="twitter:title" content={pageProps?.initialPropertyData?.addressParts?.displayAddress || "Property | Ausrealty"}
@@ -89,7 +89,7 @@ export default function App({ Component, pageProps }: AppProps) {
         />
         <meta
           name="twitter:description"
-          content={pageProps?.initialPropertyData?.details || "Find your dream home with Ausrealty"}
+          content={pageProps?.initialPropertyData?.headline || "Find your dream home with Ausrealty"}
           key={'twitterDescription'}
         />
         <meta

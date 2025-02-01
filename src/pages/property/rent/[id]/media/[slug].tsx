@@ -136,7 +136,7 @@ export default function ImageGallery({ id,
     if (navigator.share) {
       navigator
         .share({
-          title: initialPropertyData?.headline,
+          title: initialPropertyData?.addressParts?.displayAddress,
           text: initialPropertyData?.details,
           url: window.location.href,
         })
@@ -155,11 +155,11 @@ export default function ImageGallery({ id,
   return (
     <>
 <Head>
-        <title key={'title'}>{initialPropertyData?.headline || "Property"} | Ausrealty</title>
+        <title key={'title'}>{initialPropertyData?.addressParts?.displayAddress || "Property"} | Ausrealty</title>
         <meta name="description" content={initialPropertyData?.details || "Find your dream home with Ausrealty"} 
         key={'description'}
         />
-        <meta property="og:title" content={initialPropertyData?.headline || "Property | Ausrealty"} 
+        <meta property="og:title" content={initialPropertyData?.addressParts?.displayAddress || "Property | Ausrealty"} 
         key={'ogTitle'}
         />
         <meta
@@ -185,7 +185,7 @@ export default function ImageGallery({ id,
         <meta name="twitter:card" content="summary_large_image" 
         key={'twitterCard'}
         />
-        <meta name="twitter:title" content={initialPropertyData?.headline || "Property | Ausrealty"}
+        <meta name="twitter:title" content={initialPropertyData?.addressParts?.displayAddress || "Property | Ausrealty"}
         key={'twitterTitle'}
         />
         <meta

@@ -2,9 +2,6 @@ import React, { useState, useEffect, useContext, useRef } from 'react'
 import axiosInstance from '@/utils/axios-instance'
 import {
   Autocomplete,
-  GoogleMap,
-  useJsApiLoader,
-  Marker
 } from '@react-google-maps/api'
 import Button from '../ui/Button'
 import { showToast } from '../ui/toast'
@@ -13,16 +10,16 @@ import { useForm } from 'react-hook-form'
 import { MdOutlineEdit } from 'react-icons/md'
 import { HiChevronDown } from 'react-icons/hi2'
 import PageLoader from '../ui/PageLoader'
-import GoogleMaps from '../GoogleMaps'
+
 import Tooltip from '../ui/Tooltip'
 import arrow from 'assets/images/arrow.png'
-import GooglePieChart from '../GooglePieChart'
+
 // import { AuthContext } from "context/AuthContext";
 import Modal from '../ui/Modal'
 import EditableField from '../ui/EditableField'
 // import NoImage from 'assets/images/no-image.jpg'
 import axiosExternalInstance from '@/utils/axios-external-instance'
-import GoogleChart from '../GoogleChart'
+
 import EmblaCarousel from '../ui/carousel'
 import LogicalPriceEdit from '../ui/LogicalPriceEdit'
 import { PropertyDetailsModal } from '../ui/PropertyDetailsModal'

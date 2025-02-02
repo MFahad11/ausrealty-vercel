@@ -1106,14 +1106,14 @@ const ChatBot = ({
             <Link
               href='/privacy'
               // target='_blank'
-              className='text-xs text-darkergray underline'
+              className='text-xs text-darkergray'
             >
               Privacy Policy
             </Link>
             <Link
               href='/terms'
               // target='_blank'
-              className='text-xs text-darkergray underline'
+              className='text-xs text-darkergray'
             >
               Terms & Conditions
             </Link>

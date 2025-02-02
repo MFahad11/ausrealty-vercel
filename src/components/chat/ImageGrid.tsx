@@ -88,7 +88,8 @@ export default function ImageGrid(
         role: selectedMedia?.role as string,
         contact: selectedMedia?.contact   as string,
         email: selectedMedia?.email as string,
-        specialisedServiceAreas: selectedMedia?.specialisedServiceAreas as string[]
+        specialisedServiceAreas: selectedMedia?.specialisedServiceAreas as string[],
+        image: selectedMedia?.image as string
       }
     }
     />)}

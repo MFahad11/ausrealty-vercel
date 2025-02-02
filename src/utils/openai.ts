@@ -552,7 +552,6 @@ export async function handleRenChat(
   };
 }> {
   try {
-
     const systemPrompt = `You are an experienced, knowledgeable, professional human property agent specializing exclusively in property renting. You have access to the following data:
     - A conversation history with the client
     - Their latest message
@@ -986,7 +985,7 @@ Return only primary suburb results when more options exist nearby
 export async function handleSellingChat(
   userInput: string,
   conversationHistory: { role: string; content: string }[],
-  agents:Agent[]
+  agents: Agent[]
 ) {
   try {
     // Add the user's input to the conversation history
@@ -1129,14 +1128,19 @@ Responses should focus on guiding the user to provide information while maintain
         responseText = reply_to_user;
         // Filter agents logic (replace this with your actual filtering logic)
         filteredAgents = agents.filter((agent) =>
-          
           agent.suburbs.find((sub) => {
-            return sub?.suburb?.toLowerCase()?.includes(suburb?.toLowerCase()) || suburb?.toLowerCase()?.includes(sub?.suburb?.toLowerCase());
+            return (
+              sub?.suburb?.toLowerCase()?.includes(suburb?.toLowerCase()) ||
+              suburb?.toLowerCase()?.includes(sub?.suburb?.toLowerCase())
+            );
           })
         );
-        if(filteredAgents.length === 0){
-          
-          filteredAgents = agents?.filter((agent) => agent._id === "6791b0dd8092f11849a81e58" || agent._id === "6791b0e38092f11849a81e70");
+        if (filteredAgents.length === 0) {
+          filteredAgents = agents?.filter(
+            (agent) =>
+              agent._id === "6791b0dd8092f11849a81e58" ||
+              agent._id === "6791b0e38092f11849a81e70"
+          );
         }
       }
     }
@@ -1153,7 +1157,7 @@ Responses should focus on guiding the user to provide information while maintain
 export async function handleLeasingChat(
   userInput: string,
   conversationHistory: { role: string; content: string }[],
-  agents:Agent[]
+  agents: Agent[]
 ) {
   try {
     // Add the user's input to the conversation history
@@ -1301,19 +1305,22 @@ Responses should focus on guiding the user to provide information while maintain
               suburb &&
               (sub.suburb.toLowerCase().includes(suburb.toLowerCase()) ||
                 suburb.toLowerCase().includes(sub.suburb.toLowerCase())) &&
-              agent.title === 'Business Development Manager'
+              agent.title === "Business Development Manager"
           )
         );
-        
+
         if (filteredAgents.length === 0) {
           // Fallback: Select all agents with title 'Business Development Manager'
           filteredAgents = agents.filter((agent) => {
-
-            return agent.title === 'Business Development Manager';
+            return agent.title === "Business Development Manager";
           });
         }
-        if(filteredAgents.length === 0){
-          filteredAgents = agents?.filter((agent) => agent._id === "6791b0dd8092f11849a81e58" || agent._id === "6791b0e38092f11849a81e70");
+        if (filteredAgents.length === 0) {
+          filteredAgents = agents?.filter(
+            (agent) =>
+              agent._id === "6791b0dd8092f11849a81e58" ||
+              agent._id === "6791b0e38092f11849a81e70"
+          );
         }
       }
     }
@@ -1590,7 +1597,10 @@ Impotant Notes:
   }
 }
 
-export async function handleLogicalTemplateGenerate(systemPrompt:string,userInput:string){
+export async function handleLogicalTemplateGenerate(
+  systemPrompt: string,
+  userInput: string
+) {
   try {
     const messages = [
       { role: "system", content: systemPrompt },
@@ -1602,7 +1612,7 @@ export async function handleLogicalTemplateGenerate(systemPrompt:string,userInpu
       messages: messages,
       model: "gpt-4o",
       response_format: {
-        type: 'json_object',
+        type: "json_object",
       },
     };
 
@@ -1610,17 +1620,17 @@ export async function handleLogicalTemplateGenerate(systemPrompt:string,userInpu
     // @ts-ignore
     const completion: OpenAI.Chat.ChatCompletion =
       await openai.chat.completions.create(params);
-    
-    const responseJson=  JSON.parse(completion.choices[0].message?.content || "{}");
+
+    const responseJson = JSON.parse(
+      completion.choices[0].message?.content || "{}"
+    );
     return responseJson;
   } catch (error) {
     console.error("Error interacting with OpenAI API:", error);
     throw new Error("Failed to process the request. Please try again later.");
   }
 }
-export async function handleAerialImgAnalyze(imageBuffer:
-  Buffer
-){
+export async function handleAerialImgAnalyze(imageBuffer: Buffer) {
   try {
     let messages = {
       role: "user",
@@ -1661,15 +1671,15 @@ export async function handleAerialImgAnalyze(imageBuffer:
 
     const analysis = JSON.parse(response.choices[0].message.content || "{}");
     return analysis;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error("Error analyzing image with OpenAI:", error.message);
     throw error;
   }
-};
+}
 
 export async function handleEstimateValue(
   systemPrompt: string,
-  userInput: string,
+  userInput: string
 ) {
   try {
     const messages = [
@@ -1682,7 +1692,7 @@ export async function handleEstimateValue(
       messages: messages,
       model: "gpt-4o",
       response_format: {
-        type: 'json_object',
+        type: "json_object",
       },
     };
 
@@ -1690,8 +1700,10 @@ export async function handleEstimateValue(
     // @ts-ignore
     const completion: OpenAI.Chat.ChatCompletion =
       await openai.chat.completions.create(params);
-    
-    const responseJson=  JSON.parse(completion.choices[0].message?.content || "{}");
+
+    const responseJson = JSON.parse(
+      completion.choices[0].message?.content || "{}"
+    );
     return responseJson;
   } catch (error) {
     console.error("Error interacting with OpenAI API:", error);
@@ -1701,8 +1713,8 @@ export async function handleEstimateValue(
 
 export async function handleGeneralWithResponse(
   systemPrompt: string,
-  userInput: string,
-){
+  userInput: string
+) {
   try {
     const messages = [
       { role: "system", content: systemPrompt },
@@ -1714,17 +1726,16 @@ export async function handleGeneralWithResponse(
       messages: messages,
       model: "gpt-4o",
       response_format: {
-        type: 'text',
+        type: "text",
       },
     };
-
 
     // Call the OpenAI API with the conversation messages
     // @ts-ignore
     const completion: OpenAI.Chat.ChatCompletion =
       await openai.chat.completions.create(params);
-    
-    const responseText=  completion.choices[0].message?.content || "";
+
+    const responseText = completion.choices[0].message?.content || "";
 
     return responseText;
   } catch (error) {
@@ -1736,7 +1747,7 @@ export async function handleGeneralWithResponse(
 export async function handlePropertyDetailChat(
   userInput: string,
   conversationHistory: { role: string; content: string }[],
-  properties: any[],
+  properties: any[]
 ) {
   try {
     // Add the user's input to the conversation history
@@ -1872,15 +1883,14 @@ ${JSON.stringify(properties)}
     const completion: OpenAI.Chat.ChatCompletion =
       await openai.chat.completions.create(params);
     responseText = completion.choices[0].message?.content || "";
-    if(responseText?.includes("%%")){
-      const [response,link]=responseText.split("%%");
-      responseText=response;
-      responseLink=link;
-
+    if (responseText?.includes("%%")) {
+      const [response, link] = responseText.split("%%");
+      responseText = response;
+      responseLink = link;
     }
     return {
       response: responseText,
-      link:responseLink
+      link: responseLink,
     };
   } catch (error) {
     console.error("Error interacting with OpenAI API:", error);
@@ -1890,7 +1900,9 @@ ${JSON.stringify(properties)}
 export async function checkIsAddress(text: string) {
   try {
     const messages = [
-      { role: "system", content: `
+      {
+        role: "system",
+        content: `
   You are an expert in Australian address validation, specifically for New South Wales (NSW).
   
   Tasks:
@@ -1928,37 +1940,38 @@ export async function checkIsAddress(text: string) {
               "postcode": "2210"
             }
 
-  If the input is not a valid address, set isAddress to false and leave other fields empty.` },
-    ]
+  If the input is not a valid address, set isAddress to false and leave other fields empty.`,
+      },
+    ];
     const params: OpenAI.Chat.ChatCompletionCreateParams = {
       // @ts-ignore
       messages: messages,
       model: "gpt-4o",
       response_format: {
-        type: 'json_object',
+        type: "json_object",
       },
     };
     const response = await openai.chat.completions.create(params);
-      // @ts-ignore
-      const result = JSON.parse(response.choices[0].message.content || '{}');
-      return result;
+    // @ts-ignore
+    const result = JSON.parse(response.choices[0].message.content || "{}");
+    return result;
   } catch (error) {
     console.error("Error checking address:", error);
     throw new Error("Failed to check the address. Please try again later.");
   }
 }
-type AgentKey = keyof typeof OUR_TEAM_DATA[0];
+type AgentKey = keyof (typeof OUR_TEAM_DATA)[0];
 
 function findAgent(key: AgentKey, value: string) {
   return OUR_TEAM_DATA.find((agent) => {
     const agentValue = agent[key];
-    if (typeof agentValue === 'string') {
+    if (typeof agentValue === "string") {
       return agentValue.toLowerCase() === value.toLowerCase();
     }
     return false;
   });
 }
-export async function handleUserQuery(userInput:string) {
+export async function handleUserQuery(userInput: string) {
   const functions = [
     {
       name: "find_agent",
@@ -1966,7 +1979,10 @@ export async function handleUserQuery(userInput:string) {
       parameters: {
         type: "object",
         properties: {
-          key: { type: "string", description: "The field to search by (e.g., name, email, contact)." },
+          key: {
+            type: "string",
+            description: "The field to search by (e.g., name, email, contact).",
+          },
           value: { type: "string", description: "The value to search for." },
         },
         required: ["key", "value"],
@@ -1974,23 +1990,26 @@ export async function handleUserQuery(userInput:string) {
     },
   ];
 
-  const response: OpenAI.Chat.ChatCompletion
-   = await openai.chat.completions.create({
-    model: "gpt-4-0613",
-    messages: [
-      { role: "system", content: "You are a helpful assistant that helps find agent details." },
-      { role: "user", content: userInput },
-    ],
-    functions,
-    function_call: "auto", // Let the model decide when to call the function
-  });
+  const response: OpenAI.Chat.ChatCompletion =
+    await openai.chat.completions.create({
+      model: "gpt-4-0613",
+      messages: [
+        {
+          role: "system",
+          content: "You are a helpful assistant that helps find agent details.",
+        },
+        { role: "user", content: userInput },
+      ],
+      functions,
+      function_call: "auto", // Let the model decide when to call the function
+    });
 
   const functionCall = response.choices[0].message.function_call;
 
   if (functionCall) {
     const { key, value } = JSON.parse(functionCall.arguments);
     const result = findAgent(key, value);
-    return result
+    return result;
   } else {
     return null;
   }

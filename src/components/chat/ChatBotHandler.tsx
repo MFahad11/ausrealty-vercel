@@ -206,7 +206,10 @@ const ChatBotHandler = (
     
         const tabName = box.title.toLowerCase().replace(/\s+/g, "-");
        
-        router.push(`/chat/${tabName}`);
+        router.push(`/chat/${tabName}`, undefined, {
+          scroll: false,
+        });
+        
   };
 
   return (

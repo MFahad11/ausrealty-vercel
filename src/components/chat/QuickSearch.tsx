@@ -1968,7 +1968,7 @@ setPropertyForm(true)
   }
 
   return (
-    <div className='w-full fixed bottom-20 md:bottom-[5.8rem] left-0 right-0 px-6 pt-2.5 pb-4 z-50 bg-white'>
+    <div className='w-full fixed bottom-[6rem] md:bottom-[6.5rem] left-0 right-0 px-6 pt-2.5 pb-4 z-50 bg-white'>
         <div className='w-full max-w-4xl mx-auto flex gap-2 items-end justify-center relative'>
           <Autocomplete
             onLoad={handleLoad}

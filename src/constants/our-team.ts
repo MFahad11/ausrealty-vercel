@@ -34,15 +34,7 @@ export const OUR_TEAM_DATA = [
     image:
       "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/6ce9048c-271e-4101-aeba-33d5505bace7-Anthony%20-%20Web.jpg",
   },
-  {
-    name: "Chrissie Kametopoulos",
-    role: "Sales Agent",
-    contact: "0431095301",
-    email: "chrissie.kametopoulos@ausrealty.com.au",
-    specialisedServiceAreas: ["Penshurst, NSW 2222"],
-    image:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/79b2b285-31c5-4100-8e20-07952460b80d-Chris%20-%20Web.jpg",
-  },
+ 
   {
     name: "Chrissie Kametopoulos",
     role: "Sales Agent",
@@ -52,15 +44,7 @@ export const OUR_TEAM_DATA = [
     image:
       "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/9c1f0deb-7b64-47d0-91dd-4f682d8f7910-Chrissie%20-%20Web.jpg",
   },
-  {
-    name: "Hani Obeid",
-    role: "Sales Agent",
-    contact: "0457038716",
-    email: "hani.o@ausrealty.com.au",
-    specialisedServiceAreas: ["Penshurst, NSW 2222"],
-    image:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/747a128d-df4f-4e2f-899f-f0198b667c59-Hani%20-%20web%20cropped.jpg",
-  },
+  
   {
     name: "Hani Obeid",
     role: "Sales Agent",
@@ -70,42 +54,7 @@ export const OUR_TEAM_DATA = [
     image:
       "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/04ed1c6a-ad2c-4c09-88bf-f1d813f8d166-Hani%20-%20Web.jpg",
   },
-  {
-    name: "CHRIS HARDING",
-    role: "Sales Agent",
-    contact: "0413 400 077",
-    email: "chris.harding@ausrealty.com.au",
-    specialisedServiceAreas: ["Penshurst, NSW 2222"],
-    image:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/d5ac1b19-7478-47fa-a57e-74edc3d443fe-Headshot%12_RETOUCH-Edit.jpg",
-  },
-  {
-    name: "CHRIS HARDING",
-    role: "Sales Agent",
-    contact: "0413 400 077",
-    email: "chris.harding@ausrealty.com.au",
-    specialisedServiceAreas: ["Penshurst, NSW 2222"],
-    image:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/a57d9032-02e1-4db8-a5d5-6d625153b27b-Headshot%14_RETOUCH-Edit-Edit.jpg",
-  },
-  {
-    name: "CHRIS HARDING",
-    role: "Sales Agent",
-    contact: "0413 400 077",
-    email: "chris.harding@ausrealty.com.au",
-    specialisedServiceAreas: ["Penshurst, NSW 2222"],
-    image:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/aaaf682e-9954-40a9-9088-eb1afc20efe6-Headshot%15_RETOUCH-Edit.jpg",
-  },
-  {
-    name: "Imam Sayed",
-    role: "Sales Agent",
-    contact: "0420742323",
-    email: "imam.s@ausrealty.com.au",
-    specialisedServiceAreas: ["Penshurst, NSW 2222"],
-    image:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/e686e4ae-1610-4d07-b304-b314142f2a3b-Imam%20-%20web%cropped.jpg",
-  },
+
   {
     name: "Imam Sayed",
     role: "Sales Agent",
@@ -115,15 +64,7 @@ export const OUR_TEAM_DATA = [
     image:
       "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/d1b067ec-ea90-4d89-b99d-7eae25c67db4-Imam%20-%20Web.jpg",
   },
-  {
-    name: "James Lesaguis",
-    role: "Sales Agent",
-    contact: "0424799285",
-    email: "james.l@ausrealty.com.au",
-    specialisedServiceAreas: ["Penshurst, NSW 2222"],
-    image:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/e43be54a-9f4f-4e92-9ad3-89c11ca5aefb-James%20-%20web%cropped.jpg",
-  },
+
   {
     name: "James Lesaguis",
     role: "Sales Agent",
@@ -141,15 +82,6 @@ export const OUR_TEAM_DATA = [
     specialisedServiceAreas: ["Penshurst, NSW 2222"],
     image:
       "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/9cd5403d-3691-4d00-bee9-1c7fca76e056-Kat%20-%20Web.jpg",
-  },
-  {
-    name: "Daniel Tonkonogy",
-    role: "Sales Agent",
-    contact: "0452281852",
-    email: "danielt@ausrealty.com.au",
-    specialisedServiceAreas: ["Penshurst, NSW 2222"],
-    image:
-      "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/cc1692d1-b815-4a58-b721-5f4a5ed0d3f9-Tonko%20-%20web%cropped.jpg",
   },
   {
     name: "Daniel Tonkonogy",

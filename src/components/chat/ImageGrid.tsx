@@ -25,7 +25,7 @@ export default function ImageGrid(
 
   return (
     <>
-    <div className="max-w-4xl mx-auto px-4 py-4 enhanced-textarea overflow-y-auto">
+    <div className="max-w-4xl mx-auto px-4 py-4 enhanced-textarea overflow-y-auto pb-32">
       <div className={'grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4'}>
         {data?.map((item, index) => (
           <div key={index} className="relative aspect-square overflow-hidden"

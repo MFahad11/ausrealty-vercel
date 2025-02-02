@@ -29,8 +29,9 @@ const ChatBotHandler = (
     "How we can help?",
     "Ask us anything"
   ];
-
-
+  const ourPeoplePlaceholder = [
+    'Looking for anyone in particular? Just type'
+  ];
   const [boxes, ] = useState<{
     title: string;
     description: string;
@@ -116,13 +117,13 @@ const ChatBotHandler = (
     const typingSpeed = 100; // Speed of typing in milliseconds
     const deletingSpeed = 50; // Speed of deleting in milliseconds
     const pauseBetweenWords = 1700; // Pause before starting to delete
-    
-    const getCurrentPlaceholder = () => placeholders[currentPlaceholderIndex];
+
+    const getCurrentPlaceholder = selectedBox === "OUR PEOPLE" ? () => ourPeoplePlaceholder[currentPlaceholderIndex] : () => placeholders[currentPlaceholderIndex];
     
     if (!isDeleting && currentText !== getCurrentPlaceholder()) {
       // Typing
       const timeout = setTimeout(() => {
-        setCurrentText(getCurrentPlaceholder().substring(0, currentText.length + 1));
+        setCurrentText(getCurrentPlaceholder()?.substring(0, currentText.length + 1));
       }, typingSpeed);
       return () => clearTimeout(timeout);
     } 
@@ -136,16 +137,21 @@ const ChatBotHandler = (
     else if (isDeleting && currentText !== '') {
       // Deleting
       const timeout = setTimeout(() => {
-        setCurrentText(currentText.substring(0, currentText.length - 1));
+        setCurrentText(currentText?.substring(0, currentText.length - 1));
       }, deletingSpeed);
       return () => clearTimeout(timeout);
     }
     else if (isDeleting && currentText === '') {
       // Move to next placeholder
       setIsDeleting(false);
-      setCurrentPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+      if(selectedBox === "OUR PEOPLE") {
+        setCurrentPlaceholderIndex((prev) => (prev + 1) % ourPeoplePlaceholder.length);
+      }else{
+        setCurrentPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+      }
+      
     }
-  }, [currentText, isDeleting, currentPlaceholderIndex, placeholders]);
+  }, [currentText, isDeleting, currentPlaceholderIndex, placeholders,ourPeoplePlaceholder,selectedBox]);
   useEffect(() => {
     if (tab) {
       // @ts-ignore

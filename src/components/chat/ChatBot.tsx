@@ -117,8 +117,10 @@ const ChatBot = ({
   const [selectedMedia, setSelectedMedia] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [agent,setAgent]=useState('')
+  const [searchedAgent,setSearchedAgent]=useState('')
   const agents=useAgentStore((state) => state.agents);
   const setAgents=useAgentStore((state) => state.setAgents);
+  const [ourTeamData, setOurTeamData] = useState(OUR_TEAM_DATA)
   const [isPageLoading, setIsPageLoading] = useState(false)
   useEffect(() => {
     setMessages([])
@@ -182,7 +184,6 @@ const ChatBot = ({
           content: firstMessage,
           videoUrl: boxes[index]?.videoUrl
         }
-        
       ])
       
     }
@@ -241,24 +242,49 @@ const ChatBot = ({
     if(fetchedProperties?.length==0){getAllProperties()}
   }, [])
   const handleSend = async (inputValue: string) => {
-    if (!inputValue.trim()) {
-      // toast.error("Please type something");
+    if (!inputValue.trim() && title!=='OUR PEOPLE') {
       return
     }
     const userMessage = { role: 'user', content: inputValue }
     if (!indexPage) {
       setMessages([...messages, userMessage])
+      if(title==='OUR PEOPLE'){
+        // split the input value by space
+        const searchTerms = inputValue.split(' ')
+        console.log(searchTerms)
+        if(searchTerms.length>=1){
+          const filteredAgents = OUR_TEAM_DATA.filter((agent) => {
+          // now try to search every split word in the agent's name, suburb, and role ,email and phone
+          return searchTerms.some((term) => {
+            return (
+              agent.name.toLowerCase().includes(term.toLowerCase())  ||
+              agent.role.toLowerCase().includes(term.toLowerCase()) ||
+              agent.email.toLowerCase().includes(term.toLowerCase()) ||
+              agent.contact.toLowerCase().includes(term.toLowerCase())
+            )
+          })
+        })
+        setOurTeamData(filteredAgents)
+        return
+        }
+        
+      }
+      else{
+        setInputValue('')
+      }
       // scrollToElement(messagesEndRef);
     } else {
+      
+      
       if(isMessage){
         setMessages([...messages, userMessage])
       }
       else{
         setIntentExtracting(true)
       }
-      
+      setInputValue('')
     }
-    setInputValue('')
+    
 
     try {
       searchData(userMessage?.content)
@@ -499,15 +525,7 @@ const ChatBot = ({
             })),
             agents
           )
-        } else if(title === 'OUR PEOPLE'){
-          data = await handleUserQuery(userInput)
-          console.log(data)
-          if(data){
-            setSelectedMedia(data)
-          setIsOpen(true)
-          }
-          
-        }
+        } 
         if (data?.extractedInfo) {
           setMessages(prevMessages => {
             const newMessage = {
@@ -598,6 +616,9 @@ const ChatBot = ({
 
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value)
+    if(title==='OUR PEOPLE'){
+      handleSend(e.target.value)
+    }
   }
 
   const handleKeyPress = (e: any) => {
@@ -988,7 +1009,7 @@ const ChatBot = ({
             selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia} setIsOpen={setIsOpen} isOpen={isOpen}
             />
           )}
-          {title === 'OUR PEOPLE' && <ImageGrid data={OUR_TEAM_DATA} 
+          {title === 'OUR PEOPLE' && <ImageGrid data={ourTeamData} 
           selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia} setIsOpen={setIsOpen} isOpen={isOpen}
           />}
           {title === 'LOCATIONS' && (

@@ -78,8 +78,14 @@ const PropertyCarousel: React.FC<PropType> = props => {
                   </div>
                   <div className="embla__controls absolute w-full">
         <div className="embla__buttons">
-          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+          <PrevButton onClick={(event)=>{
+            onPrevButtonClick()
+            event.stopPropagation();
+          }} disabled={prevBtnDisabled} />
+          <NextButton onClick={(event)=>{
+            onNextButtonClick()
+            event.stopPropagation();
+          }} disabled={nextBtnDisabled} />
         </div>
       </div>
                 </div>

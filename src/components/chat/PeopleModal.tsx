@@ -49,23 +49,26 @@ export default function PeopleModal({ isOpen, onClose,data }: PeopleModalProps) 
 
         <div className="space-y-2">
           <p className="font-medium">{data.role}</p>
-          <div className="space-y-1">
+          {
+            data && data?.contact && (<div className="space-y-1">
     <div className="flex items-center justify-center gap-2 text-sm">
       <LuPhone className="w-4 h-4" />
       <a
-        href={`tel:${data.contact.replace(/^\+92/, '+64')}`}
+        href={`tel:${data?.contact?.replace(/^\+92/, '+64')}`}
         className="hover:underline"
       >
-        {data.contact.replace(/^\+92/, '+64')}
+        {data?.contact?.replace(/^\+92/, '+64')}
       </a>
     </div>
     <Link
-      href={`https://wa.me/${data.contact.replace(/^\+92/, '+64').replace(/\s+/g, '')}`}
+      href={`https://wa.me/${data?.contact?.replace(/^\+92/, '+64').replace(/\s+/g, '')}`}
       className="text-xs text-gray-600 hover:underline ml-6"
     >
       Message on WhatsApp
     </Link>
-  </div>
+  </div>)
+          }
+          
           <a href={`mailto:${data.email}`} className="block text-sm hover:text-black transition-colors break-words">
             {data.email}
           </a>

@@ -322,8 +322,8 @@ const ChatBot = ({
       }) => {
         return (
           property.addressParts.suburb.toLowerCase() == isAddress?.suburb?.toLowerCase() &&
-          (property.addressParts.postcode == isAddress?.postcode ||
-          property.addressParts.displayAddress.toLowerCase()?.includes(isAddress?.address.toLowerCase()))
+          property.addressParts.postcode == isAddress?.postcode &&
+          property.addressParts.displayAddress.toLowerCase()?.includes(isAddress?.address.toLowerCase())
         )
       })
       // @ts-ignore
@@ -616,7 +616,8 @@ const ChatBot = ({
 
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value)
-    if(title==='OUR PEOPLE'){
+    if(title==='OUR PEOPLE' && (e.target.value.trim().length>3 || e.target.value.trim().length==0)){
+      console.log('searching',e.target.value.trim().length)
       handleSend(e.target.value)
     }
   }

@@ -26,7 +26,12 @@ export default function ImageGrid(
   return (
     <>
     <div className="max-w-4xl mx-auto px-4 py-4 enhanced-textarea overflow-y-auto pb-32">
-      <div className={'grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4'}>
+      {
+        data?.length === 0 ? (
+          <div className="flex items-center justify-center h-96">
+            <h1>No data found</h1>
+          </div>
+        ) : (<div className={'grid gap-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4'}>
         {data?.map((item, index) => (
           <div key={index} className="relative aspect-square overflow-hidden"
           onClick={() => {
@@ -70,7 +75,9 @@ export default function ImageGrid(
           </div>
           // <h1>{item?.image}</h1>
         ))}
-      </div>
+      </div>)
+      }
+      
     </div>
     {
      (!isInsideAusrealty && !isLocation) && (

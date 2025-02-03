@@ -717,7 +717,7 @@ const ChatBot = ({
               <div
                 id='msg'
                 ref={messagesContainerRef}
-                className='enhanced-textarea overflow-y-auto pl-0 pb-32 '
+                className='enhanced-textarea overflow-y-auto pl-0 pb-[10rem] '
               >
                 {(messages && messages?.length>=1) && messages.map((message, index) => (
                   <>

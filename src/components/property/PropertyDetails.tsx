@@ -128,23 +128,8 @@ export default function PropertyDetails({
             </ul>
           </div>
         )}
-        {property.inspectionDetails.pastInspections.length > 0 && (
-          <div>
-            <h4 className="font-medium mb-2">Past Inspections:</h4>
-            <ul className="list-disc pl-5 space-y-1">
-              {property.inspectionDetails.pastInspections.map(
-                (inspection, index) => (
-                   <li key={index}>
-                    {dayjs(inspection.openingDateTime).tz('Australia/Sydney').format("MMMM D, YYYY h:mm A")}{" "}
-                    - {dayjs(inspection.closingDateTime).tz('Australia/Sydney').format("h:mm A")}
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-        )}
+        
         {property.inspectionDetails.inspections.length === 0 &&
-          property.inspectionDetails.pastInspections.length === 0 &&
           null}
       </div>
       {/* Description Section */}

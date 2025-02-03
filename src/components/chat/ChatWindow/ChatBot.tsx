@@ -154,15 +154,7 @@ const ChatBot = ({
           .tz('Australia/Sydney')
           .format('YYYY-MM-DDTHH:mm:ss')
       })),
-      pastInspections: property.inspectionDetails.pastInspections.map((inspection: any) => ({
-        ...inspection,
-        openingDateTime: dayjs(inspection.openingDateTime)
-          .tz('Australia/Sydney')
-          .format('YYYY-MM-DDTHH:mm:ss'),
-        closingDateTime: dayjs(inspection.closingDateTime)
-          .tz('Australia/Sydney')
-          .format('YYYY-MM-DDTHH:mm:ss')
-      })),
+      
       isByAppointmentOnly: property.inspectionDetails.isByAppointmentOnly
       },
       agentInfo: property?.agentInfo?.map((agent: any) => ({

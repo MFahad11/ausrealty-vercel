@@ -58,13 +58,13 @@ export default function Index({ data }: { data: any }) {
   }, []);
   
   return (
-    <>
+    <div className="overflow-hidden">
       <Head>
         <title key={"title"}>{`Ausrealty`}</title>
       </Head>
       {!isMessage ? (
-        <div className="max-w-md mx-auto px-4 flex flex-col items-center md:mt-4">
-          <div className="relative w-full max-w-[417px]">
+        <div className="max-w-md mx-auto px-4 flex flex-col items-center md:mt-4 overflow-hidden">
+          <div className="relative w-full">
           <video
   autoPlay
   loop
@@ -74,7 +74,7 @@ export default function Index({ data }: { data: any }) {
 >
   {/* Portrait Video for Mobile */}
   <source
-    src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/98ed0248-9634-428c-8212-4c01d7b030ae-ausrealty_website_reel.mp4"
+    src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/f14ab7af-2c31-4bce-963b-9085f7b3d1ad-ausrealty_website_reel.mp4"
     type="video/mp4"
   />
 </video>
@@ -88,7 +88,7 @@ export default function Index({ data }: { data: any }) {
 >
   {/* Landscape Video for Desktop */}
   <source
-    src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/e7379331-b580-495a-b88d-c751812c0ac1-ausrealty_website_reel.mp4"
+    src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/6e4c15ba-ce8d-4e4c-94ef-97beeba83479-ausrealty_website_reel.mp4"
     type="video/mp4"
   />
 </video>
@@ -113,6 +113,6 @@ export default function Index({ data }: { data: any }) {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }

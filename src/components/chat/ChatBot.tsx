@@ -326,6 +326,7 @@ const ChatBot = ({
           property.addressParts.displayAddress.toLowerCase()?.includes(isAddress?.address.toLowerCase())
         )
       })
+      
       // @ts-ignore
       property?.agentInfo?.map((agent) => {
         axiosInstance.post('/api/send-email', {

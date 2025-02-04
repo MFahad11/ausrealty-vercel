@@ -64,19 +64,35 @@ export default function Index({ data }: { data: any }) {
       </Head>
       {!isMessage ? (
         <div className="max-w-md mx-auto px-4 flex flex-col items-center md:mt-4">
-          <div className="relative w-full max-w-[417px] h-[656px] md:h-[670px] flex-shrink-0">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            >
-              <source
-                src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/98ed0248-9634-428c-8212-4c01d7b030ae-ausrealty_website_reel.mp4"
-                type="video/mp4"
-              />
-            </video>
+          <div className="relative w-full max-w-[417px]">
+          <video
+  autoPlay
+  loop
+  muted
+  playsInline
+  className="w-full h-full object-cover block sm:hidden"
+>
+  {/* Portrait Video for Mobile */}
+  <source
+    src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/98ed0248-9634-428c-8212-4c01d7b030ae-ausrealty_website_reel.mp4"
+    type="video/mp4"
+  />
+</video>
+
+<video
+  autoPlay
+  loop
+  muted
+  playsInline
+  className="w-full h-full object-cover hidden sm:block"
+>
+  {/* Landscape Video for Desktop */}
+  <source
+    src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/e7379331-b580-495a-b88d-c751812c0ac1-ausrealty_website_reel.mp4"
+    type="video/mp4"
+  />
+</video>
+
           </div>
 
           <div>

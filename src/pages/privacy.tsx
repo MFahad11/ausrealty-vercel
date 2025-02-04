@@ -3,9 +3,9 @@ import React from 'react'
 
 const Privacy = () => {
   return (
-    <><NavBar/>
+    <><NavBar backgroundColor="black" showBackButton={true} />
     <div
-    className='container mx-auto px-4 py-8 text-gray-800 max-w-2xl mt-4'
+    className='container mx-auto px-4 py-8 text-gray-800 max-w-2xl mt-10'
     >
         <h1
         className='text-center'

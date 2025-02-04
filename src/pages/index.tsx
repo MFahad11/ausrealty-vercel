@@ -73,7 +73,7 @@ export default function Index({ data }: { data: any }) {
               className="w-full h-full object-cover"
             >
               <source
-                src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/STARTS+WITH+BELIEF+(5).mp4"
+                src="https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/e7379331-b580-495a-b88d-c751812c0ac1-ausrealty_website_reel.mp4"
                 type="video/mp4"
               />
             </video>

@@ -78,11 +78,7 @@ export default function ConfirmationComponent({
             <p className="text-sm text-gray-500">{details.agentEmail}</p>
           </div>
         </div>
-
-        <div className="bg-gray-50 -mx-6 -mb-6 p-6 rounded-b-lg">
-          
-
-          <div className="flex justify-end space-x-3">
+        <div className="flex justify-end space-x-3">
             <Button
               type="button"
               onClick={onBack}
@@ -100,7 +96,6 @@ export default function ConfirmationComponent({
               Confirm Booking
             </Button>
           </div>
-        </div>
       </div></>
     
   )

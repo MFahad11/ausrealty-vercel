@@ -20,7 +20,7 @@ export const LOOKING_TO_RENT = [
         suburb: "Padstow"
     },
     {
-        image: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/e7da975e-9888-4c9e-9b9d-a06d73876d3c-EDMONSONPARK-COMINGSOON.jpg",
+        image: "https://ausrealty-next.s3.ap-southeast-2.amazonaws.com/uploads/7d161754-6b9e-4539-929f-4b734a6490c8-WhatsApp%20Image%202025-02-05%20at%2011.35.22_b9b1ff0c.jpg",
         address:"Shop AG08/52 Soldiers Parade, Edmondson Park NSW 2174",
         suburb: "Edmondson Park"
     }

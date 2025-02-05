@@ -999,6 +999,7 @@ const ChatBot = ({
                           availableAgents={availableAgents}
                           address={address}
                           setAddress={setAddress}
+                          agents={agents}
                           />
                 }
                 

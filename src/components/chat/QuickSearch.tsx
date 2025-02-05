@@ -1773,8 +1773,8 @@ const PropertyContainer = ({
   )
 }
 
-const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData,availableAgents, setAvailableAgents,address, setAddress}:{setQuickSearch:any, propertyForm:any, setPropertyForm:any,propertyData:any,
-  availableAgents:any, setAvailableAgents:any,
+const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData,availableAgents, setAvailableAgents,address, setAddress,agents}:{setQuickSearch:any, propertyForm:any, setPropertyForm:any,propertyData:any,
+  availableAgents:any, setAvailableAgents:any, agents:any,
   address:any, setAddress:any}) => {
   const [property, setProperty] = useState('')
   const [loading, setLoading] = useState(false)
@@ -1817,23 +1817,41 @@ const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData,
             name:string
           }
         }) => {
-          console.log(property.addressParts.suburb.toLowerCase(), suburb?.toLowerCase(), property.addressParts.postcode, postcode, property.addressParts.displayAddress.toLowerCase(), shortAddress.toLowerCase())
           return (
             property.addressParts.suburb.toLowerCase() == suburb?.toLowerCase() &&
             property.addressParts.postcode == postcode &&
             property.addressParts.displayAddress.toLowerCase()?.includes(shortAddress.toLowerCase())
           )
         })
-        console.log(property)
-        // @ts-ignore
-        property?.agentInfo?.map((agent) => {
-          axiosInstance.post('/api/send-email', {
-            to: agent.email,
-            subject: `${property.addressParts.displayAddress} has been searched`,
-            text: `Hello ${agent.name}, ${property.addressParts.displayAddress} has been searched.`
+        
+        agents?.map((agent:{
+          email:string,
+          firstName:string,
+          suburbs:Array<{
+            suburb:string
+          }>
+        }) => {
+          agent?.suburbs?.map(({suburb:agentSuburb}:{
+            suburb:string
+          }) => {
+            if(agentSuburb?.toLowerCase().includes(suburb?.toLowerCase() || '') || suburb?.toLowerCase().includes(agentSuburb?.toLowerCase() || '')){
+              axiosInstance.post('/api/send-email', {
+                to: agent.email,
+                subject: `${property?.addressParts.displayAddress || shortAddress} has been searched`,
+                text: `Hello ${agent.firstName}, ${property?.addressParts.displayAddress || shortAddress} has been searched.`
+              })
+            }
           })
         })
-        console.log(property?.agentInfo)
+        // @ts-ignore
+        // property?.agentInfo?.map((agent) => {
+        //   axiosInstance.post('/api/send-email', {
+        //     to: agent.email,
+        //     subject: `${property.addressParts.displayAddress} has been searched`,
+        //     text: `Hello ${agent.name}, ${property.addressParts.displayAddress} has been searched.`
+        //   })
+        // })
+        // console.log(property?.agentInfo)
         setAvailableAgents(property?.agentInfo || [])
         return response.data.data
       }

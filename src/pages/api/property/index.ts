@@ -426,17 +426,16 @@ await dbConnectBeleef();
       latitude,
       longitude
     );
-    dbConnect();
-    // Create a new UserProperty document
-    const newUserProperty = await UserProperty.create({
-      userId: "60b9e4b3b3b3b3b3b3b3b3b3",
+    // dbConnect();
+    // // Create a new UserProperty document
+    // const newUserProperty = await UserProperty.create();
+
+    return res.status(200).json({ success: true, data: {
       ...property,
       boxStatus,
       processChain,
       fiveStepProcess,
-    });
-
-    return res.status(200).json({ success: true, data: newUserProperty });
+    } });
   } catch (error: any) {
     console.error("Error creating property:", error);
     return res.status(500).json({ success: false, message: error.message });

@@ -1012,7 +1012,7 @@ const ChatBot = ({
             selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia} setIsOpen={setIsOpen} isOpen={isOpen}
             />
           )}
-          {title === 'OUR PEOPLE' && <ImageGrid data={ourTeamData} 
+          {title === 'OUR PEOPLE' && <ImageGrid data={agents} 
           selectedMedia={selectedMedia} setSelectedMedia={setSelectedMedia} setIsOpen={setIsOpen} isOpen={isOpen}
           />}
           {title === 'LOCATIONS' && (

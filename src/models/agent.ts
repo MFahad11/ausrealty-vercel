@@ -59,7 +59,8 @@ interface IAgent extends Document {
   validLicence: boolean;
   conjunctionAgent?: string;
   ownCompany: boolean;
-
+  company?: string;
+  companyAddress?: string;
   // Financial Information
   abn?: string;
   gst?: string;
@@ -126,6 +127,8 @@ const AgentSchema = new Schema<IAgent>(
     licenseExpiry: { type: Date },
     validLicence: { type: Boolean, default: false },
     conjunctionAgent: { type: String },
+    company: { type: String },
+    companyAddress: { type: String },
     ownCompany: { type: Boolean, default: false },
 
     // Financial Information

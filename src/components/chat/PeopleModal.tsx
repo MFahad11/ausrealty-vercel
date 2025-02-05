@@ -11,7 +11,8 @@ interface PeopleModalProps {
     contact: string,
     email:  string,
     specialisedServiceAreas:string [],
-    image: string
+    image: string,
+    company: string
   }
 }
 
@@ -50,6 +51,11 @@ export default function PeopleModal({ isOpen, onClose,data }: PeopleModalProps) 
         <div className="space-y-2">
           <p className="font-medium">{data.role}</p>
           {
+            data && data?.company && (<div className="flex items-center gap-2 text-sm">
+    <p>{data?.company}</p>
+  </div>)
+          }
+          {
             data && data?.contact && (<div className="space-y-1">
     <div className="flex items-center justify-center gap-2 text-sm">
       <LuPhone className="w-4 h-4" />
@@ -72,6 +78,7 @@ export default function PeopleModal({ isOpen, onClose,data }: PeopleModalProps) 
           <a href={`mailto:${data.email}`} className="block text-sm hover:text-black transition-colors break-words">
             {data.email}
           </a>
+          
         </div>
 
         {data?.specialisedServiceAreas?.length > 0 && (

@@ -40,7 +40,7 @@ export default function ImageGrid(
           }}
           >
             <img
-                  src={item?.image as string}
+                  src={(item?.image || item?.picture) as string}
                   alt={`Grid item ${index + 1}`}
                   // fill
                   className="object-cover"
@@ -92,11 +92,12 @@ export default function ImageGrid(
     data={
       {
         name: selectedMedia?.name as string,
-        role: selectedMedia?.role as string,
-        contact: selectedMedia?.contact   as string,
+        role: selectedMedia?.title as string,
+        contact: selectedMedia?.mobile   as string,
         email: selectedMedia?.email as string,
-        specialisedServiceAreas: selectedMedia?.specialisedServiceAreas as string[],
-        image: selectedMedia?.image as string
+        specialisedServiceAreas: selectedMedia?.suburbs?.map(({suburb}: any) => suburb),
+        image: selectedMedia?.image as string,
+        company: selectedMedia?.company as string
       }
     }
     />)}

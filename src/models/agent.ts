@@ -87,7 +87,7 @@ const AgentSchema = new Schema<IAgent>(
     name: { type: String },
     firstName: { type: String },
     lastName: { type: String },
-    email: { type: String, unique: true, sparse: true },
+    email: { type: String},
     secondaryEmail: { type: String },
     mobile: { type: String },
     phone: { type: String },
@@ -147,12 +147,6 @@ const AgentSchema = new Schema<IAgent>(
   },
   
   { timestamps: true }
-);
-
-// Index to prevent duplicate agents across unique fields
-AgentSchema.index(
-  { email: 1},
-  { unique: true, sparse: true }
 );
 
 // Model definition with interface

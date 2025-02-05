@@ -1,3 +1,4 @@
+import dbConnect from "@/components/lib/db";
 import Agent from "@/models/agent";
 import { google } from 'googleapis';
 import { NextApiRequest, NextApiResponse } from "next";
@@ -51,8 +52,9 @@ export const refreshAccessToken = async (refreshToken: string) => {
     }
 };
 const handler = async (req:NextApiRequest, res:NextApiResponse) => {
+    dbConnect();
     const { agentId, date } = req.body;
-
+    
     if (!agentId || !date) {
         return res.status(400).json({ error: 'Agent ID and date are required.' });
     }

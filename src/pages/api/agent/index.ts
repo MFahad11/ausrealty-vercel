@@ -24,6 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         data: agents
     });
   } catch (error) {
+    
     console.error("Error fetching agents:", error);
     res.status(500).json({ error: "Failed to fetch agents" });
   }

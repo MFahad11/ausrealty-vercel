@@ -63,7 +63,7 @@ export default function Index({ data }: { data: any }) {
         <title key={"title"}>{`Ausrealty`}</title>
       </Head>
       {!isMessage ? (
-        <div className="max-w-md mx-auto px-4 flex flex-col items-center md:mt-4 overflow-hidden">
+        <div className=" max-w-4xl mx-auto px-4 flex flex-col items-center md:mt-4 overflow-hidden">
           <div className="relative w-full">
           <video
   autoPlay

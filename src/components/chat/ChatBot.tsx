@@ -116,7 +116,7 @@ const ChatBot = ({
   const [address, setAddress] = useState('')
   const [selectedMedia, setSelectedMedia] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [agent,setAgent]=useState('')
+  const [agent,setAgent]=useState(null)
   const [searchedAgent,setSearchedAgent]=useState('')
   const agents=useAgentStore((state) => state.agents);
   const setAgents=useAgentStore((state) => state.setAgents);

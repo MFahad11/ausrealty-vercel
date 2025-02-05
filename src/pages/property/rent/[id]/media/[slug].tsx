@@ -245,6 +245,8 @@ export default function ImageGallery({ id,
             activeTab === 'contact' && (
               <AgentsPage 
               agents={initialPropertyData?.agentInfo || []}
+              address={initialPropertyData?.addressParts?.displayAddress}
+
               />
             )
           }

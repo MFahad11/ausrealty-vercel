@@ -24,7 +24,10 @@ const AgentCarousel: React.FC<PropType> = props => {
 
   return (
     <>
-    <BookingOverlay isOpen={props?.isOverlayOpen} onClose={() => props?.setIsOverlayOpen(false)} 
+    <BookingOverlay isOpen={props?.isOverlayOpen} onClose={() => {
+      props?.setIsOverlayOpen(false)
+      props?.setAgent(null)
+    }} 
       agent={props?.agent} availableAgents={props?.availableAgents} address={props?.address}
       />
        <div className='agent'>

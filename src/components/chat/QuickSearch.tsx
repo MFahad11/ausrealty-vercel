@@ -25,7 +25,6 @@ import LogicalPriceEdit from '../ui/LogicalPriceEdit'
 import { PropertyDetailsModal } from '../ui/PropertyDetailsModal'
 import { LiaSyncSolid } from "react-icons/lia";
 import { FaSpinner } from 'react-icons/fa'
-import BookingOverlay from './BookApraisal/Overlay'
 const settings = {
   dots: false,
   infinite: false,
@@ -1739,7 +1738,6 @@ const PropertyContainer = ({
 }) => {
   const [formData, setFormData] = useState(initialProperty)
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false)
   // Function to handle the form submission and pass data to PropertyResult
   const handleFormSubmit = (data: any) => {
     setFormData(data)
@@ -1823,7 +1821,7 @@ const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData,
             property.addressParts.displayAddress.toLowerCase()?.includes(shortAddress.toLowerCase())
           )
         })
-        
+        const agentsWithSuburb:any = []
         agents?.map((agent:{
           email:string,
           firstName:string,
@@ -1835,24 +1833,20 @@ const QuickSearch = ({setQuickSearch,propertyForm, setPropertyForm,propertyData,
             suburb:string
           }) => {
             if(agentSuburb?.toLowerCase().includes(suburb?.toLowerCase() || '') || suburb?.toLowerCase().includes(agentSuburb?.toLowerCase() || '')){
-              axiosInstance.post('/api/send-email', {
+              // check if agent has already been added in agentsWithSuburb list by checking the email
+              if(!agentsWithSuburb.find((agentWithSuburb:any) => agentWithSuburb.email === agent.email)){
+                axiosInstance.post('/api/send-email', {
                 to: agent.email,
                 subject: `${property?.addressParts.displayAddress || shortAddress} has been searched`,
                 text: `Hello ${agent.firstName}, ${property?.addressParts.displayAddress || shortAddress} has been searched.`
-              })
+                })
+                agentsWithSuburb.push(agent)
+              }
+              
             }
           })
         })
-        // @ts-ignore
-        // property?.agentInfo?.map((agent) => {
-        //   axiosInstance.post('/api/send-email', {
-        //     to: agent.email,
-        //     subject: `${property.addressParts.displayAddress} has been searched`,
-        //     text: `Hello ${agent.name}, ${property.addressParts.displayAddress} has been searched.`
-        //   })
-        // })
-        // console.log(property?.agentInfo)
-        setAvailableAgents(property?.agentInfo || [])
+        setAvailableAgents(property?.agentInfo?.length>=1? property?.agentInfo : agentsWithSuburb)
         return response.data.data
       }
     } catch (error: any) {

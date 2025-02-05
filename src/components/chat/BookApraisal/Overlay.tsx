@@ -7,7 +7,8 @@ interface BookingOverlayProps {
   onClose: () => void
   agent: any
   address?: string
-  availableAgents?: any
+  availableAgents?: any,
+
 }
 
 export default function BookingOverlay({ isOpen, onClose,agent,address,availableAgents }: BookingOverlayProps) {
@@ -17,7 +18,7 @@ export default function BookingOverlay({ isOpen, onClose,agent,address,available
   const [step, setStep] = useState(0)
   useEffect(() => {
     if (isOpen) {
-      setStep(availableAgents?.length>=1?0:1)
+      setStep(agent?1:availableAgents?.length>=1?0:1)
     }
   }, [isOpen])
   if (!isOpen) return null

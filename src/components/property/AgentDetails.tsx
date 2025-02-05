@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { LuFacebook, LuGlobe, LuLinkedin, LuMail, LuPhone, LuTwitter } from 'react-icons/lu'
 import AgentCard from './AgentCard'
 import { useState } from 'react'
+import BookingOverlay from '../chat/BookApraisal/Overlay'
 interface Agent {
     dateUpdated?: string
     agencyId?: number
@@ -38,13 +39,20 @@ interface Agent {
 // Mock data - replace with your actual data fetching
 
 
-export default function AgentsPage({agents}:{
-  agents:any
+export default function AgentsPage({agents,address}:{
+  agents:any,
+  address:any
 }) {
     const [isOverlayOpen, setIsOverlayOpen] = useState(false)
-    const [agent, setAgent] = useState('')
+    const [agent, setAgent] = useState(null)
+
   return (
-    <div className="container mx-auto px-4 py-12">
+    <><BookingOverlay isOpen={isOverlayOpen} onClose={() => {
+      setIsOverlayOpen(false)
+      setAgent(null)
+    }} 
+          agent={agent} availableAgents={agents} address={address}
+          /><div className="container mx-auto px-4 pb-24">
         <h1 className="tracking-wider text-center mb-12 uppercase">
           Our Agents
         </h1>
@@ -62,6 +70,7 @@ export default function AgentsPage({agents}:{
               />
           ))}
         </div>
-      </div>
+      </div></>
+    
   )
 }

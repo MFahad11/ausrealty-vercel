@@ -294,8 +294,9 @@ const ChatBot = ({
         <div className='flex flex-col gap-2'>
         
         <div className='w-full max-w-md mx-auto relative'>
-            <input
-              type='text'
+            <textarea
+              ref={textareaRef}
+              rows={1}
               value={inputValue}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}

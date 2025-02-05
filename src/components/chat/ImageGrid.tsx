@@ -40,7 +40,7 @@ export default function ImageGrid(
           }}
           >
             <img
-                  src={(item?.image || item?.picture) as string}
+                  src={(item?.image || item?.picture || "https://beleef-public-uploads.s3.ap-southeast-2.amazonaws.com/pictures/677db63f24caaa4007459a07.png") as string}
                   alt={`Grid item ${index + 1}`}
                   // fill
                   className="object-cover"

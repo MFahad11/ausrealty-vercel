@@ -87,11 +87,11 @@ const AgentCard = ({
         href={`tel:${agent.phone.replace(/^\+92/, '+64')}`}
         className="hover:underline"
       >
-        {agent.phone.replace(/^\+92/, '+64')}
+        {agent.phone.replace(/^0/, '61')}
       </a>
     </div>
     <Link
-      href={`https://wa.me/${agent.phone.replace(/^\+92/, '+64').replace(/\s+/g, '')}`}
+      href={`https://wa.me/${agent.phone.replace(/^0/, '61').replace(/\s+/g, '')}`}
       className="text-xs text-gray-600 hover:underline ml-6"
     >
       Message on WhatsApp

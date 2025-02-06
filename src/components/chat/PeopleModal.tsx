@@ -67,7 +67,7 @@ export default function PeopleModal({ isOpen, onClose,data }: PeopleModalProps) 
       </a>
     </div>
     <Link
-      href={`https://wa.me/${data?.contact?.replace(/^\+92/, '+64').replace(/\s+/g, '')}`}
+      href={`https://wa.me/${data?.contact?.replace(/^0/, '61').replace(/\s+/g, '')}`}
       className="text-xs text-gray-600 hover:underline ml-6"
     >
       Message on WhatsApp

@@ -12,10 +12,10 @@ export const config = {
 };
 
 const s3Client = new S3Client({ 
-  region: process.env.AWS_S3_REGION as string,
+  region: process.env.S3_REGION as string,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY  as string,
+    accessKeyId: process.env.ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY  as string,
   }
 });
 
@@ -47,7 +47,7 @@ export default async function handler(
         const fileName = `uploads/${uuidv4()}-${file.originalFilename}`;
 
         const command = new PutObjectCommand({
-          Bucket: process.env.AWS_S3_BUCKET_NAME,
+          Bucket: process.env.S3_BUCKET_NAME,
           Key: fileName,
           Body: fileContent,
           ContentType: file.mimetype || 'application/octet-stream',
@@ -55,7 +55,7 @@ export default async function handler(
 
         await s3Client.send(command);
 
-        const fileUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${fileName}`;
+        const fileUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${fileName}`;
 
         res.status(200).json({ fileUrl });
       } catch (error) {

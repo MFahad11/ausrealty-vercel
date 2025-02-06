@@ -20,6 +20,7 @@ export default async function handler(req: NextApiRequest,
         });
         return response.data;
     }));
+    console.log(combinedResponse);
     let agentsResponse=await axiosInstance.get('/api/agent');
     const agents=agentsResponse.data.data;
 
@@ -56,15 +57,18 @@ export default async function handler(req: NextApiRequest,
         }
         return true;
     });
+    console.log(combinedResponse);
+    
     res.status(200).json({
         data:combinedResponse || [],
         success: true,
     });
     
   } catch (error:any) {
+    console.log(error);
     res.status(error.response?.status || 500).json({
         success: false,
-        message: error.message || 'Error fetching agency listings',
+        message: JSON.stringify(error) || 'Error fetching agency listings',
     }
     );
   }

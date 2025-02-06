@@ -1140,7 +1140,7 @@ const ChatBot = ({
               // target='_blank'
               className='text-xs text-darkergray'
             >
-              Terms & Conditions
+              Terms of use
             </Link>
             </div>
         </div>
